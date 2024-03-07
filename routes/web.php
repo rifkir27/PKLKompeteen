@@ -9,10 +9,13 @@ use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Landing\CartController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BenefitController;
+use App\Http\Controllers\Admin\CertificateController;
 use App\Http\Controllers\Admin\PhotoController;
 use App\Http\Controllers\Admin\MyCourseController;
 use App\Http\Controllers\Admin\ShowcaseController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\InfrastructureController;
+use App\Http\Controllers\Admin\MentorController;
 use App\Http\Controllers\Landing\CheckoutController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\NotificationDatabaseController;
@@ -28,6 +31,7 @@ use App\Http\Controllers\Landing\CategoryController as LandingCategoryController
 use App\Http\Controllers\Landing\ShowcaseController as LandingShowcaseController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
 use App\Http\Controllers\Member\TransactionController as MemberTransactionController;
+use App\Http\Controllers\TestingController;
 use App\Http\Controllers\UploadController;
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +69,10 @@ Route::controller(CartController::class)->middleware('auth')->as('cart.')->group
 // checkout route
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::get('/transactions/{id}/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+
+Route::get('/certificate-custom',  [CertificateController::class, 'custom'])->name('certificate.certificate');
+Route::post('/store-html-certificate/{id}',  [CertificateController::class, 'storehtmlcertificate'])->name('store-html-certificate');
+
 
 // admin route
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'role:admin']], function(){
@@ -112,7 +120,16 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'r
         Route::get('/user/profile', 'profile')->name('profile');
         Route::put('/user/profile/{user}', 'profileUpdate')->name('profile.update');
         Route::get('/user/profile/password/{user}', 'profile')->name('profile.password');
-    });   
+    });
+
+    Route::get('/certificate',  [CertificateController::class, 'index'])->name('certificate.index');
+
+    Route::resource('mentor', MentorController::class)->except(['show']);
+    Route::get('mentor/ajax/datatable', [MentorController::class, 'datatable'])->name('mentor.ajax.datatable');
+
+    Route::resource('infrastructure', InfrastructureController::class)->except(['show']);
+    Route::get('infrastructure/ajax/datatable', [InfrastructureController::class, 'datatable'])->name('infrastructure.ajax.datatable');
+
 });
 
 // member route
@@ -138,6 +155,7 @@ Route::group(['as' => 'member.', 'prefix' => 'account', 'middleware' => ['auth',
         Route::put('/profile/{user}', 'updateProfile')->name('update');
         Route::put('/profile/password/{user}', 'updatePassword')->name('password');
     });
+
 });
 
 // login with google

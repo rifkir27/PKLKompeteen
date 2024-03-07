@@ -36,7 +36,7 @@ class ReviewController extends Controller
             'rating' => $request->rating,
             'review' => $request->review,
         ]);
-        
+
         return back()->with('toast_success', 'Review Created');
     }
 
@@ -48,4 +48,7 @@ class ReviewController extends Controller
             ->addIndexColumn()
             ->make(true);
     }
+
+
+
 }
