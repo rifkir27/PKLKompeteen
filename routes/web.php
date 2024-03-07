@@ -115,12 +115,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'r
     Route::resource('testimonials', TestimonialController::class)->except(['show']);
     Route::get('testimonials/ajax/datatable', [TestimonialController::class, 'datatable'])->name('testimonials.ajax.datatable');
 
-    Route::get('/vouchers', [VoucherController::class, 'index'])->name('vouchers.index');
-    Route::get('/vouchers/create', [VoucherController::class, 'create'])->name('vouchers.create');
-    Route::post('/vouchers', [VoucherController::class, 'store'])->name('vouchers.store');
-    Route::get('/vouchers/{id}/edit', [VoucherController::class, 'edit'])->name('vouchers.edit');
-    Route::put('/vouchers/{id}', [VoucherController::class, 'update'])->name('vouchers.update');
-    Route::delete('/vouchers/{id}', [VoucherController::class, 'destroy'])->name('vouchers.destroy');
+    Route::resource('vouchers', VoucherController::class)->except(['show']);
+    Route::get('vouchers/ajax/datatable', [VoucherController::class, 'datatable'])->name('vouchers.ajax.datatable');
 
     Route::controller(ReviewController::class)->group(function(){
         Route::post('/review/{course}', 'store')->name('review');

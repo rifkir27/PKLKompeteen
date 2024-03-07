@@ -33,6 +33,7 @@
                                 <table id="datatable" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
+                                            <th>No</th>
                                             <th>Code</th>
                                             <th>Amount</th>
                                             <th>Usage Limit</th>
@@ -42,23 +43,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($vouchers as $voucher)
-                                            <tr>
-                                                <td>{{ $voucher->code }}</td>
-                                                <td>{{ $voucher->amount }}</td>
-                                                <td>{{ $voucher->usage_limit }}</td>
-                                                <td>{{ $voucher->expiry_date }}</td>
-                                                <td>{{ $voucher->active ? 'Active' : 'Inactive' }}</td>
-                                                <td>
-                                                    <a href="{{ route('admin.vouchers.edit', $voucher->id) }}" class="btn btn-sm btn-primary">Edit</a>
-                                                    <form action="{{ route('admin.vouchers.destroy', $voucher->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+
                                     </tbody>
                                 </table>
                             </div>
@@ -75,3 +60,52 @@
         </section>
     </div>
 @endsection
+
+@push('scripts')
+<script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#datatable').DataTable({
+            responsive : true,
+            processing : true,
+            serverSide : true,
+            ajax : {
+            url : '{!! route('admin.vouchers.ajax.datatable') !!}',
+            },
+            columns       : [
+                {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},                 
+                {data: 'code', name: 'code', orderable: true, searchable: true},                    
+                {data: 'amount', name: 'amount', orderable: false, searchable: false},                            
+                {data: 'usage_limit', name: 'usage_limit', orderable: false, searchable: false},                                                       
+                {data: 'expiry_date', name: 'expiry_date', orderable: false, searchable: false},                                                       
+                {data: 'active', name: 'active', orderable: false, searchable: false},                                                       
+                {data: 'action', name: 'action', orderable: false, searchable: false,}
+            ]
+        });
+    });
+
+    function deleteConfirm(id) {
+    Swal.fire({
+        text: "Are you sure you want to delete data ?",
+        type: 'warning',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Delete'
+        }).then((result) => {
+        if (result.value) {
+            $('#submit_'+id).submit();
+                Swal.fire(
+                'Deleted!',
+                'Category data deleted',
+                'success'
+            )   
+        }
+    })
+  }
+</script>
+@endpush
