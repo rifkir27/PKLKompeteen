@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ArticleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\UserController;
@@ -16,6 +17,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Landing\CheckoutController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\NotificationDatabaseController;
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Member\SeriesController as MemberSeriesController;
 use App\Http\Controllers\Member\CourseController as MemberCourseController;
 use App\Http\Controllers\Member\ReviewController as MemberReviewController;
@@ -28,6 +31,8 @@ use App\Http\Controllers\Landing\CategoryController as LandingCategoryController
 use App\Http\Controllers\Landing\ShowcaseController as LandingShowcaseController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
 use App\Http\Controllers\Member\TransactionController as MemberTransactionController;
+use App\Http\Controllers\Member\VoucherController as MemberVoucherController;
+
 use App\Http\Controllers\UploadController;
 /*
 |--------------------------------------------------------------------------
@@ -104,6 +109,19 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'r
     Route::get('reviews', [ReviewController::class, 'index'])->name('reviews.index');
     Route::get('reviews/ajax/datatable', [ReviewController::class, 'datatable'])->name('reviews.ajax.datatable');
 
+    Route::resource('articles', ArticleController::class)->except(['show']);
+    Route::get('articles/ajax/datatable', [ArticleController::class, 'datatable'])->name('articles.ajax.datatable');
+
+    Route::resource('testimonials', TestimonialController::class)->except(['show']);
+    Route::get('testimonials/ajax/datatable', [TestimonialController::class, 'datatable'])->name('testimonials.ajax.datatable');
+
+    Route::get('/vouchers', [VoucherController::class, 'index'])->name('vouchers.index');
+    Route::get('/vouchers/create', [VoucherController::class, 'create'])->name('vouchers.create');
+    Route::post('/vouchers', [VoucherController::class, 'store'])->name('vouchers.store');
+    Route::get('/vouchers/{id}/edit', [VoucherController::class, 'edit'])->name('vouchers.edit');
+    Route::put('/vouchers/{id}', [VoucherController::class, 'update'])->name('vouchers.update');
+    Route::delete('/vouchers/{id}', [VoucherController::class, 'destroy'])->name('vouchers.destroy');
+
     Route::controller(ReviewController::class)->group(function(){
         Route::post('/review/{course}', 'store')->name('review');
     });
@@ -132,6 +150,9 @@ Route::group(['as' => 'member.', 'prefix' => 'account', 'middleware' => ['auth',
 
     Route::get('my-course/course/{id}', [MemberCourseController::class, 'course'])->name('mycourse.course');
     Route::get('my-course/course/{id}/series/{seriesId}', [MemberCourseController::class, 'show'])->name('mycourse.course.show');
+
+    Route::get('redeem-voucher', [MemberVoucherController::class, 'showRedeemForm'])->name('voucher.redeem.form');
+    Route::post('redeem-voucher', [MemberVoucherController::class, 'redeem'])->name('voucher.redeem');
 
     Route::controller(MemberProfileController::class)->as('profile.')->group(function(){
         Route::get('/profile', 'index')->name('index');
