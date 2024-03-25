@@ -25,11 +25,13 @@ class MentorRequest extends FormRequest
             $data = [
                 'name' => 'required',
                 'description' => 'required',
+                'image' => 'mimes:png,jpg,jpeg|max:2048',
             ];
         }else{
             $data = [
                 'name' => 'required',
                 'description' => 'required',
+                'image' => 'mimes:png,jpg,jpeg|max:2048',
             ];
         }
 

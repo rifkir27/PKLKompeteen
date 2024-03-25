@@ -1,4 +1,4 @@
-@extends('layouts.backend.app', ['title' => 'infrastructure'])
+@extends('layouts.backend.app', ['title' => 'Infrastructure'])
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
@@ -30,7 +30,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="{{ route('admin.infrastructure.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Create New</a>
+                            <a href="{{ route('member.Infrastructure.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Create New</a>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -39,9 +39,8 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
-                                        <th>Created_at</th>
-                                        <th>Image</th>
-                                        <th>Action</th>
+                                        <th>Description</th>
+                                        <th width="100px">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -76,47 +75,37 @@
             processing : true,
             serverSide : true,
             ajax : {
-            url : '{!! route('admin.infrastructure.ajax.datatable') !!}',
+            url : '{!! route('member.Infrastructure.ajax.datatable') !!}',
             },
             columns       : [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
-            {data: 'name', name: 'name', orderable: true, searchable: true},
-            {data: 'created_at', name: 'created_at', orderable: true, searchable: true,
-            render: function(created_at)
-                {
-                    return created_at;
-                }
-            },
-            {
-                data: 'image',
-                render: (image) => /* html */`
-                ${image}
-                `
-            },
-            {data: 'action', name: 'action', orderable: false, searchable: false,}
+                {data: 'name', name: 'name', orderable: false, searchable: false},
+                {data: 'description', name: 'description', orderable: false, searchable: true},
+                // {data: 'image', name: 'image', orderable: false, searchable: true},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
     });
 
   function deleteConfirm(id) {
-    Swal.fire({
-        text: "Are you sure you want to delete data ?",
-        type: 'warning',
-        icon: 'info',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Delete'
-        }).then((result) => {
-        if (result.value) {
-            $('#submit_'+id).submit();
-                Swal.fire(
-                'Deleted!',
-                'Infrastructure data deleted',
-                'success'
-            )
-        }
-    })
-  }
+        Swal.fire({
+            text: "Are you sure you want to delete data ?",
+            type: 'warning',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Delete'
+            }).then((result) => {
+            if (result.value) {
+                $('#submit_'+id).submit();
+                    Swal.fire(
+                    'Deleted!',
+                    'Showcase data deleted',
+                    'success'
+                )
+            }
+        })
+    }
 </script>
 @endpush

@@ -59,6 +59,24 @@
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
+
+                                    <div class="form-group">
+                                        <label class="col-form-label">Image</label>
+                                        @php
+                                            $a =  explode("/",$infrastructure->image)[3];
+                                        @endphp
+                                        <br>
+                                        <img src="{{asset('/storage/infrastructure/'.$a)}}" alt="" height="100px" width="100px" srcset="">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-form-label">Image</label>
+                                        <input type="file" class="form-control @error('image') is-invalid @enderror" placeholder="image" name="image" value="{{ old('image') }}">
+                                        @error('image')
+                                            <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
                                     <!-- /.card-footer -->
                                     <div class="card-footer">
                                         <button type="submit" class="btn btn-primary">Submit</button>

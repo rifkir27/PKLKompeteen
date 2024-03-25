@@ -28,8 +28,12 @@ use App\Http\Controllers\Member\ProfileController as MemberProfileController;
 use App\Http\Controllers\Member\MyCourseController as MemberMyCourseController;
 use App\Http\Controllers\Member\ShowcaseController as MemberShowcaseController;
 use App\Http\Controllers\Landing\CategoryController as LandingCategoryController;
+use App\Http\Controllers\Landing\InfrastructureController as LandingInfrastructureController;
+use App\Http\Controllers\Landing\MentorController as LandingMentorController;
 use App\Http\Controllers\Landing\ShowcaseController as LandingShowcaseController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
+use App\Http\Controllers\member\InfrastructureController as MemberInfrastructureController;
+use App\Http\Controllers\Member\MentorController as MemberMentorController;
 use App\Http\Controllers\Member\TransactionController as MemberTransactionController;
 use App\Http\Controllers\TestingController;
 use App\Http\Controllers\UploadController;
@@ -60,6 +64,10 @@ Route::get('/categories/{category:slug}', LandingCategoryController::class)->nam
 Route::get('/reviews', LandingReviewController::class)->name('review');
 // showcase route
 Route::get('/showcases', LandingShowcaseController::class)->name('showcase');
+// mentor route
+Route::get('/mentors', LandingMentorController::class)->name('mentor');
+// mentor route
+Route::get('/infrastructures', LandingInfrastructureController::class)->name('infrastructure');
 // cart route
 Route::controller(CartController::class)->middleware('auth')->as('cart.')->group(function(){
     Route::get('/cart', 'index')->name('index');
@@ -124,10 +132,10 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'r
 
     Route::get('/certificate',  [CertificateController::class, 'index'])->name('certificate.index');
 
-    Route::resource('mentor', MentorController::class)->except(['show']);
+    Route::resource('mentor', MentorController::class);
     Route::get('mentor/ajax/datatable', [MentorController::class, 'datatable'])->name('mentor.ajax.datatable');
 
-    Route::resource('infrastructure', InfrastructureController::class)->except(['show']);
+    Route::resource('infrastructure', InfrastructureController::class);
     Route::get('infrastructure/ajax/datatable', [InfrastructureController::class, 'datatable'])->name('infrastructure.ajax.datatable');
 
 });
@@ -141,6 +149,12 @@ Route::group(['as' => 'member.', 'prefix' => 'account', 'middleware' => ['auth',
 
     Route::resource('/showcases', MemberShowcaseController::class);
     Route::get('showcases/ajax/datatable', [MemberShowcaseController::class, 'datatable'])->name('showcases.ajax.datatable');
+
+    Route::resource('/mentor', MemberMentorController::class);
+    Route::get('mentor/ajax/datatable', [MemberMentorController::class, 'datatable'])->name('mentor.ajax.datatable');
+
+    Route::resource('/infrastructure', MemberInfrastructureController::class);
+    Route::get('infrastructure/ajax/datatable', [MemberInfrastructureController::class, 'datatable'])->name('infrastructure.ajax.datatable');
 
     Route::resource('/transactions', MemberTransactionController::class)->only('index', 'show');
     Route::get('transactions/ajax/datatable', [MemberTransactionController::class, 'datatable'])->name('transactions.ajax.datatable');
@@ -157,6 +171,7 @@ Route::group(['as' => 'member.', 'prefix' => 'account', 'middleware' => ['auth',
     });
 
 });
+
 
 // login with google
 Route::get('/auth/redirect', [\App\Http\Controllers\Auth\LoginController::class, 'redirectToProvider']);

@@ -59,6 +59,24 @@
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
+
+                                    <div class="form-group">
+                                        <label class="col-form-label">Image</label>
+                                        @php
+                                            $a =  explode("/",$mentor->image)[3];
+                                        @endphp
+                                        <br>
+                                        <img src="{{asset('/storage/mentor/'.$a)}}" alt="" height="100px" width="100px" srcset="">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-form-label">Image</label>
+                                        <input type="file" class="form-control @error('image') is-invalid @enderror" placeholder="image" name="image" value="{{ old('image') }}">
+                                        @error('image')
+                                            <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
                                     <!-- /.card-footer -->
                                     <div class="card-footer">
                                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -85,8 +103,7 @@
         $('.select2').select2()
     </script>
 
-    <script src="https://cdn.tiny.cloud/1/p3bgwt3k7550en3tmyd4pd3xrdk6sjx2j0j1ywb7zxgiejix/tinymce/6/tinymce.min.js"
-        referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/czpou863v7lzjbday6jmfcorhq0gyyaigh2bogm7e2zwe6sj/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         tinymce.init({
             selector: '#description',
@@ -109,72 +126,33 @@
 
                     var reader = new FileReader();
                     reader.readAsDataURL(file);
-                    reader.onload = function() {
+                    reader.onload = function () {
                         var id = 'blobid' + (new Date()).getTime();
-                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                        var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
                         var base64 = reader.result.split(',')[1];
                         var blobInfo = blobCache.create(id, file, base64);
                         blobCache.add(blobInfo);
-                        cb(blobInfo.blobUri(), {
-                            title: file.name
-                        });
+                        cb(blobInfo.blobUri(), { title: file.name });
                     };
                 };
                 input.click();
             },
-            codesample_languages: [{
-                    text: 'Bash',
-                    value: 'bash'
-                },
-                {
-                    text: 'HTML/XML',
-                    value: 'markup'
-                },
-                {
-                    text: 'JavaScript',
-                    value: 'javascript'
-                },
-                {
-                    text: 'CSS',
-                    value: 'css'
-                },
-                {
-                    text: 'PHP',
-                    value: 'php'
-                },
-                {
-                    text: 'Ruby',
-                    value: 'ruby'
-                },
-                {
-                    text: 'Python',
-                    value: 'python'
-                },
-                {
-                    text: 'Java',
-                    value: 'java'
-                },
-                {
-                    text: 'C',
-                    value: 'c'
-                },
-                {
-                    text: 'C#',
-                    value: 'csharp'
-                },
-                {
-                    text: 'C++',
-                    value: 'cpp'
-                }
+            codesample_languages: [
+                { text: 'Bash', value: 'bash'},
+                { text: 'HTML/XML', value: 'markup'},
+                { text: 'JavaScript', value: 'javascript'},
+                { text: 'CSS', value: 'css'},
+                { text: 'PHP', value: 'php'},
+                { text: 'Ruby', value: 'ruby'},
+                { text: 'Python', value: 'python'},
+                { text: 'Java', value: 'java'},
+                { text: 'C', value: 'c'},
+                { text: 'C#', value: 'csharp'},
+                { text: 'C++', value: 'cpp'}
             ],
-            mergetags_list: [{
-                    value: 'First.Name',
-                    title: 'First Name'
-                },
-                {
-                    value: 'Email',
-                    title: 'Email'
-                },
+            mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
             ]
         });
     </script>

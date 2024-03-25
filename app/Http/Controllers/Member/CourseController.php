@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Member;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Series;
 use App\Models\Transaction;
+use Illuminate\Http\Request;
 use App\Models\TransactionDetail;
+use App\Http\Controllers\Controller;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
@@ -18,9 +18,9 @@ class CourseController extends Controller
         $course = Course::with(['series'])->findOrFail($courseId);
         $seriesDetail = Series::where('course_id', $courseId)->orderBy('number_of_series', 'ASC')->first();
         if($seriesDetail) {
-            return redirect()->route('member.mycourse.course.show', [$course->id, $seriesDetail->id]);  
-        } 
-           
+            return redirect()->route('member.mycourse.course.show', [$course->id, $seriesDetail->id]);
+        }
+
         return redirect()->route('home');
 
     }

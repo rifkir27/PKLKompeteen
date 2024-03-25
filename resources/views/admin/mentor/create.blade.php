@@ -33,7 +33,7 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form class="form-horizontal" method="POST" action="{{ route('admin.mentor.store') }}">
+                        <form class="form-horizontal" method="POST" action="{{ route('admin.mentor.store') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
                                 <div class="form-group">
@@ -47,6 +47,13 @@
                                 <label class="col-form-label">Description</label>
                                 <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror">{{ old('description') }}</textarea>
                                 @error('description')
+                                    <span class="error invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Image</label>
+                                <input type="file" class="form-control @error('image') is-invalid @enderror" placeholder="image" name="image" value="{{ old('image') }}">
+                                @error('image')
                                     <span class="error invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
