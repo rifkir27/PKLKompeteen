@@ -38,9 +38,9 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Title</th>
-                                            <th>Content</th>
-                                            <th>User Id</th>
+                                            <th>User</th>
                                             <th>Publish at</th>
+                                            <th>created at</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -81,9 +81,9 @@
             columns       : [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},                 
                 {data: 'title', name: 'title', orderable: true, searchable: true},                    
-                {data: 'content', name: 'content', orderable: false, searchable: false},                            
-                {data: 'user_id', name: 'user_id', orderable: false, searchable: false},                            
+                {data: 'user', name: 'user', orderable: false, searchable: false},                            
                 {data: 'published_at', name: 'published_at', orderable: false, searchable: false},                            
+                {data: 'created_at', name: 'created_at', orderable: false, searchable: false},                            
                 {data: 'action', name: 'action', orderable: false, searchable: false,}
             ]
         });
@@ -91,7 +91,7 @@
 
     function deleteConfirm(id) {
     Swal.fire({
-        text: "Are you sure you want to delete data ?",
+        text: "Are you sure you want to delete article ?",
         type: 'warning',
         icon: 'info',
         showCancelButton: true,
@@ -103,7 +103,7 @@
             $('#submit_'+id).submit();
                 Swal.fire(
                 'Deleted!',
-                'Category data deleted',
+                'Article deleted',
                 'success'
             )   
         }

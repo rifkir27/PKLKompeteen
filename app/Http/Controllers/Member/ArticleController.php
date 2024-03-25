@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
@@ -11,12 +11,12 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        return view('admin.article.index');
+        return view('member.article.index');
     }
 
     public function create()
     {
-        return view('admin.article.create');
+        return view('member.article.create');
     }
 
     public function store(Request $request)
@@ -30,18 +30,13 @@ class ArticleController extends Controller
 
         Article::create($request->all());
 
-        return redirect(route('admin.articles.index'))->with('toast_success', 'Article Created');
-    }
-
-    public function show(Article $article)
-    {
-        return view('admin.article.show', compact('article'));
+        return redirect(route('member.articles.index'))->with('toast_success', 'Article Created');
     }
 
     public function edit($id)
     {
         $article = Article::findOrFail($id);
-        return view('admin.article.edit', compact('article'));
+        return view('member.article.edit', compact('article'));
     }
 
     public function update(Request $request, $id)
@@ -56,7 +51,7 @@ class ArticleController extends Controller
         $article = Article::findOrFail($id);
         $article->update($request->all());
 
-        return redirect(route('admin.articles.index'))->with('toast_success', 'Article Updated');
+        return redirect(route('member.articles.index'))->with('toast_success', 'Article Updated');
     }
 
     public function destroy($id)
@@ -76,10 +71,9 @@ class ArticleController extends Controller
                 return "<img src=".$article->image." width='50px'>";
             })
             ->addColumn('action', function($data){
-                return '<a href="'.route('admin.articles.edit', $data->id).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> </a>
-                        <a href="'.route('admin.articles.show', $data->id).'" class="btn btn-info btn-sm btn-info"><i class="fas fa-th"></i> </a>
+                return '<a href="'.route('member.articles.edit', $data->id).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> </a>
                         <button onclick="deleteConfirm(\''.$data->id.'\')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                        <form method="POST" action="'.route('admin.articles.destroy', $data->id).'" style="display:inline-block;" id="submit_'.$data->id.'">
+                        <form method="POST" action="'.route('member.articles.destroy', $data->id).'" style="display:inline-block;" id="submit_'.$data->id.'">
                             '.method_field('delete').csrf_field().'
                         </form>';
             })

@@ -32,6 +32,9 @@ use App\Http\Controllers\Landing\ShowcaseController as LandingShowcaseController
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
 use App\Http\Controllers\Member\TransactionController as MemberTransactionController;
 use App\Http\Controllers\Member\VoucherController as MemberVoucherController;
+use App\Http\Controllers\Landing\ArticleController as LandingArticleController;
+use App\Http\Controllers\Landing\TestimonialController as LandingTestimonialController;
+
 
 use App\Http\Controllers\UploadController;
 /*
@@ -61,6 +64,10 @@ Route::get('/categories/{category:slug}', LandingCategoryController::class)->nam
 Route::get('/reviews', LandingReviewController::class)->name('review');
 // showcase route
 Route::get('/showcases', LandingShowcaseController::class)->name('showcase');
+//article route
+Route::get('/articles', LandingArticleController::class)->name('article');
+//testimonial route
+Route::get('/testimonials', LandingTestimonialController::class)->name('testimonial');
 // cart route
 Route::controller(CartController::class)->middleware('auth')->as('cart.')->group(function(){
     Route::get('/cart', 'index')->name('index');
@@ -109,10 +116,10 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'r
     Route::get('reviews', [ReviewController::class, 'index'])->name('reviews.index');
     Route::get('reviews/ajax/datatable', [ReviewController::class, 'datatable'])->name('reviews.ajax.datatable');
 
-    Route::resource('articles', ArticleController::class)->except(['show']);
+    Route::resource('articles', ArticleController::class);
     Route::get('articles/ajax/datatable', [ArticleController::class, 'datatable'])->name('articles.ajax.datatable');
 
-    Route::resource('testimonials', TestimonialController::class)->except(['show']);
+    Route::resource('testimonials', TestimonialController::class);
     Route::get('testimonials/ajax/datatable', [TestimonialController::class, 'datatable'])->name('testimonials.ajax.datatable');
 
     Route::resource('vouchers', VoucherController::class)->except(['show']);

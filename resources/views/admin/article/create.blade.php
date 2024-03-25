@@ -54,8 +54,8 @@
                                             @enderror
                                         </div>
                                         <div class="mb-3">
-                                            <label for="user_id" class="form-label">User ID</label>
-                                            <input type="number" class="form-control" id="user_id" name="user_id"
+                                            <label for="user" class="form-label">User ID</label>
+                                            <input type="text" class="form-control" id="user" name="user"
                                                 required>
                                         </div>
                                         <div class="mb-3">
@@ -92,6 +92,7 @@
     <script src="https://cdn.tiny.cloud/1/p3bgwt3k7550en3tmyd4pd3xrdk6sjx2j0j1ywb7zxgiejix/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         tinymce.init({
+            forced_root_block : false,
             selector: '#content',
             plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss fullscreen',
             toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat | fullscreen',

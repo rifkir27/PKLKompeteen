@@ -5,33 +5,36 @@
 @endpush
 
 @section('content')
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Voucher</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Voucher</li>
-                        </ol>
-                    </div>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Voucher</h1>
                 </div>
-            </div><!-- /.container-fluid -->
-        </section>
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <a href="{{ route('admin.vouchers.create') }}" class="btn btn-primary">Create New Voucher</a>
-                        <div class="card">
-                            <!-- /.card-header -->
-                            <div class="card-body">
-                                <table id="datatable" class="table table-bordered table-hover">
-                                    <thead>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                        <li class="breadcrumb-item active">Voucher</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="{{ route('admin.vouchers.create') }}" class="btn btn-primary"><i
+                                    class="fa fa-plus"></i> Create New</a>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="datatable" class="table table-bordered table-hover">
+                                <thead>
                                         <tr>
                                             <th>No</th>
                                             <th>Code</th>
@@ -79,8 +82,8 @@
                 {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},                 
                 {data: 'code', name: 'code', orderable: true, searchable: true},                    
                 {data: 'amount', name: 'amount', orderable: false, searchable: false},                            
-                {data: 'usage_limit', name: 'usage_limit', orderable: false, searchable: false},                                                       
-                {data: 'expiry_date', name: 'expiry_date', orderable: false, searchable: false},                                                       
+                { data: 'usage_limit', name: 'usage_limit', orderable: false, searchable: false,render: function(data) {return data !== null ? data : '-';}},
+                {data: 'expiry_date', name: 'expiry_date', orderable: false, searchable: false,render: function(data) {return data !== null ? data : '-';}},
                 {data: 'active', name: 'active', orderable: false, searchable: false},                                                       
                 {data: 'action', name: 'action', orderable: false, searchable: false,}
             ]

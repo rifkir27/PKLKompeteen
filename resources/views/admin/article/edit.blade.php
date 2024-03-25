@@ -54,9 +54,9 @@
                                             @enderror
                                         </div>
                                         <div class="mb-3">
-                                            <label for="user_id" class="form-label">User ID</label>
-                                            <input type="number" class="form-control" id="user_id" name="user_id"
-                                                value="{{ $article->user_id }}" required>
+                                            <label for="user" class="form-label">User ID</label>
+                                            <input type="text" class="form-control" id="user" name="user"
+                                                value="{{ $article->user }}" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="published_at" class="form-label">Published at</label>

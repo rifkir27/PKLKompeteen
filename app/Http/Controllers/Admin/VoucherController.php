@@ -75,6 +75,11 @@ class VoucherController extends Controller
             ->editColumn('image', function($vouchers) {
                 return "<img src=".$vouchers->image." width='50px'>";
             })
+
+            ->editColumn('active', function($vouchers) {
+                return $vouchers->active == 0 ? "<span class='badge badge-danger'>Inactive</span>" : "<span class='badge badge-success'>Active</span>";
+            })
+
             ->addColumn('action', function($data){
                 return '<a href="'.route('admin.vouchers.edit', $data->id).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> </a>
                         <button onclick="deleteConfirm(\''.$data->id.'\')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
@@ -82,7 +87,7 @@ class VoucherController extends Controller
                             '.method_field('delete').csrf_field().'
                         </form>';
             })
-            ->rawColumns(['image', 'action'])
+            ->rawColumns(['image', 'action', 'active'])
             ->make(true);
     }
 }

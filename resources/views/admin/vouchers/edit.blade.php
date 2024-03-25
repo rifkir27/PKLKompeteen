@@ -22,41 +22,63 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
-        <div class="container">
-            <h1>Edit Voucher</h1>
-
-            <form action="{{ route('admin.vouchers.update', $voucher->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="mb-3">
-                    <label for="code" class="form-label">Voucher Code</label>
-                    <input type="text" class="form-control" id="code" name="code" value="{{ $voucher->code }}"
-                        required>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- /.card -->
+                        <!-- Horizontal Form -->
+                        <div class="card">
+                            <div class="card-header">
+                                <a href="{{ route('admin.vouchers.index') }}" class="btn btn-success"><i
+                                        class="fa fa-chevron-left"></i> Back</a>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form action="{{ route('admin.vouchers.update', $voucher->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="code" class="form-label">Voucher Code</label>
+                                        <input type="text" class="form-control" id="code" name="code"
+                                            value="{{ $voucher->code }}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="amount" class="form-label">Amount</label>
+                                        <input type="number" class="form-control" id="amount" name="amount"
+                                            value="{{ $voucher->amount }}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="usage_limit" class="form-label">Usage Limit</label>
+                                        <input type="number" class="form-control" id="usage_limit" name="usage_limit"
+                                            value="{{ $voucher->usage_limit }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="expiry_date" class="form-label">Expiry Date</label>
+                                        <input type="date" class="form-control" id="expiry_date" name="expiry_date"
+                                            value="{{ $voucher->expiry_date }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="active" class="form-label">Status</label>
+                                        <select class="form-control" id="active" name="active" required>
+                                            <option value="1" {{ $voucher->active ? 'selected' : '' }}>Active</option>
+                                            <option value="0" {{ !$voucher->active ? 'selected' : '' }}>Inactive
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card -->
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="amount" class="form-label">Amount</label>
-                    <input type="number" class="form-control" id="amount" name="amount" value="{{ $voucher->amount }}"
-                        required>
-                </div>
-                <div class="mb-3">
-                    <label for="usage_limit" class="form-label">Usage Limit</label>
-                    <input type="number" class="form-control" id="usage_limit" name="usage_limit"
-                        value="{{ $voucher->usage_limit }}">
-                </div>
-                <div class="mb-3">
-                    <label for="expiry_date" class="form-label">Expiry Date</label>
-                    <input type="date" class="form-control" id="expiry_date" name="expiry_date"
-                        value="{{ $voucher->expiry_date }}">
-                </div>
-                <div class="mb-3">
-                    <label for="active" class="form-label">Status</label>
-                    <select class="form-control" id="active" name="active" required>
-                        <option value="1" {{ $voucher->active ? 'selected' : '' }}>Active</option>
-                        <option value="0" {{ !$voucher->active ? 'selected' : '' }}>Inactive</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Update Voucher</button>
-            </form>
-        </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
     </div>
 @endsection

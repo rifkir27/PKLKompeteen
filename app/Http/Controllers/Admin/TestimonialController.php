@@ -38,6 +38,11 @@ class TestimonialController extends Controller
         return view('admin.testimonial.edit', compact('testimonial'));
     }
 
+    public function show(Testimonial $testimonial)
+    {
+        return view('admin.testimonial.show', compact('testimonial'));
+    }
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -70,6 +75,7 @@ class TestimonialController extends Controller
             })
             ->addColumn('action', function($data){
                 return '<a href="'.route('admin.testimonials.edit', $data->id).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> </a>
+                        <a href="'.route('admin.testimonials.show', $data->id).'" class="btn btn-info btn-sm btn-info"><i class="fas fa-th"></i> </a>
                         <button onclick="deleteConfirm(\''.$data->id.'\')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                         <form method="POST" action="'.route('admin.testimonials.destroy', $data->id).'" style="display:inline-block;" id="submit_'.$data->id.'">
                             '.method_field('delete').csrf_field().'

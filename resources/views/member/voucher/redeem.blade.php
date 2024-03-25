@@ -22,26 +22,43 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
-        <div class="container">
-            <h1>Redeem Voucher</h1>
-
-            @if (session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @elseif (session('error'))
-                <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
-
-            <form action="{{ route('member.voucher.redeem') }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label for="voucher_code" class="form-label">Enter Voucher Code</label>
-                    <input type="text" class="form-control" id="voucher_code" name="voucher_code" required>
-                    @error('voucher_code')
-                        <div class="text-danger">Kode tidak valid</div>
-                    @enderror
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- /.card -->
+                        <!-- Horizontal Form -->
+                        <div class="card">
+                            <!-- form start -->
+                            <h1>Redeem Voucher</h1>
+                            @if (session('success'))
+                                <div class="alert alert-success">{{ session('success') }}</div>
+                            @elseif (session('error'))
+                                <div class="alert alert-danger">{{ session('error') }}</div>
+                            @endif
+                            <form action="{{ route('member.voucher.redeem') }}" method="POST">
+                                @csrf
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="voucher_code" class="form-label">Enter Voucher Code</label>
+                                        <input type="text" class="form-control" id="voucher_code" name="voucher_code"
+                                            required>
+                                        @error('voucher_code')
+                                            <div class="text-danger">Kode tidak valid</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card -->
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Redeem</button>
-            </form>
-        </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
     </div>
 @endsection

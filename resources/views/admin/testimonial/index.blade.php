@@ -39,7 +39,7 @@
                                             <th>No</th>
                                             <th>Name</th>
                                             <th>Position</th>
-                                            <th>Description</th>
+                                            <th>Created at</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -81,7 +81,7 @@
                 {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},                 
                 {data: 'name', name: 'name', orderable: true, searchable: true},                    
                 {data: 'position', name: 'position', orderable: false, searchable: false},                            
-                {data: 'description', name: 'description', orderable: false, searchable: false},                                                       
+                {data: 'created_at', name: 'created_at', orderable: false, searchable: false},                                                       
                 {data: 'action', name: 'action', orderable: false, searchable: false,}
             ]
         });
