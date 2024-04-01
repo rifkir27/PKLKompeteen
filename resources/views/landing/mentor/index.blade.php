@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- hero section -->
-<x-landing.hero-section title="Mentor" subtitle="Kumpulan mentor project dari para member yang mengisi di platform eduthings"
+<x-landing.hero-section title="Mentor" subtitle="Kumpulan para mentor mengisi di platform kompeteen"
     details="Disini project para member yang sudah belajar kami tampilkan agar mampu meningkatkan motivasi belajar para member untuk saling sharing project dan menjadi inspirasi dalam membangun sebuah project."
     :data="$mentors" cardtitle="Mentor">
 </x-landing.hero-section>

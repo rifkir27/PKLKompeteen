@@ -56,7 +56,7 @@ class MentorController extends Controller
     {
         // dd($id);
         $mentor = Mentor::find($id);
-        // dd($mentor);
+        // Storage::disk('local')->delete('public/mentor/'.basename($mentor->image));
         return view('admin.mentor.edit', compact('mentor'));
     }
 
