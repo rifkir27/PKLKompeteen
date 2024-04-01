@@ -141,6 +141,36 @@
                 Infrastructure
             </a>
         </li>
+        {{-- <li class="hidden lg:flex">
+            <a href="{{ route('article') }}"
+                class="text-sm font-semibold text-black flex items-center gap-2 {{ activeNav('article') }}">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-source-code w-5 h-5" width="24" height="24"
+                    viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M7 25V2.005C7 2.005 7 1 8 1H30C30 1 31 1.005 31 2.005V28.005C31 28.005 31 31 28 31H4C4 31 1 31.005 1 27.005V12.005C1 12.005 1 11 2 11H4M13 7H18M13 11H25M13 15H25M13 19H25M13 23H25"path>
+                    <path d="M6 5l-2 2l2 2"></path>
+                    <path d="M10 9l2 -2l-2 -2"></path>
+                </svg>
+                Article
+            </a>
+        </li>
+        <li class="hidden lg:flex">
+            <a href="{{ route('testimonial') }}"
+                class="text-sm font-semibold text-black flex items-center gap-2 {{ activeNav('testimonial') }}">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-source-code w-5 h-5" width="24" height="24"
+                    viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M8 10.5H16M8 14.5H11M21.0039 12C21.0039 16.9706 16.9745 21 12.0039 21C9.9675 21 3.00463 21 3.00463 21C3.00463 21 4.56382 17.2561 3.93982 16.0008C3.34076 14.7956 3.00391 13.4372 3.00391 12C3.00391 7.02944 7.03334 3 12.0039 3C16.9745 3 21.0039 7.02944 21.0039 12Z"></path>
+                    <path d="M6 5l-2 2l2 2"></path>
+                    <path d="M10 9l2 -2l-2 -2"></path>
+                </svg>
+                Testimonial
+            </a>
+        </li> --}}
     </ul>
     <!-- NavProfile -->
     <div class="hidden md:flex items-center gap-2 text-white">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ArticleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\UserController;
@@ -19,6 +20,8 @@ use App\Http\Controllers\Admin\MentorController;
 use App\Http\Controllers\Landing\CheckoutController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\NotificationDatabaseController;
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Member\SeriesController as MemberSeriesController;
 use App\Http\Controllers\Member\CourseController as MemberCourseController;
 use App\Http\Controllers\Member\ReviewController as MemberReviewController;
@@ -35,6 +38,11 @@ use App\Http\Controllers\Member\DashboardController as MemberDashboardController
 use App\Http\Controllers\member\InfrastructureController as MemberInfrastructureController;
 use App\Http\Controllers\Member\MentorController as MemberMentorController;
 use App\Http\Controllers\Member\TransactionController as MemberTransactionController;
+use App\Http\Controllers\Member\VoucherController as MemberVoucherController;
+use App\Http\Controllers\Landing\ArticleController as LandingArticleController;
+use App\Http\Controllers\Landing\TestimonialController as LandingTestimonialController;
+
+
 use App\Http\Controllers\TestingController;
 use App\Http\Controllers\UploadController;
 /*
@@ -64,6 +72,10 @@ Route::get('/categories/{category:slug}', LandingCategoryController::class)->nam
 Route::get('/reviews', LandingReviewController::class)->name('review');
 // showcase route
 Route::get('/showcases', LandingShowcaseController::class)->name('showcase');
+//article route
+Route::get('/articles', LandingArticleController::class)->name('article');
+//testimonial route
+Route::get('/testimonials', LandingTestimonialController::class)->name('testimonial');
 // mentor route
 Route::get('/mentors', LandingMentorController::class)->name('mentor');
 // mentor route
@@ -120,6 +132,15 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'r
     Route::get('reviews', [ReviewController::class, 'index'])->name('reviews.index');
     Route::get('reviews/ajax/datatable', [ReviewController::class, 'datatable'])->name('reviews.ajax.datatable');
 
+    Route::resource('articles', ArticleController::class);
+    Route::get('articles/ajax/datatable', [ArticleController::class, 'datatable'])->name('articles.ajax.datatable');
+
+    Route::resource('testimonials', TestimonialController::class);
+    Route::get('testimonials/ajax/datatable', [TestimonialController::class, 'datatable'])->name('testimonials.ajax.datatable');
+
+    Route::resource('vouchers', VoucherController::class)->except(['show']);
+    Route::get('vouchers/ajax/datatable', [VoucherController::class, 'datatable'])->name('vouchers.ajax.datatable');
+
     Route::controller(ReviewController::class)->group(function(){
         Route::post('/review/{course}', 'store')->name('review');
     });
@@ -163,6 +184,9 @@ Route::group(['as' => 'member.', 'prefix' => 'account', 'middleware' => ['auth',
 
     Route::get('my-course/course/{id}', [MemberCourseController::class, 'course'])->name('mycourse.course');
     Route::get('my-course/course/{id}/series/{seriesId}', [MemberCourseController::class, 'show'])->name('mycourse.course.show');
+
+    Route::get('redeem-voucher', [MemberVoucherController::class, 'showRedeemForm'])->name('voucher.redeem.form');
+    Route::post('redeem-voucher', [MemberVoucherController::class, 'redeem'])->name('voucher.redeem');
 
     Route::controller(MemberProfileController::class)->as('profile.')->group(function(){
         Route::get('/profile', 'index')->name('index');
