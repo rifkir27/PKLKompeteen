@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+// use DataTables;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
@@ -91,7 +92,7 @@ class UserController extends Controller
     public function datatable()
     {
         $users = User::with('roles')->orderBy('created_at', 'DESC');
-        
+
         return DataTables::of($users)
             ->addIndexColumn()
             ->addColumn('role', function($data) {

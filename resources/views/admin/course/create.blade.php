@@ -195,7 +195,7 @@
         $('.select2').select2()
     </script>
 
-    <script src="https://cdn.tiny.cloud/1/czpou863v7lzjbday6jmfcorhq0gyyaigh2bogm7e2zwe6sj/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/8akgjko6neygqvja0rejxp8epqy35np77k716ru64g2txz3s/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         tinymce.init({
             selector: '#description',

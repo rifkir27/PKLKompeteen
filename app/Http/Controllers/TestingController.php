@@ -17,4 +17,16 @@ class TestingController extends Controller
 
         return $data;
     }
+
+    public function test()
+    {
+        // dd('test');
+        return view('admin.certificate.certificate');
+    }
+    public function storehtmlcertificate(Request $request)
+    {
+        dd($request);
+        // return view('admin.certificate.index');
+    }
+
 }

@@ -15,7 +15,7 @@
 
     <link rel="icon" href="{{ asset('assets/dist/img/logo-icon.png') }}" type="image/png">
     <link rel="shortcut icon" href="{{ asset('assets/dist/img/logo-icon.png') }}" type="image/png">
-    
+
     @stack('styles')
 </head>
 

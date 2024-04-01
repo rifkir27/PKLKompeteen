@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Category;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
 {
