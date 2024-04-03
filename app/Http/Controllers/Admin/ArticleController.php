@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -74,6 +75,10 @@ class ArticleController extends Controller
             ->addIndexColumn()
             ->editColumn('image', function($article) {
                 return "<img src=".$article->image." width='50px'>";
+            })
+            ->editColumn('created_at', function($article) 
+            {
+                return Carbon::parse($article->created_at)->format('Y-m-d H:i:s');
             })
             ->addColumn('action', function($data){
                 return '<a href="'.route('admin.articles.edit', $data->id).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> </a>

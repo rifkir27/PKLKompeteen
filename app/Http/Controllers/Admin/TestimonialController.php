@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Testimonial;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -72,6 +73,10 @@ class TestimonialController extends Controller
             ->addIndexColumn()
             ->editColumn('image', function($testimonial) {
                 return "<img src=".$testimonial->image." width='50px'>";
+            })
+            ->editColumn('created_at', function($testimonial) 
+            {
+                return Carbon::parse($testimonial->created_at)->format('Y-m-d H:i:s');
             })
             ->addColumn('action', function($data){
                 return '<a href="'.route('admin.testimonials.edit', $data->id).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> </a>
