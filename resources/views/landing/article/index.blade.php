@@ -3,7 +3,7 @@
 @section('content')
     <!-- hero section -->
     <x-landing.hero-section title="Artikel"
-        subtitle="Kumpulan artikel dari para member yang memberikan pengalaman dari platform eduthings"
+        subtitle="Kumpulan artikel dari para member yang memberikan pengalaman dari platform kami"
         details="Disini artikel yang kami tampilkan berasal langsung dari para member yang telah bergabung dengan kami."
         :data="$articles" cardtitle="article">
     </x-landing.hero-section>
