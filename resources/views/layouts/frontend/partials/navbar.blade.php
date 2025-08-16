@@ -1,73 +1,32 @@
-<div class="w-full bg-white px-10 py-3 fixed z-10 2xl:px-36">
-<div class="container mx-auto">
-<div class="flex items-center justify-between">
-    <!-- NavMenu -->
-    <ul class="flex items-center justify-center gap-5">
-        <li>
-            <a href="/" class="flex items-center text-lg font-semibold">
-                {{ env('APP_NAME') }}
+<div class="w-full bg-purple-600 px-10 py-3 fixed z-10 2xl:px-36">
+    <div class="container mx-auto flex items-center justify-between">
+        <!-- Kiri: Logo -->
+        <div class="flex items-center">
+            <a href="/" class="flex items-center text-lg font-bold">
+                <span class="text-white">Kompe</span>
+                <span class="text-orange-500">teen</span>
             </a>
-        </li>
-        <li class="hidden lg:flex">
-            <a href="{{ route('home') }}"
-                class="text-sm font-semibold text-black flex items-center gap-2 {{ activeNav('home') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home w-5 h-5"
-                    width="24" height="24" viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor"
-                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <polyline points="5 12 3 12 12 3 21 12 19 12"></polyline>
-                    <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
-                    <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path>
-                </svg>
-                Home
-            </a>
-        </li>
-        <li class="hidden lg:flex">
-            <a href="{{ route('course.index') }}"
-                class="text-sm font-semibold text-black flex items-center gap-2 {{ activeNav('course.index') }}">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="icon icon-tabler icon-tabler-device-laptop w-5 h-5" width="24" height="24"
-                    viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <line x1="3" y1="19" x2="21" y2="19"></line>
-                    <rect x="5" y="6" width="14" height="10" rx="1"></rect>
-                </svg>
-                Course
-            </a>
-        </li>
-        <li class="hidden lg:flex">
-            <div class="relative" x-data="{ isOpen: false }">
+        </div>
+
+        <!-- Tengah: Semua menu dari Home sampai Infrastructure -->
+        <ul class="hidden lg:flex items-center gap-5 justify-center flex-1">
+            <li>
+                <a href="{{ route('home') }}" class="text-sm font-semibold text-white flex items-center gap-2">
+                    Home
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('course.index') }}" class="text-sm font-semibold text-white flex items-center gap-2">
+                    Course
+                </a>
+            </li>
+            <li class="relative" x-data="{ isOpen: false }">
                 <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false"
-                    class="flex items-center gap-2 text-sm font-semibold text-black {{ activeNav('category*') }}">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="icon icon-tabler icon-tabler-category-2 w-5 h-5" width="24" height="24"
-                        viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M14 4h6v6h-6z"></path>
-                        <path d="M4 14h6v6h-6z"></path>
-                        <circle cx="17" cy="17" r="3"></circle>
-                        <circle cx="7" cy="7" r="3"></circle>
-                    </svg>
+                    class="flex items-center gap-2 text-sm font-semibold text-white">
                     Category
-                    <svg xmlns="http://www.w3.org/2000/svg" x-show="!isOpen"
-                        class="icon icon-tabler icon-tabler-chevron-down w-4 h-4" width="24"
-                        height="24" viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor"
-                        fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" x-cloak x-show="isOpen"
-                        class="icon icon-tabler icon-tabler-chevron-up w-4 h-4" width="24" height="24"
-                        viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <polyline points="6 15 12 9 18 15"></polyline>
-                    </svg>
                 </button>
                 <ul x-cloak x-show="isOpen" @click.away="isOpen = false"
-                    class="overflow-auto h-96 absolute font-normal bg-white shadow  w-56 border mt-2 py-1 left-0 z-20 scrollbar-thumb-gray-300 scrollbar-track-gray-100 scrollbar-thin">
+                    class="overflow-auto h-96 absolute font-normal bg-white shadow w-56 border mt-2 py-1 left-0 z-20 scrollbar-thumb-gray-300 scrollbar-track-gray-100 scrollbar-thin">
                     @foreach ($categories as $category)
                         <li>
                             <a href="{{ route('category', $category->slug) }}"
@@ -78,125 +37,41 @@
                         </li>
                     @endforeach
                 </ul>
-            </div>
-        </li>
-        <li class="hidden lg:flex">
-            <a href="{{ route('review') }}"
-                class="text-sm font-semibold text-black flex items-center gap-2 {{ activeNav('review') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-2 w-5 h-5"
-                    width="24" height="24" viewBox="0 0 24 24" stroke-width="1.25"
-                    stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path
-                        d="M12 20l-3 -3h-2a3 3 0 0 1 -3 -3v-6a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-2l-3 3">
-                    </path>
-                    <line x1="8" y1="9" x2="16" y2="9"></line>
-                    <line x1="8" y1="13" x2="14" y2="13"></line>
-                </svg>
-                Review
-            </a>
-        </li>
-        <li class="hidden lg:flex">
-            <a href="{{ route('showcase') }}"
-                class="text-sm font-semibold text-black flex items-center gap-2 {{ activeNav('showcase') }}">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="icon icon-tabler icon-tabler-source-code w-5 h-5" width="24" height="24"
-                    viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M14.5 4h2.5a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-10a3 3 0 0 1 -3 -3v-5"></path>
-                    <path d="M6 5l-2 2l2 2"></path>
-                    <path d="M10 9l2 -2l-2 -2"></path>
-                </svg>
-                Showcase
-            </a>
-        </li>
-        <li class="hidden lg:flex">
-            <a href="{{ route('mentor') }}"
-                class="text-sm font-semibold text-black flex items-center gap-2 {{ activeNav('mentor') }}">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="icon icon-tabler icon-tabler-source-code w-5 h-5" width="24" height="24"
-                    viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M14.5 4h2.5a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-10a3 3 0 0 1 -3 -3v-5"></path>
-                    <path d="M6 5l-2 2l2 2"></path>
-                    <path d="M10 9l2 -2l-2 -2"></path>
-                </svg>
-                Mentor
-            </a>
-        </li>
-        <li class="hidden lg:flex">
-            <a href="{{ route('infrastructure') }}"
-                class="text-sm font-semibold text-black flex items-center gap-2 {{ activeNav('infrastructure') }}">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="icon icon-tabler icon-tabler-source-code w-5 h-5" width="24" height="24"
-                    viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M14.5 4h2.5a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-10a3 3 0 0 1 -3 -3v-5"></path>
-                    <path d="M6 5l-2 2l2 2"></path>
-                    <path d="M10 9l2 -2l-2 -2"></path>
-                </svg>
-                Infrastructure
-            </a>
-        </li>
-        {{-- <li class="hidden lg:flex">
-            <a href="{{ route('article') }}"
-                class="text-sm font-semibold text-black flex items-center gap-2 {{ activeNav('article') }}">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="icon icon-tabler icon-tabler-source-code w-5 h-5" width="24" height="24"
-                    viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M7 25V2.005C7 2.005 7 1 8 1H30C30 1 31 1.005 31 2.005V28.005C31 28.005 31 31 28 31H4C4 31 1 31.005 1 27.005V12.005C1 12.005 1 11 2 11H4M13 7H18M13 11H25M13 15H25M13 19H25M13 23H25"path>
-                    <path d="M6 5l-2 2l2 2"></path>
-                    <path d="M10 9l2 -2l-2 -2"></path>
-                </svg>
-                Article
-            </a>
-        </li>
-        <li class="hidden lg:flex">
-            <a href="{{ route('testimonial') }}"
-                class="text-sm font-semibold text-black flex items-center gap-2 {{ activeNav('testimonial') }}">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="icon icon-tabler icon-tabler-source-code w-5 h-5" width="24" height="24"
-                    viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M8 10.5H16M8 14.5H11M21.0039 12C21.0039 16.9706 16.9745 21 12.0039 21C9.9675 21 3.00463 21 3.00463 21C3.00463 21 4.56382 17.2561 3.93982 16.0008C3.34076 14.7956 3.00391 13.4372 3.00391 12C3.00391 7.02944 7.03334 3 12.0039 3C16.9745 3 21.0039 7.02944 21.0039 12Z"></path>
-                    <path d="M6 5l-2 2l2 2"></path>
-                    <path d="M10 9l2 -2l-2 -2"></path>
-                </svg>
-                Testimonial
-            </a>
-        </li> --}}
-    </ul>
+            </li>
+            <li>
+                <a href="{{ route('review') }}" class="text-sm font-semibold text-white flex items-center gap-2">
+                    Review
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('showcase') }}" class="text-sm font-semibold text-white flex items-center gap-2">
+                    Showcase
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('mentor') }}" class="text-sm font-semibold text-white flex items-center gap-2">
+                    Mentor
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('infrastructure') }}" class="text-sm font-semibold text-white flex items-center gap-2">
+                    Infrastructure
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
     <!-- NavProfile -->
     <div class="hidden md:flex items-center gap-2 text-white">
         @guest
-            <a href="{{ route('login') }}"
-                class="text-gray-200 font-semibold flex items-center border px-4 py-2 gap-2 rounded-lg text-xs bg-slate-900 border-slate-700">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-check w-5 h-5"
-                    width="24" height="24" viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor"
-                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                    <path d="M16 11l2 2l4 -4"></path>
-                </svg>
-                Sign In
-            </a>
+                <a href="{{ route('login') }}"
+                    class="text- font-semibold flex items-center px-4 py-2 gap-2 rounded-lg text-sm bg-orange-600">
+                    Sign In
+                </a>
+
             <a href="{{ route('register') }}"
-                class="font-semibold text-white flex items-center border px-4 py-2 gap-2 rounded-lg text-xs bg-slate-700 border-slate-900">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-plus w-5 h-5"
-                    width="24" height="24" viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor"
-                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                    <path d="M16 11h6m-3 -3v6"></path>
-                </svg>
+                class="font-semibold text-white flex items-center border px-4 py-2 gap-2 rounded-lg text-sm border-orange-">
                 Sign Up
             </a>
         @endguest
