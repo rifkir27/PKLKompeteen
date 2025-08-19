@@ -1,36 +1,36 @@
-<div class="w-full bg-purple-600 px-10 py-3 fixed z-10 2xl:px-36">
-    <div class="container mx-auto flex items-center justify-between">
-        <!-- Kiri: Logo -->
+<div class="w-full bg-purple-900 px-10 py-3 fixed z-10 2xl:px-36">
+    <div class="container mx-auto grid grid-cols-3 items-center">
+        
         <div class="flex items-center">
-            <a href="/" class="flex items-center text-lg font-bold">
+            <a href="/" class="flex items-center text-3xl font-bold">
                 <span class="text-white">Kompe</span>
                 <span class="text-orange-500">teen</span>
             </a>
         </div>
 
-        <!-- Tengah: Semua menu dari Home sampai Infrastructure -->
-        <ul class="hidden lg:flex items-center gap-5 justify-center flex-1">
+        <ul class="hidden lg:flex items-center gap-6 justify-center">
             <li>
-                <a href="{{ route('home') }}" class="text-sm font-semibold text-white flex items-center gap-2">
+                <a href="{{ route('home') }}" class="text-sm font-semibold text-white hover:text-orange-300">
                     Home
                 </a>
             </li>
             <li>
-                <a href="{{ route('course.index') }}" class="text-sm font-semibold text-white flex items-center gap-2">
+                <a href="{{ route('course.index') }}" class="text-sm font-semibold text-white hover:text-orange-300">
                     Course
                 </a>
             </li>
             <li class="relative" x-data="{ isOpen: false }">
                 <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false"
-                    class="flex items-center gap-2 text-sm font-semibold text-white">
+                    class="flex items-center gap-2 text-sm font-semibold text-white hover:text-orange-300">
                     Category
                 </button>
                 <ul x-cloak x-show="isOpen" @click.away="isOpen = false"
-                    class="overflow-auto h-96 absolute font-normal bg-white shadow w-56 border mt-2 py-1 left-0 z-20 scrollbar-thumb-gray-300 scrollbar-track-gray-100 scrollbar-thin">
+                    class="overflow-auto h-96 absolute font-normal bg-white shadow w-56 border mt-2 py-1 left-0 z-20 
+                           scrollbar-thumb-gray-300 scrollbar-track-gray-100 scrollbar-thin">
                     @foreach ($categories as $category)
                         <li>
                             <a href="{{ route('category', $category->slug) }}"
-                                class="flex items-center p-3 hover:text-blue-500 rounded-lg text-sm text-black">
+                                class="flex items-center p-3 hover:bg-gray-100 rounded-lg text-sm text-black">
                                 <img src="{{ $category->image }}" class="w-5 h-5 object-cover" />
                                 <span class="ml-2">{{ $category->name }}</span>
                             </a>
@@ -39,177 +39,62 @@
                 </ul>
             </li>
             <li>
-                <a href="{{ route('review') }}" class="text-sm font-semibold text-white flex items-center gap-2">
+                <a href="{{ route('review') }}" class="text-sm font-semibold text-white hover:text-orange-300">
                     Review
                 </a>
             </li>
             <li>
-                <a href="{{ route('showcase') }}" class="text-sm font-semibold text-white flex items-center gap-2">
+                <a href="{{ route('showcase') }}" class="text-sm font-semibold text-white hover:text-orange-300">
                     Showcase
                 </a>
             </li>
             <li>
-                <a href="{{ route('mentor') }}" class="text-sm font-semibold text-white flex items-center gap-2">
+                <a href="{{ route('mentor') }}" class="text-sm font-semibold text-white hover:text-orange-300">
                     Mentor
                 </a>
             </li>
             <li>
-                <a href="{{ route('infrastructure') }}" class="text-sm font-semibold text-white flex items-center gap-2">
+                <a href="{{ route('infrastructure') }}" class="text-sm font-semibold text-white hover:text-orange-300">
                     Infrastructure
                 </a>
             </li>
         </ul>
-    </div>
-</div>
 
-    <!-- NavProfile -->
-    <div class="hidden md:flex items-center gap-2 text-white">
-        @guest
-                <a href="{{ route('login') }}"
-                    class="text- font-semibold flex items-center px-4 py-2 gap-2 rounded-lg text-sm bg-orange-600">
+        <div class="hidden md:flex items-center justify-end gap-3 text-white">
+            @guest
+                <a href="{{ route('login') }}" 
+                   class="px-4 py-2 rounded-lg text-sm bg-orange-600 hover:bg-orange-700 transition">
                     Sign In
                 </a>
+                <a href="{{ route('register') }}" 
+                   class="px-4 py-2 rounded-lg text-sm border border-orange-500 hover:bg-orange-600 hover:text-white transition">
+                    Sign Up
+                </a>
+            @endguest
 
-            <a href="{{ route('register') }}"
-                class="font-semibold text-white flex items-center border px-4 py-2 gap-2 rounded-lg text-sm border-orange-">
-                Sign Up
-            </a>
-        @endguest
-        @auth
-            <a href="{{ route('cart.index') }}">
-                <div class="rounded-lg border px-4 py-2 bg-slate-900 border-slate-700">
-                    <i class="fa fa-shopping-cart"></i>
+            @auth
+                <!-- Profile dropdown / avatar -->
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open" class="flex items-center gap-2">
+                        <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name='.Auth::user()->name }}" 
+                             alt="Avatar" class="w-8 h-8 rounded-full">
+                        <span>{{ Auth::user()->name }}</span>
+                    </button>
+                    <div x-show="open" @click.away="open = false"
+                         class="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg py-2">
+                        <a href="{{ route('dashboard') }}" class="block px-4 py-2 hover:bg-gray-100">Dashboard</a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button class="w-full text-left px-4 py-2 hover:bg-gray-100">Logout</button>
+                        </form>
+                    </div>
                 </div>
-            </a>
+            @endauth
+        </div>
 
-            @role('member')
-            <a href="{{ route('member.transactions.index') }}">
-                <div class="rounded-lg border px-4 py-2 bg-slate-900 border-slate-700">
-                    <i class="fa fa-exchange"></i>
-                </div>
-            </a>
-
-            @endrole
-            <div class="relative" x-data="{ isOpen: false }">
-                <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false"
-                    class="flex items-center gap-2 border px-4 py-2 rounded-lg text-sm bg-slate-900 border-slate-700">
-                    <img src="{{ Auth::user()->avatar }}" alt="avatar"
-                        class="w-5 h-5 rounded-full border border-slate-700">
-                    {{ Auth::user()->name }}
-                    <svg xmlns="http://www.w3.org/2000/svg" x-show="!isOpen"
-                        class="icon icon-tabler icon-tabler-chevron-down w-4 h-4" width="24" height="24"
-                        viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" x-cloak x-show="isOpen"
-                        class="icon icon-tabler icon-tabler-chevron-up w-4 h-4" width="24" height="24"
-                        viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <polyline points="6 15 12 9 18 15"></polyline>
-                    </svg>
-                </button>
-                <ul x-cloak x-show="isOpen" @click.away="isOpen = false"
-                    class="absolute font-normal bg-slate-800 shadow overflow-hidden rounded-lg w-48 border border-slate-700 mt-2 py-1 right-0 z-20">
-                    <li>
-                        @role('admin')
-                            <a href="{{ route('admin.dashboard') }}"
-                                class="p-3 rounded-lg text-sm font-semibold text-white flex items-center gap-2 hover:text-blue-500">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-apps w-5 h-5" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <rect x="4" y="4" width="6" height="6"
-                                        rx="1"></rect>
-                                    <rect x="4" y="14" width="6" height="6"
-                                        rx="1"></rect>
-                                    <rect x="14" y="14" width="6" height="6"
-                                        rx="1"></rect>
-                                    <line x1="14" y1="7" x2="20" y2="7"></line>
-                                    <line x1="17" y1="4" x2="17" y2="10"></line>
-                                </svg>
-                                <span class="ml-2">Dashboard</span>
-                            </a>
-                        @else
-                            <a href="{{ route('member.dashboard') }}"
-                                class="p-3 rounded-lg text-sm font-semibold text-white flex items-center gap-2 hover:text-blue-500">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-apps w-5 h-5" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <rect x="4" y="4" width="6" height="6"
-                                        rx="1"></rect>
-                                    <rect x="4" y="14" width="6" height="6"
-                                        rx="1"></rect>
-                                    <rect x="14" y="14" width="6" height="6"
-                                        rx="1"></rect>
-                                    <line x1="14" y1="7" x2="20" y2="7"></line>
-                                    <line x1="17" y1="4" x2="17" y2="10"></line>
-                                </svg>
-                                <span class="ml-2">Dashboard</span>
-                            </a>
-                        @endrole
-                    </li>
-                    <li class="border-b border-dashed border-slate-700">
-                        @role('admin')
-                            <a href="{{ route('admin.user.profile') }}"
-                                class="p-3 rounded-lg text-sm font-semibold text-white flex items-center gap-2 hover:text-blue-500">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-user-circle w-5 h-5" width="24"
-                                    height="24" viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor"
-                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <circle cx="12" cy="12" r="9"></circle>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                    <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
-                                </svg>
-                                <span class="ml-2">Profile</span>
-                            </a>
-                        @else
-                            <a href="{{ route('member.profile.index') }}"
-                                class="p-3 rounded-lg text-sm font-semibold text-white flex items-center gap-2 hover:text-blue-500">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-user-circle w-5 h-5" width="24"
-                                    height="24" viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor"
-                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <circle cx="12" cy="12" r="9"></circle>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                    <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
-                                </svg>
-                                <span class="ml-2">Profile</span>
-                            </a>
-                        @endrole
-                    </li>
-                    <li>
-                        <a href="{{ route('logout') }}"
-                            class="p-3 rounded-lg text-sm font-semibold text-white flex items-center gap-2 hover:text-blue-500"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                class="icon icon-tabler icon-tabler-logout w-5 h-5" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path
-                                    d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2">
-                                </path>
-                                <path d="M7 12h14l-3 -3m0 6l3 -3"></path>
-                            </svg>
-                            <span class="ml-2">Logout</span>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                class="d-none">
-                                @csrf
-                            </form>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        @endauth
     </div>
+</div>
+    
     <!-- Mobile Nav -->
     <div class="flex gap-1 items-center md:hidden">
         <div class="rounded-lg border px-4 py-2 bg-slate-900 border-slate-700 text-white">
