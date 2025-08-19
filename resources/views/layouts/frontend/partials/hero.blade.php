@@ -1,12 +1,10 @@
-<div class="w-full bg-sky-800 pt-32 pb-20">
+<div class="w-full bg-white pt-32 pb-20">
     <div class="container mx-auto">
         <div class="flex flex-col gap-2 text-center items-center">
-            <h1 class="text-3xl font-semibold lg:text-5xl text-white text-center">
-                {{ env('APP_NAME') }}
-            </h1>
-            <p class="text-sm leading-relaxed md:text-xl text-center text-gray-100 m-5">
+            <p class="text-3xl md:text-5xl leading-relaxed text-center text-black m-5">
                 Platform Belajar Pemrograman dan Ilmu Teknologi Lainnya Secara Lengkap dan Mendasar.
-            </p>    
+            </p>
+
             <div class="flex flex-row gap-4 items-center justify-center md:center-start mt-5">
                 <a href="{{ route('course.index') }}"
                     class="px-4 py-2 rounded-lg bg-white-800 text-white hover:scale-110 hover:duration-200 flex items-center gap-2 text-sm border border-cyan-600">
