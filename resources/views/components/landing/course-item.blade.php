@@ -32,10 +32,6 @@
                 </div>
             </div>
 
-            {{-- Info siswa & harga --}}
-            <div class="flex justify-between items-center text-sm">
-                <div>
-                    {{ $course->enrolled }} Siswa • {{ $course->reviews_count }} Testimoni
                 </div>
                 <div class="text-right">
                     @if($course->price_before_discount > $course->price_after_discount)

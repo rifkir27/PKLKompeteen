@@ -13,11 +13,16 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::where('is_published', 1)->withCount(['series', 'reviews', 'details as enrolled' => function($query){
-            $query->whereHas('transaction', function($query){
-                $query->where('status', 'success');
-            });
-        }])->search('name')->orderBy('created_at', 'DESC')->get();
+        $courses = Course::where('is_published', 1)
+            ->withCount(['series', 'reviews', 'details as enrolled' => function($query){
+                $query->whereHas('transaction', function($query){
+                    $query->where('status', 'success');
+                });
+            }])
+            ->withAvg('reviews as avg_rating', 'rating')
+            ->search('name')
+            ->orderBy('created_at', 'DESC')
+            ->get();
         
         return view('landing.course.index', compact('courses'));
     }
@@ -45,7 +50,15 @@ class CourseController extends Controller
 
         $reviews = Review::where('course_id', $course->id)->orderBy('created_at', 'DESC')->limit(6)->get();
         
-        return view('landing.course.show', compact('course', 'series', 'enrolled', 'alreadyBought', 'reviews'));
+        $avgRating = Review::where('course_id', $course->id)->avg('rating');
+        $ratingCount = Review::where('course_id', $course->id)->count();
+        $ratingStats = Review::where('course_id', $course->id)
+            ->selectRaw('rating, COUNT(*) as count')
+            ->groupBy('rating')
+            ->orderBy('rating', 'DESC')
+            ->get();
+        
+        return view('landing.course.show', compact('course', 'series', 'enrolled', 'alreadyBought', 'reviews', 'avgRating', 'ratingCount', 'ratingStats'));
     }
 
     public function series(Course $course, $number_of_series)
