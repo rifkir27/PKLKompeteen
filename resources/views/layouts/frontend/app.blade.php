@@ -51,7 +51,8 @@
     </style>
 </head>
 
-<body style="font-family: 'Open Sans', sans-serif;">
+<body style="font-family: 'Poppins', sans-serif;">
+
     <!-- navbar -->
     @include('layouts.frontend.partials.navbar')
 

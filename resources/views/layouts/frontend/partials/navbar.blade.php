@@ -1,6 +1,5 @@
 <div class="w-full bg-purple-900 px-10 py-3 fixed z-10 2xl:px-36">
-    <div class="container mx-auto grid grid-cols-3 items-center">
-        
+    <div class="grid grid-cols-3 items-center">
         <div class="flex items-center">
             <a href="/" class="flex items-center text-3xl font-bold">
                 <span class="text-white">Kompe</span>
@@ -63,11 +62,11 @@
         <div class="hidden md:flex items-center justify-end gap-3 text-white">
             @guest
                 <a href="{{ route('login') }}" 
-                   class="px-4 py-2 rounded-lg text-sm bg-orange-600 hover:bg-orange-700 transition">
+                   class="px-4 py-1 rounded-lg text-sm bg-orange-600 hover:bg-orange-700 transition">
                     Sign In
                 </a>
                 <a href="{{ route('register') }}" 
-                   class="px-4 py-2 rounded-lg text-sm border border-orange-500 hover:bg-orange-600 hover:text-white transition">
+                   class="px-4 py-1 rounded-lg text-sm border border-orange-500 hover:bg-orange-600 hover:text-white transition">
                     Sign Up
                 </a>
             @endguest
