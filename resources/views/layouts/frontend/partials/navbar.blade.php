@@ -1,4 +1,4 @@
-<div class="w-full bg-purple-900 px-10 py-3 fixed z-10 2xl:px-36">
+<div class="w-full bg-custom-purple px-10 py-3 fixed z-10 2xl:px-36">
     <div class="grid grid-cols-3 items-center">
         <div class="flex items-center">
             <a href="/" class="flex items-center text-3xl font-bold">

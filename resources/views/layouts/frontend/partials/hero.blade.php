@@ -12,7 +12,7 @@
 
             <div class="flex flex-row gap-4 items-center justify-center mt-5">
                 <a href="{{ route('course.index') }}"
-                    class="px-3 py-2 rounded-2xl bg-orange-600 text-white font-semibold text-lg flex items-center gap-2
+                    class="px-3 py-2 rounded-xl bg-orange-600 font-medium text-white text-lg flex items-center gap-2
                         transition-transform duration-300 hover:scale-110">
                     Gabung Kelas
                 </a>

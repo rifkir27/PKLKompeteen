@@ -6,17 +6,12 @@
         class="p-8 text-center bg-slate-800 font-semibold text-white text-lg md:text-2xl">
         <span class="text-red-500">{{ $user->count() }}</span> Orang Telah Belajar di Eduthings
     </section> --}}
-    <section class="bg-slate-300 w-full p-10 2xl:px-36">
-        <div class="text-center max-w-4xl mx-auto">
-            <h3 class="text-sm md:text-xl mb-5 font-light">Kami menyediakan berbagai macam pembahasan dengan studi kasus yang dapat membantu menjadi seorang Developer Profesional.</h3>
-            <div class="text-center mb-10">
-                <span class="inline-block w-1 h-1 rounded-full bg-sky-800 ml-1"></span>
-                <span class="inline-block w-3 h-1 rounded-full bg-sky-800 ml-1"></span>
-                <span class="inline-block w-40 h-1 rounded-full bg-sky-800"></span>
-                <span class="inline-block w-3 h-1 rounded-full bg-sky-800 ml-1"></span>
-                <span class="inline-block w-1 h-1 rounded-full bg-sky-800 ml-1"></span>
-            </div>
+    <section class="bg-white w-full p-10 2xl:px-36">
+        <div class="max-w-4xl mx-auto flex flex-col md:items-start items-center text-left md:text-left px-4">
+            <p class="text-sm md:text-base font-light mb-2">Siap upgrade skill anda hari ini?</p>
+            <h2 class="text-2xl md:text-4xl font-bold">Dapatkan kelas sesuai passion dan skill anda</h2>>
         </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 container mx-auto my-5 items-start">
             @foreach ($courses as $course)
                 <x-landing.course-item :course="$course" />
@@ -25,18 +20,11 @@
         <div class="flex justify-center text-center mt-14">
             <a href="{{ route('course.index') }}"
                 class="px-4 py-2 rounded-lg bg-sky-700 text-white hover:bg-sky-900 hover:duration-200 flex items-center gap-2 text-lg border border-slate-500 hover:border-sky-900 hover:transition-colors">
-                Lihat Semua Course
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-narrow-right w-5 h-5"
-                    width="24" height="24" viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor"
-                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <line x1="15" y1="16" x2="19" y2="12"></line>
-                    <line x1="15" y1="8" x2="19" y2="12"></line>
-                </svg>
+                Lihat Semua
             </a>
         </div>
     </section>
+    
     {{-- <section class="w-full max-w-6xl mx-auto bg-white mt-10 mb-10 my-5">
         <div class="text-center max-w-xl mx-auto">
             <h1 class="text-2xl font-bold mb-5 text-gray-600">Testimoni

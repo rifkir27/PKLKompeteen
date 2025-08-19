@@ -6,7 +6,11 @@ module.exports = {
     "./resources/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'custom-purple': '#3C096C',
+      },
+    },
   },
   plugins: [
     require('tailwind-scrollbar'),
