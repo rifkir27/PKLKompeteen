@@ -8,7 +8,6 @@
     </section> --}}
     <section class="bg-slate-300 w-full p-10 2xl:px-36">
         <div class="text-center max-w-4xl mx-auto">
-            <h1 class="text-2xl font-bold mb-5 text-gray-600">E-BOOK
             <h3 class="text-sm md:text-xl mb-5 font-light">Kami menyediakan berbagai macam pembahasan dengan studi kasus yang dapat membantu menjadi seorang Developer Profesional.</h3>
             <div class="text-center mb-10">
                 <span class="inline-block w-1 h-1 rounded-full bg-sky-800 ml-1"></span>
@@ -225,31 +224,4 @@
             </a>
         </div>
     </section> --}}
-    <section class="w-full p-6 bg-sky-800">
-        <div class="flex flex-col items-center justify-center p-4 space-y-8 md:p-10 md:px-24 xl:px-48">
-            <h1 class="text-2xl md:text-3xl font-bold leading-none text-center text-white">
-                TUNGGU APA LAGI ?
-            </h1>
-            <p class="text-sm md:text-base font-medium text-center text-gray-100">
-                Belajar lebih terarah dan sistematis dengan materi berkualitas
-                tinggi beserta pendampingan mentoring secara intensif.
-            </p>
-            @if (!Auth::user())
-              <div class="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:space-x-8">
-                  <a href="{{ route('register') }}"
-                      class="px-4 py-2 rounded-lg bg-slate-700 text-white text-base flex items-center gap-2 hover:scale-110 hover:duration-200 border border-slate-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-plus" width="24"
-                          height="24" viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
-                          stroke-linecap="round" stroke-linejoin="round">
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                          <circle cx="9" cy="7" r="4"></circle>
-                          <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                          <path d="M16 11h6m-3 -3v6"></path>
-                      </svg>
-                      Daftar Gratis
-                  </a>
-              </div>
-            @endif
-        </div>
-    </section>
 @endsection
