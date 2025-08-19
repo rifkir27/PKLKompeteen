@@ -7,7 +7,7 @@
 
             <div class="flex flex-row gap-4 items-center justify-center md:center-start mt-5">
                 <a href="{{ route('course.index') }}"
-                    class="px-4 py-2 rounded-lg bg-white-800 text-white hover:scale-110 hover:duration-200 flex items-center gap-2 text-sm border border-cyan-600">
+                    class="px-4 py-2 rounded-lg bg-orange-600  flex items-center gap-2  border-cyan-600">
                     <svg xmlns="http://www.w3.org/2000/svg"
                         class="icon icon-tabler icon-tabler-device-laptop w-5 h-5" width="24" height="24"
                         viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
