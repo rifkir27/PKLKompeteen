@@ -4,7 +4,15 @@
     {{-- Hero --}}
     @include('layouts.frontend.partials.hero')
 
-   
+    
+            <div class="flex justify-center space-x-1 mb-12">
+                <span class="w-1 h-1 bg-sky-800 rounded-full"></span>
+                <span class="w-3 h-1 bg-sky-800 rounded-full"></span>
+                <span class="w-40 h-1 bg-sky-800 rounded-full"></span>
+                <span class="w-3 h-1 bg-sky-800 rounded-full"></span>
+                <span class="w-1 h-1 bg-sky-800 rounded-full"></span>
+            </div>
+        </div>
 
         {{-- Grid Courses --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 container mx-auto">

@@ -33,6 +33,10 @@ class DashboardController extends Controller
 
         $showcase = Showcase::where('user_id', $user->id)->count();
 
-        return view('member.dashboard', compact('course', 'review', 'transaction', 'showcase'));
+        // Data rating untuk dashboard
+        $avgRating = Review::where('user_id', $user->id)->avg('rating');
+        $totalReviews = Review::where('user_id', $user->id)->count();
+
+        return view('member.dashboard', compact('course', 'review', 'transaction', 'showcase', 'avgRating', 'totalReviews'));
     }
 }

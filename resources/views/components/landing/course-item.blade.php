@@ -24,6 +24,10 @@
                     <i class="fa fa-comment"></i>
                     {{ $course->reviews_count }} Review
                 </div>
+                <div class="text-slate-600 flex items-center gap-1 align-bottom">
+                    <i class="fa fa-star text-yellow-500"></i>
+                    {{ number_format($course->avg_rating ?? 0, 1) }}
+                </div>
             </div>
             <div class="flex justify-between items-center mt-2">               
                 @if ($course->price_before_discount != $course->price_after_discount)

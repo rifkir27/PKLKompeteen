@@ -13,11 +13,16 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::where('is_published', 1)->withCount(['series', 'reviews', 'details as enrolled' => function($query){
-            $query->whereHas('transaction', function($query){
-                $query->where('status', 'success');
-            });
-        }])->search('name')->orderBy('created_at', 'DESC')->get();
+        $courses = Course::where('is_published', 1)
+            ->withCount(['series', 'reviews', 'details as enrolled' => function($query){
+                $query->whereHas('transaction', function($query){
+                    $query->where('status', 'success');
+                });
+            }])
+            ->withAvg('reviews as avg_rating', 'rating')
+            ->search('name')
+            ->orderBy('created_at', 'DESC')
+            ->get();
         
         return view('landing.course.index', compact('courses'));
     }

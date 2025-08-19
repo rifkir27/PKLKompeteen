@@ -69,6 +69,12 @@
                                 {{ $review }}
                             </h3>
                             <p>Review</p>
+                            @if($totalReviews > 0)
+                                <p class="text-sm mt-1">
+                                    <i class="fas fa-star text-yellow-300"></i> 
+                                    {{ number_format($avgRating ?? 0, 1) }} avg rating
+                                </p>
+                            @endif
                         </div>
                         <div class="icon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-2" width="48"
