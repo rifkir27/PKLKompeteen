@@ -10,6 +10,13 @@
                 </div>
             </div>
         @endif
+        
+        <!-- Rating in top-left corner -->
+        <div class="absolute top-2 left-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded-md text-xs font-semibold flex items-center gap-1 z-10">
+            <i class="fa fa-star text-yellow-400"></i>
+            {{ number_format($course->avg_rating ?? 0, 1) }}
+        </div>
+        
         <img class="rounded-t-lg" src="{{ $course->image }}" alt="product image">
         <div class="p-4 md:p-5 text-center">
             <div class="h-16 min-h-full font-medium">
@@ -23,10 +30,6 @@
                 <div class="text-slate-600 flex items-center gap-1 align-bottom">
                     <i class="fa fa-comment"></i>
                     {{ $course->reviews_count }} Review
-                </div>
-                <div class="text-slate-600 flex items-center gap-1 align-bottom">
-                    <i class="fa fa-star text-yellow-500"></i>
-                    {{ number_format($course->avg_rating ?? 0, 1) }}
                 </div>
             </div>
             <div class="flex justify-between items-center mt-2">               

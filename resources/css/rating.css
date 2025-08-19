@@ -47,3 +47,24 @@
     font-size: 0.875rem;
     color: #6b7280;
 }
+
+/* Top-left rating positioning */
+.rating-top-left {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    z-index: 10;
+}
+
+.rating-top-left i {
+    color: #facc15;
+}
