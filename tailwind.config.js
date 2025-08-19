@@ -10,6 +10,10 @@ module.exports = {
       colors: {
         'custom-purple': '#3C096C',
       },
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+        nunito: ['Nunito', 'sans-serif'],
+      },
     },
   },
   plugins: [
