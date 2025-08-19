@@ -2,11 +2,12 @@
     <div class="container mx-auto">
         <div class="flex flex-col gap-2 text-center items-center">
 
-            <p class="text-3xl md:text-5xl leading-relaxed text-center text-black m-5">
+            <p class="text-3xl md:text-5xl leading-relaxed text-center text-black m-5 font-nunito font-semibold">
                 Platform Belajar Pemrograman dan Ilmu Teknologi Lainnya Secara Lengkap dan Mendasar.
             </p>
 
-            <p class="text-xl md:text-lg text-black mb-5">
+
+            <p class="text-xl md:text-lg text-black mb-5 font-semibold font-nunito">
                 Belajar, berkolaborasi, dan kembangkan skill anda bersama kami di KOMPETEEN
             </p>
 
