@@ -1,4 +1,4 @@
-<footer class="bg-slate-800">
+<footer class="bg-custom-purple">
     <div class="container px-10 py-10 mx-auto 2xl:px-36">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 justify-items-center md:justify-items-start">
             <div class="text-center sm:text-start col-span-2">

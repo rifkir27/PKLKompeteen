@@ -6,7 +6,16 @@ module.exports = {
     "./resources/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'custom-purple': '#3C096C',
+        'custom-orange': '#e0641c'
+      },
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+        nunito: ['Nunito', 'sans-serif'],
+      },
+    },
   },
   plugins: [
     require('tailwind-scrollbar'),

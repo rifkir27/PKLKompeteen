@@ -1,4 +1,4 @@
-<div class="w-full bg-purple-900 px-10 py-3 fixed z-10 2xl:px-36">
+<div class="w-full bg-custom-purple px-10 py-4 fixed z-10 2xl:px-36">
     <div class="grid grid-cols-3 items-center">
         <div class="flex items-center">
             <a href="/" class="flex items-center text-3xl font-bold">
@@ -9,18 +9,18 @@
 
         <ul class="hidden lg:flex items-center gap-6 justify-center">
             <li>
-                <a href="{{ route('home') }}" class="text-sm font-semibold text-white hover:text-orange-300">
+                <a href="{{ route('home') }}" class="text-sm text-white hover:text-orange-300">
                     Home
                 </a>
             </li>
             <li>
-                <a href="{{ route('course.index') }}" class="text-sm font-semibold text-white hover:text-orange-300">
+                <a href="{{ route('course.index') }}" class="text-sm text-white hover:text-orange-300">
                     Course
                 </a>
             </li>
             <li class="relative" x-data="{ isOpen: false }">
                 <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false"
-                    class="flex items-center gap-2 text-sm font-semibold text-white hover:text-orange-300">
+                    class="flex items-center gap-2 text-sm text-white hover:text-orange-300">
                     Category
                 </button>
                 <ul x-cloak x-show="isOpen" @click.away="isOpen = false"
@@ -38,22 +38,22 @@
                 </ul>
             </li>
             <li>
-                <a href="{{ route('review') }}" class="text-sm font-semibold text-white hover:text-orange-300">
+                <a href="{{ route('review') }}" class="text-sm text-white hover:text-orange-300">
                     Review
                 </a>
             </li>
             <li>
-                <a href="{{ route('showcase') }}" class="text-sm font-semibold text-white hover:text-orange-300">
+                <a href="{{ route('showcase') }}" class="text-sm text-white hover:text-orange-300">
                     Showcase
                 </a>
             </li>
             <li>
-                <a href="{{ route('mentor') }}" class="text-sm font-semibold text-white hover:text-orange-300">
+                <a href="{{ route('mentor') }}" class="text-sm text-white hover:text-orange-300">
                     Mentor
                 </a>
             </li>
             <li>
-                <a href="{{ route('infrastructure') }}" class="text-sm font-semibold text-white hover:text-orange-300">
+                <a href="{{ route('infrastructure') }}" class="text-sm text-white hover:text-orange-300">
                     Infrastructure
                 </a>
             </li>
@@ -62,17 +62,16 @@
         <div class="hidden md:flex items-center justify-end gap-3 text-white">
             @guest
                 <a href="{{ route('login') }}" 
-                   class="px-4 py-1 rounded-lg text-sm bg-orange-600 hover:bg-orange-700 transition">
+                   class="px-4 py-2 rounded-lg text-sm bg-custom-orange hover:bg-orange-700 transition">
                     Sign In
                 </a>
                 <a href="{{ route('register') }}" 
-                   class="px-4 py-1 rounded-lg text-sm border border-orange-500 hover:bg-orange-600 hover:text-white transition">
+                   class="px-4 py-2 rounded-lg text-sm border border-orange-500 hover:bg-white hover:text-black transition">
                     Sign Up
                 </a>
             @endguest
 
             @auth
-                <!-- Profile dropdown / avatar -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center gap-2">
                         <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name='.Auth::user()->name }}" 
