@@ -62,11 +62,11 @@
         <div class="hidden md:flex items-center justify-end gap-3 text-white">
             @guest
                 <a href="{{ route('login') }}" 
-                   class="px-4 py-2 rounded-lg text-sm bg-orange-600 hover:bg-orange-700 transition">
+                   class="px-4 py-2 rounded-lg text-sm bg-custom-orange hover:bg-orange-700 transition">
                     Sign In
                 </a>
                 <a href="{{ route('register') }}" 
-                   class="px-4 py-2 rounded-lg text-sm border border-orange-500 hover:bg-orange-600 hover:text-white transition">
+                   class="px-4 py-2 rounded-lg text-sm border border-orange-500 hover:bg-white hover:text-black transition">
                     Sign Up
                 </a>
             @endguest

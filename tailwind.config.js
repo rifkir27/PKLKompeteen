@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       colors: {
         'custom-purple': '#3C096C',
+        'custom-orange': '#e0641c'
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
