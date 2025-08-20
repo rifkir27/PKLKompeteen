@@ -1,7 +1,9 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar elevation-4" style="background-color: #3C096C !important; color: white !important;">
     <a href="/" class="brand-link">
         <div class="text-center">
-            <span class="brand-text font-weight-bold">{{ env('APP_NAME') }}</span>
+            <span class="brand-text font-weight-bold" style="color: white !important;">
+                {{ env('APP_NAME') }}
+            </span>
         </div>
     </a>
 
