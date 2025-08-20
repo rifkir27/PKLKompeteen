@@ -9,7 +9,7 @@
     @endif
 
     <img class="w-full h-48 object-cover" 
-         src="{{ $course->image ? asset('images/' . $course->image) : asset('images/default.png') }}" 
+         src="{{ $course->image ?? asset('images/default.png') }}" 
          alt="{{ $course->name }}">
 
     <div class="bg-custom-purple text-white p-4 flex flex-col flex-1">

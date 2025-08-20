@@ -181,6 +181,9 @@ Route::group(['as' => 'member.', 'prefix' => 'account', 'middleware' => ['auth',
     Route::get('transactions/ajax/datatable', [MemberTransactionController::class, 'datatable'])->name('transactions.ajax.datatable');
 
     Route::post('/review/{course}', [MemberReviewController::class, 'store'])->name('review');
+    Route::post('/series/{series}/reviews', [SeriesReviewController::class, 'store'])->name('series.reviews.store');
+    Route::put('/series/{series}/reviews', [SeriesReviewController::class, 'update'])->name('series.reviews.update');
+    Route::delete('/series/{series}/reviews', [SeriesReviewController::class, 'destroy'])->name('series.reviews.destroy');
 
     Route::get('my-course/course/{id}', [MemberCourseController::class, 'course'])->name('mycourse.course');
     Route::get('my-course/course/{id}/series/{seriesId}', [MemberCourseController::class, 'show'])->name('mycourse.course.show');

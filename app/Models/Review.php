@@ -14,6 +14,7 @@ class Review extends Model
     protected $fillable = [
         'id',
         'course_id', 
+        'series_id',
         'user_id', 
         'rating', 
         'review',
@@ -22,6 +23,11 @@ class Review extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function series()
+    {
+        return $this->belongsTo(Series::class);
     }
 
     public function user()

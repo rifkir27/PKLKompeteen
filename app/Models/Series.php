@@ -25,4 +25,19 @@ class Series extends Model
     {
         return $this->belongsTo(Course::class);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function avgRating()
+    {
+        return $this->reviews()->avg('rating') ?? 0;
+    }
+
+    public function ratingCount()
+    {
+        return $this->reviews()->count();
+    }
 }
