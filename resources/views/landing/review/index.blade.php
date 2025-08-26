@@ -1,36 +1,38 @@
 @extends('layouts.frontend.app', ['title' => 'Reviews'])
 
 @section('content')
-    <!-- hero section -->
-    <x-landing.hero-section title="Review" subtitle="Kumpulan review dari para member yang sudah membeli premium disini"
+    <x-landing.hero-section 
+        title="Review" 
+        subtitle="Kumpulan review dari para member yang sudah membeli premium disini"
         details="Disini review yang diberikan kami tampilkan secara menyeluruh tanpa adanya perubahan review agar kami semakin baik dalam menyajikan konten - konten premium maupun gratis."
-        :data="$reviews" cardtitle="Review">
+        :data="$reviews" 
+        cardtitle="Review">
     </x-landing.hero-section>
 
-    <div class="w-full bg-slate-300 p-10 2xl:px-36">
+    <div class="w-full bg-custom-purple2 p-10 2xl:px-36">
         <div class="container mx-auto">
             
             <x-landing.search-section :url="route('review')" />
 
-            <div class="my-5 flex flex-row overflow-x-auto md:grid md:grid-cols-3 gap-4 items-start">
+            <div class="my-5 flex flex-row overflow-x-auto md:grid md:grid-cols-3 gap-6 items-start">
                 @foreach ($reviews as $review)
-                    <div class="min-w-full bg-white rounded-lg border border-slate-300">
-                        <div class="flex justify-between p-4">
-                            <div class="flex space-x-4">
+                    <div class="min-w-full bg-white shadow-lg rounded-xl border border-slate-200 hover:shadow-xl transition duration-300">
+                        
+                        <div class="flex justify-between p-5">
+                            <div class="flex space-x-4 items-center">
+                                <img src="{{ $review->user->avatar }}" 
+                                    alt="Avatar {{ $review->user->name }}"
+                                    class="object-cover w-12 h-12 rounded-full border-2 border-custom-orange shadow-sm">
                                 <div>
-                                    <img src="{{ $review->user->avatar }}" alt=""
-                                        class="object-cover w-12 h-12 rounded-full border">
-                                </div>
-                                <div>
-                                    <h4 class="font-bold">{{ $review->user->name }}</h4>
-                                    <span class="text-xs">
+                                    <h4 class="font-semibold text-gray-800">{{ $review->user->name }}</h4>
+                                    <span class="text-xs text-gray-500">
                                         {{ Carbon\Carbon::parse($review->created_at)->diffForHumans() }}
                                     </span>
                                 </div>
                             </div>
-                            <div class="flex items-center space-x-2 text-yellow-500">
+                            <div class="flex items-center space-x-2">
                                 <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-star fill-yellow-500 w-5 h-5" width="24"
+                                    class="icon icon-tabler icon-tabler-star fill-yellow-500 w-6 h-6" width="24"
                                     height="24" viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor"
                                     fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -38,20 +40,24 @@
                                         d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z">
                                     </path>
                                 </svg>
-                                <span class="text-xl font-bold">
+                                <span class="text-xl font-bold text-gray-800">
                                     {{ $review->rating }}
                                 </span>
                             </div>
                         </div>
-                        <div class="p-4 space-y-2 text-sm text-gray-800 border-t border-dashed border-slate-300">
-                            <p class="text-left h-16 min-h-full">
-                                {{ $review->review }}
+
+                        <!-- Isi review -->
+                        <div class="px-5 pb-4 space-y-3 text-lg text-black font-base border-t border-dashed border-slate-200">
+                            <p class="text-left min-h-[64px] leading-relaxed">
+                                "{{ $review->review }}"
                             </p>
                         </div>
-                        <div class="p-4 border-t border-dashed border-slate-300 text-gray-800 text-sm flex flex-col gap-2">
-                            <p class="flex items-center gap-1">
+
+                        <!-- Info course -->
+                        <div class="p-5 border-t border-dashed border-slate-200 text-gray-700 text-sm flex flex-col gap-2">
+                            <p class="flex items-center gap-2 font-medium text-gray-600">
                                 <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-message-2 w-5 h-5" width="24" height="24"
+                                    class="icon icon-tabler icon-tabler-message-2 w-5 h-5 text-purple-600" width="24" height="24"
                                     viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
                                     stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -64,7 +70,7 @@
                                 Review Course :
                             </p>
                             <a href="{{ route('course.show', $review->course->slug) }}"
-                                class="underline underline-offset-1 font-semibold h-16 min-h-full">
+                                class="underline underline-offset-2 font-semibold text-purple-700 hover:text-purple-900 transition">
                                 {{ $review->course->name }}
                             </a>
                         </div>
