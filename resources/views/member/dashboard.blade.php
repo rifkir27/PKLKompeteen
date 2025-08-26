@@ -1,7 +1,23 @@
 @extends('layouts.backend.app', ['title' => 'Dashboard'])
 
 @section('content')
-
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Dashboard</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
 
     <!-- Main content -->
     <section class="content">
@@ -53,12 +69,6 @@
                                 {{ $review }}
                             </h3>
                             <p>Review</p>
-                            @if($totalReviews > 0)
-                                <p class="text-sm mt-1">
-                                    <i class="fas fa-star text-yellow-300"></i> 
-                                    {{ number_format($avgRating ?? 0, 1) }} avg rating
-                                </p>
-                            @endif
                         </div>
                         <div class="icon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-2" width="48"
