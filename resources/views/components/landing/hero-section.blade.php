@@ -1,5 +1,5 @@
 @props(['data'])
-<div class="w-full bg-sky-800 pt-28 pb-16">
+<div class="w-full bg-custom-orange pt-28 pb-16">
     <div class="container mx-auto">
         <div class="flex flex-col gap-2 text-center items-center">
             <h1 class="text-3xl font-semibold lg:text-5xl text-white text-center">
