@@ -1,9 +1,7 @@
-<aside class="main-sidebar elevation-4" style="background-color: #3C096C !important; color: white !important;">
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="/" class="brand-link">
         <div class="text-center">
-            <span class="brand-text font-weight-bold" style="color: white !important;">
-                {{ env('APP_NAME') }}
-            </span>
+            <span class="brand-text font-weight-bold">{{ env('APP_NAME') }}</span>
         </div>
     </a>
 
@@ -223,10 +221,14 @@
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('admin.certificate.index') }}" class="nav-link {{ active('admin.certificate.index') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-certificate" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M3 15l9 6l9 -6l-9 -6l-9 6" />
-                                <path d="M9 12l2 2l4 -4" />
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                            class="icon icon-tabler icon-tabler-user-circle nav-icon" width="24" height="24"
+                            viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <circle cx="12" cy="10" r="3"></circle>
+                            <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
                             </svg>
                             <p>
                                 Certificate
@@ -235,15 +237,14 @@
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('admin.mentor.index') }}" class="nav-link {{ active('admin.mentor.index') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-teacher" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M20 20h-16v-1a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v1z" />
-                                <circle cx="12" cy="7" r="4" />
-                                <path d="M12 11v8" />
-                                <path d="M9 20h6" />
-                                <path d="M16 8v4a2 2 0 0 1 -2 2h-4a2 2 0 0 1 -2 -2v-4" />
-                                <line x1="9" y1="4" x2="9" y2="6" />
-                                <line x1="15" y1="4" x2="15" y2="6" />
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                            class="icon icon-tabler icon-tabler-user-circle nav-icon" width="24" height="24"
+                            viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <circle cx="12" cy="10" r="3"></circle>
+                            <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
                             </svg>
                             <p>
                                 Mentor
@@ -252,13 +253,14 @@
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('admin.infrastructure.index') }}" class="nav-link {{ active('admin.infrastructure.index') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M3 21v-13l9 -4l9 4v13" />
-                                <line x1="9" y1="7" x2="15" y2="7" />
-                                <line x1="9" y1="10" x2="15" y2="10" />
-                                <line x1="9" y1="13" x2="15" y2="13" />
-                                <line x1="9" y1="16" x2="15" y2="16" />
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                            class="icon icon-tabler icon-tabler-user-circle nav-icon" width="24" height="24"
+                            viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <circle cx="12" cy="10" r="3"></circle>
+                            <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
                             </svg>
                             <p>
                                 Infrastructure
