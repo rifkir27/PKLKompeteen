@@ -7,10 +7,14 @@
         <span class="text-red-500">{{ $user->count() }}</span> Orang Telah Belajar di Eduthings
     </section> --}}
     <section class="bg-white w-full p-10 2xl:px-36">
-        <div class="max-w-4xl mx-auto flex flex-col md:items-start items-center text-left md:text-left px-4">
-            <p class="text-sm md:text-base font-light mb-2">Siap upgrade skill anda hari ini?</p>
-            <h2 class="text-2xl md:text-4xl font-bold">Dapatkan kelas sesuai passion dan skills anda</h2>
-        </div>
+<div class="max-w-4xl w-full flex flex-col items-start text-left px-4">
+  <p class="text-sm md:text-base font-light mb-2">
+    Siap upgrade skill anda hari ini?
+  </p>
+  <h2 class="text-2xl md:text-4xl font-bold">
+    Dapatkan kelas sesuai passion dan skills anda
+  </h2>
+</div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 container mx-auto my-5 items-start">
             @foreach ($courses as $course)
