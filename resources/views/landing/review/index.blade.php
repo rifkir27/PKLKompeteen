@@ -9,20 +9,20 @@
         cardtitle="Review">
     </x-landing.hero-section>
 
-    <div class="w-full bg-custom-purple2 p-10 2xl:px-36">
+    <div class="w-full bg-white p-10 2xl:px-36">
         <div class="container mx-auto">
             
             <x-landing.search-section :url="route('review')" />
 
             <div class="my-5 flex flex-row overflow-x-auto md:grid md:grid-cols-3 gap-6 items-start">
                 @foreach ($reviews as $review)
-                    <div class="min-w-full bg-white shadow-lg rounded-xl border border-slate-200 hover:shadow-xl transition duration-300">
+                    <div class="min-w-full rounded-xl border-2 border-custom-purple2 hover:shadow-xl transition duration-300">
                         
                         <div class="flex justify-between p-5">
                             <div class="flex space-x-4 items-center">
                                 <img src="{{ $review->user->avatar }}" 
                                     alt="Avatar {{ $review->user->name }}"
-                                    class="object-cover w-12 h-12 rounded-full border-2 border-custom-orange shadow-sm">
+                                    class="object-cover w-12 h-12 rounded-full border-2 border-custom-purple2 shadow-sm">
                                 <div>
                                     <h4 class="font-semibold text-gray-800">{{ $review->user->name }}</h4>
                                     <span class="text-xs text-gray-500">
@@ -47,14 +47,14 @@
                         </div>
 
                         <!-- Isi review -->
-                        <div class="px-5 pb-4 space-y-3 text-lg text-black font-base border-t border-dashed border-slate-200">
+                        <div class="px-5 pb-4 space-y-3 text-lg text-black font-base border-t border-dashed border-custom-purple2">
                             <p class="text-left min-h-[64px] leading-relaxed">
                                 "{{ $review->review }}"
                             </p>
                         </div>
 
                         <!-- Info course -->
-                        <div class="p-5 border-t border-dashed border-slate-200 text-gray-700 text-sm flex flex-col gap-2">
+                        <div class="p-5 border-t border-dashed border-custom-purple2 text-gray-70a text-sm flex flex-col gap-2">
                             <p class="flex items-center gap-2 font-medium text-gray-600">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                     class="icon icon-tabler icon-tabler-message-2 w-5 h-5 text-purple-600" width="24" height="24"

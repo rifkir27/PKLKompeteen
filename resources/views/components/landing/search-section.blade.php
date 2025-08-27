@@ -4,7 +4,7 @@
             <div class="flex flex-row items-center gap-2">
                 <form action="{{ $url }}" method="GET" class="flex items-center gap-1">
                     <input type="text" placeholder="Cari disini..."
-                        class="p-2 rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-white text-sm"
+                        class="p-2 rounded-lg bg-white focus:outline-none focus:ring-1 border border-custom-orange focus:ring-white text-sm"
                         name="search" value="{{ request()->search }}" />
                     <button type="submit"
                         class="p-2 rounded-lg text-white bg-custom-orange focus:outline-none focus:ring-1 focus:ring-sky-500 text-sm border">
