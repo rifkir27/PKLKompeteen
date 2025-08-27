@@ -8,9 +8,12 @@
         </div>
     @endif
 
-    <img class="w-full h-48 object-cover" 
-         src="{{ $course->image ?? asset('images/default.png') }}" 
-         alt="{{ $course->name }}">
+    <div class="w-full aspect-video bg-gray-200 overflow-hidden">
+        <img class="w-full h-full object-cover" 
+             src="{{ $course->image ?? asset('images/default.png') }}" 
+             alt="{{ $course->name }}"
+             onerror="this.src='{{ asset('images/default.png') }}'">
+    </div>
 
     <div class="bg-custom-purple text-white p-4 flex flex-col flex-1">
         {{-- Judul course --}}
@@ -26,9 +29,21 @@
                     <p class="text-xs opacity-80">Mobile Developer</p>
                 </div>
             </div>
+            {{-- Rating Display --}}
+            @if($course->avg_rating > 0)
+            <div class="flex items-center gap-2 text-sm">
+                <x-star-rating 
+                    :rating="$course->avg_rating" 
+                    :showNumber="true"
+                    :showCount="true"
+                    :ratingCount="$course->reviews_count"
+                    size="sm" />
+            </div>
+            @endif
+            
             <div class="flex justify-between items-center text-sm">
                 <div>
-                    {{ $course->enrolled }} Siswa • {{ $course->reviews_count }} Testimoni
+                    {{ $course->enrolled }} Siswa
                 </div>
                 <div class="text-right">
                     @if($course->price_before_discount > $course->price_after_discount)

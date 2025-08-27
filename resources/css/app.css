@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './images.css';
+
 .shadow-custom {
     box-shadow: 10px 10px 0 rgba(255, 255, 255, 0.1);
 }

@@ -22,9 +22,16 @@
         <div class="lg:col-span-2">
             <h1 class="text-3xl font-bold mb-2">{{ $course->name }}</h1>
             <p class="text-gray-600">{{ $course->sort_description ?? 'Deskripsi singkat tidak tersedia' }}</p>
-            <div class="flex flex-wrap gap-4 mt-3 text-sm text-gray-500">
+            <div class="flex flex-wrap gap-4 mt-3 text-sm text-gray-500 items-center">
                 <span class="font-semibold">{{ $course->mentor->name ?? 'Mentor' }}</span>
-                <span>⭐ {{ number_format($avgRating ?? 0, 1) }} ({{ $ratingCount ?? 0 }} ulasan)</span>
+                <div class="flex items-center">
+                    <x-star-rating 
+                        :rating="$avgRating ?? 0" 
+                        :showNumber="true"
+                        :showCount="true"
+                        :ratingCount="$ratingCount ?? 0"
+                        size="sm" />
+                </div>
                 <span>{{ $enrolled ?? 0 }} siswa</span>
             </div>
         </div>
@@ -144,7 +151,10 @@
                          onerror="this.src='https://via.placeholder.com/80'">
                     <div>
                         <p class="font-bold">{{ $course->mentor->name }}</p>
-                        <p class="text-sm text-black">⭐ {{ $course->mentor->rating ?? '4.8' }} rating</p>
+                        <x-star-rating 
+                            :rating="$course->mentor->rating ?? 4.8" 
+                            :showNumber="true"
+                            size="sm" />
                     </div>
                 </div>
                 <p class="mt-3 text-black text-sm">
@@ -171,15 +181,10 @@
                                 <div class="flex-1">
                                     <div class="flex items-center justify-between">
                                         <p class="font-bold text-gray-800">{{ $review->user->name ?? 'User' }}</p>
-                                        <div class="flex items-center text-yellow-400">
-                                            @for ($i = 1; $i <= 5; $i++)
-                                                @if ($i <= $review->rating)
-                                                    <i class="fas fa-star text-sm"></i>
-                                                @else
-                                                    <i class="far fa-star text-sm"></i>
-                                                @endif
-                                            @endfor
-                                        </div>
+                                        <x-star-rating 
+                                            :rating="$review->rating" 
+                                            :showHalfStars="false"
+                                            size="sm" />
                                     </div>
                                     <p class="text-sm text-gray-600 mt-2 leading-relaxed">{{ $review->review }}</p>
                                     @if($review->created_at)

@@ -1,23 +1,20 @@
-# Fix Mycouse Page - Task List
+# TODO - Perbaikan Sistem Rating
 
-## Completed Tasks:
-- [x] Analyze current mycouse.blade.php structure
-- [x] Identify data access issues
-- [x] Plan fixes for progress calculation and curriculum display
-- [x] Fix user data access in mycouse.blade.php
-- [x] Implement dynamic progress calculation
-- [x] Replace hardcoded curriculum with actual series
-- [x] Fix instructor information display
-- [x] Update controller to load required relationships
+## Rencana Pengerjaan
 
-## Pending Tasks:
-- [ ] Test the updated functionality
-- [ ] Verify progress calculation works correctly
-- [ ] Check that all links and modals function properly
+1. [x] Membuat komponen rating yang reusable (star-rating.blade.php)
+2. [x] Memperbarui komponen course-item untuk menampilkan rating
+3. [x] Memperbarui halaman show.blade.php untuk menggunakan komponen rating yang konsisten
+4. [x] Memperbarui CSS rating untuk styling yang lebih baik
 
-## Notes:
-- Fixed: Using transaction user instead of course instructor
-- Fixed: Progress is now calculated dynamically based on completed series
-- Fixed: Curriculum now shows actual series from the course
-- Added: Series completion badges and proper accordion states
-- Enhanced: Controller now loads series and user relationships
+## Progress
+
+- [x] Membuat komponen star-rating
+- [x] Update course-item component (termasuk perbaikan variabel avg_rating)
+- [x] Update show.blade.php (3 bagian rating)
+- [x] Update rating.css dengan styling yang lebih baik
+- [ ] Testing dan verifikasi
+
+## Issues yang Diperbaiki
+- Fixed: Undefined variable $course di course-item.blade.php
+- Fixed: Menggunakan avg_rating bukan rating untuk konsistensi dengan controller
