@@ -14,3 +14,22 @@
 [x-cloak] {
     @apply hidden;
 }
+.sidebar-dark-orange {
+    background-color: #DD661D !important;
+    color: #fff;
+}
+
+.sidebar-dark-orange .nav-sidebar > .nav-item > .nav-link {
+    color: #cfcfe0;
+}
+
+.sidebar-dark-orange .nav-sidebar > .nav-item > .nav-link.active {
+    background-color: #DD661D !important;
+    color: #fff;
+}
+
+.sidebar-dark-orange .brand-link {
+    background-color: #DD661D !important;
+    color: #fff;
+}
+
