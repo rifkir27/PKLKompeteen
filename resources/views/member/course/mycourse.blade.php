@@ -288,7 +288,7 @@
                                             <a href="{{ route('course.index') }}" class="btn btn-dark btn-sm">
                                                 Lihat Daftar Course
                                             </a>
-                                        </div>
+                                        </div> 
                                     </div>
                                 </div>
                             @endforelse

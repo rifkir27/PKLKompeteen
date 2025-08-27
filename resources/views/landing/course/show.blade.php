@@ -157,17 +157,47 @@
 
             <!-- Testimoni -->
             <div class="border-2 border-custom-purple2 rounded-lg p-4 bg-white shadow">
-                <h3 class="text-lg font-semibold mb-2">Testimoni Alumni</h3>
+                <h3 class="text-lg font-semibold mb-4">Testimoni Alumni</h3>
                 @if($reviews && count($reviews) > 0)
                     @foreach ($reviews as $review)
-                        <div class="border-b border-custom-orange pb-3 mb-3 last:border-b-0">
-                            <p class="font-bold">{{ $review->user->name ?? 'User' }}</p>
-                            <p class="text-sm text-black">⭐ {{ $review->rating }}</p>
-                            <p class="text-sm mt-1">{{ $review->review }}</p>
+                        <div class="border-b border-custom-orange pb-4 mb-4 last:border-b-0">
+                            <div class="flex items-start gap-3">
+                                <!-- Profile Icon -->
+                                <div class="flex-shrink-0">
+                                    <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold text-sm">
+                                        {{ substr($review->user->name ?? 'U', 0, 1) }}
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <p class="font-bold text-gray-800">{{ $review->user->name ?? 'User' }}</p>
+                                        <div class="flex items-center text-yellow-400">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= $review->rating)
+                                                    <i class="fas fa-star text-sm"></i>
+                                                @else
+                                                    <i class="far fa-star text-sm"></i>
+                                                @endif
+                                            @endfor
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-2 leading-relaxed">{{ $review->review }}</p>
+                                    @if($review->created_at)
+                                        <p class="text-xs text-gray-400 mt-2">
+                                            {{ $review->created_at->format('d M Y') }}
+                                        </p>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     @endforeach
                 @else
-                    <p class="text-black">Belum ada testimoni untuk kelas ini.</p>
+                    <div class="text-center py-6">
+                        <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-3">
+                            <i class="fas fa-comment text-gray-400 text-2xl"></i>
+                        </div>
+                        <p class="text-gray-500">Belum ada testimoni untuk kelas ini.</p>
+                    </div>
                 @endif
             </div>
         </div>
