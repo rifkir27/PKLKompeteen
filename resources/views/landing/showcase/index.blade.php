@@ -7,23 +7,23 @@
         :data="$showcases" cardtitle="Showcase">
     </x-landing.hero-section>
 
-    <div class="w-full bg-slate-300 p-10 2xl:px-36">
+    <div class="w-full bg-white p-10 2xl:px-36">
         <div class="container mx-auto">
 
         <x-landing.search-section :url="route('showcase')" />
 
             <div class="my-5 flex flex-row overflow-x-auto md:grid md:grid-cols-3 gap-4 items-start">
                 @foreach ($showcases as $showcase)
-                    <div class="min-w-full bg-white rounded-lg">
+                    <div class="min-w-full border-2 border-custom-purple2 rounded-lg">
                         <div>
                             <img src="{{ $showcase->cover }}" class="rounded-t-lg" />
                         </div>
-                        <div class="p-4 space-y-2 text-sm text-gray-800 border-t border-dashed">
+                        <div class="p-4 space-y-2 text-sm text-gray-800 border-t border-dashed border-custom-purple2">
                             <h1 class="text-center font-semibold h-12 min-h-full">
                                 {{ $showcase->title }}
                             </h1>
                         </div>
-                        <div class="p-4 border-t border-dashed border-slate-300 text-gray-800 text-sm flex flex-col gap-2">
+                        <div class="p-4 border-t border-dashed border-custom-purple2 text-gray-800 text-sm flex flex-col gap-2">
                             <p class="flex items-center gap-1">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                     class="icon icon-tabler icon-tabler-info-circl w-5 h-5" width="24" height="24"
@@ -38,7 +38,7 @@
                             </p>
                             <p class="h-20 min-h-full">{{ $showcase->description }}</p>
                         </div>
-                        <div class="p-4 border-t border-dashed border-slate-300 text-gray-800 text-sm flex flex-col gap-2">
+                        <div class="p-4 border-t border-dashed border-custom-purple2 text-gray-800 text-sm flex flex-col gap-2">
                             <p class="flex items-center gap-1">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                     class="icon icon-tabler icon-tabler-device-laptop w-5 h-5" width="24" height="24"
@@ -56,7 +56,7 @@
                                 {{ $showcase->course->name }}
                             </a>
                         </div>
-                        <div class="flex p-4 space-x-4 border-t border-dashed border-slate-300">
+                        <div class="flex p-4 space-x-4 border-t border-dashed border-custom-purple2">
                             <div>
                                 <img src="{{ $showcase->user->avatar }}" alt=""
                                     class="object-cover w-12 h-12 rounded-full border">
