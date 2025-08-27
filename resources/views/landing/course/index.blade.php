@@ -8,7 +8,7 @@
         :data="$courses" cardtitle="Course">
     </x-landing.hero-section>
     
-    <div class="w-full bg-slate-300 p-10 2xl:px-36">
+    <div class="w-full bg-white p-10 2xl:px-36">
         <div class="container mx-auto">
             <x-landing.search-section :url="route('course.index')" />
 
