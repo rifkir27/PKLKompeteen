@@ -10,6 +10,7 @@ module.exports = {
       colors: {
         'custom-purple': '#3C096C',
         'custom-orange': '#e0641c',
+        'custom-orange2':'#CE560C',
         'custom-purple2':'#680cb4'
       },
       fontFamily: {

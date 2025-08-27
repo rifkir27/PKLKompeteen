@@ -16,20 +16,69 @@
             </a>
         </div>
     @else
+    <!-- BAGIAN ATAS -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Bagian Kiri -->
-        <div class="lg:col-span-2 space-y-8">
-            <!-- Header -->
-            <div>
-                <h1 class="text-3xl font-bold mb-2">{{ $course->name }}</h1>
-                <p class="text-gray-600">{{ $course->sort_description ?? 'Deskripsi singkat tidak tersedia' }}</p>
-                <div class="flex flex-wrap gap-4 mt-3 text-sm text-gray-500">
-                    <span class="font-semibold">{{ $course->mentor->name ?? 'Mentor' }}</span>
-                    <span>⭐ {{ number_format($avgRating ?? 0, 1) }} ({{ $ratingCount ?? 0 }} ulasan)</span>
-                    <span>{{ $enrolled ?? 0 }} siswa</span>
+        <!-- Kiri: Judul + penjelasan -->
+        <div class="lg:col-span-2">
+            <h1 class="text-3xl font-bold mb-2">{{ $course->name }}</h1>
+            <p class="text-gray-600">{{ $course->sort_description ?? 'Deskripsi singkat tidak tersedia' }}</p>
+            <div class="flex flex-wrap gap-4 mt-3 text-sm text-gray-500">
+                <span class="font-semibold">{{ $course->mentor->name ?? 'Mentor' }}</span>
+                <span>⭐ {{ number_format($avgRating ?? 0, 1) }} ({{ $ratingCount ?? 0 }} ulasan)</span>
+                <span>{{ $enrolled ?? 0 }} siswa</span>
+            </div>
+        </div>
+
+        <!-- Kanan: Card Harga -->
+        <div>
+            <div class="border rounded-lg overflow-hidden bg-custom-purple2 shadow">
+                <img src="{{ $course->image ?? asset('images/course.jpg') }}" 
+                     alt="{{ $course->name ?? 'Gambar Kelas' }}" 
+                     class="w-full h-48 object-cover"
+                     onerror="this.src='{{ asset('images/course.jpg') }}'">
+                <div class="p-4">
+                    @if($course->price_before_discount != $course->price_after_discount && $course->price_before_discount > 0)
+                        <p class="line-through text-red-500 text-sm">
+                            Rp {{ moneyFormat($course->price_before_discount) }}
+                        </p>
+                    @endif
+                    <h3 class="text-2xl font-bold text-white">
+                        @if ($course->price_after_discount == 0)
+                            Gratis
+                        @else
+                            Rp {{ moneyFormat($course->price_after_discount) }}
+                        @endif
+                    </h3>
+
+                    <div class="mt-4 flex flex-col gap-2">
+                        @if ($alreadyBought)
+                            <a href="{{ route('member.mycourse.course', $course->id) }}" 
+                               class="px-4 py-2 rounded-lg bg-custom-orange text-white text-center hover:bg-custom-orange2 transition-colors">
+                                Lanjutkan Belajar
+                            </a>
+                        @else
+                            <form action="{{ route('cart.store', $course->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" 
+                                    class="w-full px-4 py-2 rounded-lg bg-custom-orange hover:bg-custom-orange2 transition-colors">
+                                    Beli Sekarang
+                                </button>
+                            </form>
+                            <button class="w-full px-4 py-2 rounded-lg text-white border-2 border-custom-orange transition-colors">
+                                Simpan ke Favorit
+                            </button>
+                        @endif
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
 
+    <div class="my-10 border-t border-gray-300"></div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Kiri -->
+        <div class="lg:col-span-2 space-y-8">
             <!-- Apa yang akan dipelajari -->
             <div>
                 <h2 class="text-xl font-semibold mb-4">Apa yang akan kamu pelajari</h2>
@@ -82,52 +131,10 @@
             </div>
         </div>
 
-        <!-- Bagian Kanan -->
+        <!-- Kanan -->
         <div class="space-y-6">
-            <!-- Card Gambar + Harga -->
-            <div class="border rounded-lg overflow-hidden bg-white shadow">
-                <img src="{{ $course->image ?? asset('images/course.jpg') }}" 
-                     alt="{{ $course->name ?? 'Gambar Kelas' }}" 
-                     class="w-full h-48 object-cover"
-                     onerror="this.src='{{ asset('images/course.jpg') }}'">
-                <div class="p-4">
-                    @if($course->price_before_discount != $course->price_after_discount && $course->price_before_discount > 0)
-                        <p class="line-through text-red-500 text-sm">
-                            Rp {{ moneyFormat($course->price_before_discount) }}
-                        </p>
-                    @endif
-                    <h3 class="text-2xl font-bold text-purple-700">
-                        @if ($course->price_after_discount == 0)
-                            Gratis
-                        @else
-                            Rp {{ moneyFormat($course->price_after_discount) }}
-                        @endif
-                    </h3>
-
-                    <div class="mt-4 flex flex-col gap-2">
-                        @if ($alreadyBought)
-                            <a href="{{ route('member.mycourse.course', $course->id) }}" 
-                               class="px-4 py-2 rounded-lg bg-red-600 text-white text-center hover:bg-red-700 transition-colors">
-                                Lanjutkan Belajar
-                            </a>
-                        @else
-                            <form action="{{ route('cart.store', $course->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" 
-                                    class="w-full px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors">
-                                    Beli Sekarang
-                                </button>
-                            </form>
-                            <button class="w-full px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors">
-                                Simpan ke Favorit
-                            </button>
-                        @endif
-                    </div>
-                </div>
-            </div>
-
             <!-- Mentor -->
-            <div class="border rounded-lg p-4 bg-white shadow">
+            <div class="border-2 rounded-lg p-4 bg-white border-custom-purple2">
                 <h3 class="text-lg font-semibold mb-2">Mentor</h3>
                 @if($course->mentor)
                 <div class="flex items-center gap-3">
@@ -137,30 +144,30 @@
                          onerror="this.src='https://via.placeholder.com/80'">
                     <div>
                         <p class="font-bold">{{ $course->mentor->name }}</p>
-                        <p class="text-sm text-gray-500">⭐ {{ $course->mentor->rating ?? '4.8' }} rating</p>
+                        <p class="text-sm text-black">⭐ {{ $course->mentor->rating ?? '4.8' }} rating</p>
                     </div>
                 </div>
-                <p class="mt-3 text-gray-600 text-sm">
+                <p class="mt-3 text-black text-sm">
                     {{ $course->mentor->bio ?? 'Mentor berpengalaman dengan keahlian di bidang ini.' }}
                 </p>
                 @else
-                <p class="text-gray-500">Informasi mentor tidak tersedia.</p>
+                <p class="text-black">Informasi mentor tidak tersedia.</p>
                 @endif
             </div>
 
             <!-- Testimoni -->
-            <div class="border rounded-lg p-4 bg-white shadow">
+            <div class="border-2 border-custom-purple2 rounded-lg p-4 bg-white shadow">
                 <h3 class="text-lg font-semibold mb-2">Testimoni Alumni</h3>
                 @if($reviews && count($reviews) > 0)
                     @foreach ($reviews as $review)
-                        <div class="border-b pb-3 mb-3 last:border-b-0">
+                        <div class="border-b border-custom-orange pb-3 mb-3 last:border-b-0">
                             <p class="font-bold">{{ $review->user->name ?? 'User' }}</p>
-                            <p class="text-sm text-gray-600">⭐ {{ $review->rating }}</p>
+                            <p class="text-sm text-black">⭐ {{ $review->rating }}</p>
                             <p class="text-sm mt-1">{{ $review->review }}</p>
                         </div>
                     @endforeach
                 @else
-                    <p class="text-gray-500">Belum ada testimoni untuk kelas ini.</p>
+                    <p class="text-black">Belum ada testimoni untuk kelas ini.</p>
                 @endif
             </div>
         </div>
