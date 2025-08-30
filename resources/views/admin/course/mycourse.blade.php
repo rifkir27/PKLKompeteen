@@ -46,7 +46,7 @@
                             @forelse ($courses as $data)
                                 <div class="row">
                                     <div class="col-md-3 mb-3">
-                                        <img src="{{ $data->course->image }}" class="mr-3 shadow-custom w-100">
+                                        <img src="{{ $data->course->image }}" class="w-100">
                                     </div>
                                     <div class="col-md-9 mb-3 text-dark">
                                         <h5 class="mt-2">{{ $data->course->name }}</h5>

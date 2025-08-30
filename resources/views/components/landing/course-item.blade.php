@@ -9,8 +9,8 @@
         </div>
     @endif
 
-    <div class="w-full aspect-[4/3] bg-gray-200 overflow-hidden">
-        <img class="w-full h-full object-contain" 
+    <div class="w-full aspect-[4/3] overflow-hidden">
+        <img class="w-full h-full object-cover" 
              src="{{ $course->image ?? asset('images/default.png') }}" 
              alt="{{ $course->name }}"
              onerror="this.src='{{ asset('images/default.png') }}'">
