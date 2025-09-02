@@ -36,7 +36,6 @@
             </div>
         </div>
 
-        <!-- Kanan: Card Harga -->
         <div>
             <div class="border rounded-lg overflow-hidden bg-custom-purple2 shadow">
                 <img src="{{ $course->image ?? asset('images/course.jpg') }}" 
@@ -71,7 +70,8 @@
                                     Beli Sekarang
                                 </button>
                             </form>
-                            <button class="w-full px-4 py-2 rounded-lg text-white border-2 border-custom-orange transition-colors">
+                            <button type="submit"
+                             class="w-full px-4 py-2 rounded-lg text-white border-2 border-custom-orange transition-colors">
                                 Simpan ke Favorit
                             </button>
                         @endif
@@ -169,7 +169,7 @@
             <div class="border-2 border-custom-purple2 rounded-lg p-4 bg-white shadow">
                 <h3 class="text-lg font-semibold mb-4">Testimoni Alumni</h3>
                 @if($reviews && count($reviews) > 0)
-                    @foreach ($reviews as $review)
+                    @foreach ($reviews->take(3) as $review)
                         <div class="border-b border-custom-orange pb-4 mb-4 last:border-b-0">
                             <div class="flex items-start gap-3">
                                 <!-- Profile Icon -->
@@ -184,8 +184,7 @@
                                         <x-star-rating 
                                             :rating="$review->rating" 
                                             :showHalfStars="false"
-                                            size="sm" />
-                                    </div>
+                                            size="sm" />                                    </div>
                                     <p class="text-sm text-gray-600 mt-2 leading-relaxed">{{ $review->review }}</p>
                                     @if($review->created_at)
                                         <p class="text-xs text-gray-400 mt-2">
