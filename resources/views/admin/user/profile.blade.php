@@ -27,8 +27,11 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle border-0" src="{{ $user->avatar }}"
-                                    alt="User profile picture">
+                               <img src="{{ $user->avatar }}" 
+                                alt="User profile picture"
+                                class="profile-user-img img-circle"
+                                style="width:120px; height:120px; object-fit:cover; border-radius:50%;">
+
                             </div>
                             <h3 class="profile-username text-center">{{ $user->name }}</h3>
                             <p class="text-muted text-center">{{ $user->about }}</p>
@@ -75,12 +78,14 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="form-group">
-                                            <label class="col-form-label">Avatar</label>
-                                            <input type="file" class="form-control @error('avatar') is-invalid @enderror" placeholder="Avatar" avatar="avatar" value="{{ old('avatar', $user->avatar) }}">
-                                            @error('avatar')
-                                                <span class="error invalid-feedback">{{ $message }}</span>
-                                            @enderror
-                                        </div>
+                                        <label class="col-form-label">Avatar</label>
+                                        <input type="file" class="form-control @error('avatar') is-invalid @enderror"
+                                            name="avatar" accept="image/*">
+                                        @error('avatar')
+                                            <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
 
                                         <div class="form-group">
                                             <label class="col-form-label">Full Name</label>
