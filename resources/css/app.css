@@ -1,9 +1,12 @@
-@import './images.css';   /* Pindahin ke atas, sebelum tailwind */
+/* Import CSS eksternal dulu */
+@import './images.css';
 
+/* Tailwind */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Custom utility classes */
 .shadow-custom {
     box-shadow: 10px 10px 0 rgba(255, 255, 255, 0.1);
 }
@@ -14,6 +17,8 @@
 [x-cloak] {
     @apply hidden;
 }
+
+/* Sidebar custom theme */
 .sidebar-dark-orange {
     background-color: #DD661D !important;
     color: #fff;
@@ -32,4 +37,3 @@
     background-color: #DD661D !important;
     color: #fff;
 }
-

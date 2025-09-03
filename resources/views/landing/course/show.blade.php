@@ -39,9 +39,10 @@
         <div>
             <div class="border rounded-lg overflow-hidden bg-custom-purple2 shadow">
                 <img src="{{ $course->image ?? asset('images/course.jpg') }}" 
-                     alt="{{ $course->name ?? 'Gambar Kelas' }}" 
-                     class="w-full h-48 object-cover"
-                     onerror="this.src='{{ asset('images/course.jpg') }}'">
+                alt="{{ $course->name ?? 'Gambar Kelas' }}" 
+                class="w-full h-80 object-cover" 
+                onerror="this.src='{{ asset('images/course.jpg') }}'">
+
                 <div class="p-4">
                     @if($course->price_before_discount != $course->price_after_discount && $course->price_before_discount > 0)
                         <p class="line-through text-red-500 text-sm">
