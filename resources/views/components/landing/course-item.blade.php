@@ -1,6 +1,6 @@
 @props(['course'])
 
-<div class="relative bg-white rounded-xl shadow-md overflow-hidden flex flex-col h-full min-h-[550px]">
+<div class="relative bg-white rounded-xl overflow-hidden flex flex-col h-full min-h-[600px]">
 
     {{-- Diskon --}}
     @if($course->price_before_discount > $course->price_after_discount)
@@ -9,8 +9,9 @@
         </div>
     @endif
 
-    <div class="w-full aspect-[4/3] overflow-hidden">
-        <img class="w-full h-full object-cover" 
+    {{-- Gambar --}}
+    <div class="w-full aspect-[3/4] overflow-hidden">
+        <img class="w-full h-full object-cover object-center" 
              src="{{ $course->image ?? asset('images/default.png') }}" 
              alt="{{ $course->name }}"
              onerror="this.src='{{ asset('images/default.png') }}'">
@@ -25,7 +26,7 @@
         <div class="flex flex-col gap-3 flex-1">
             {{-- Mentor --}}
             <div class="flex items-center gap-2 text-sm">
-                <img class="w-8 h-8 rounded-full " src="{{ asset('images/default.png') }}" alt="Mentor">
+                <img class="w-8 h-8 rounded-full" src="{{ asset('images/default.png') }}" alt="Mentor">
                 <div class="flex-1 min-w-0">
                     <p class="font-semibold truncate">{{ $course->user->name }}</p>
                     <p class="text-xs opacity-80">Mobile Developer</p>
@@ -60,6 +61,7 @@
             </div>
         </div>
 
+        {{-- Tombol --}}
         <div class="flex gap-2 mt-4">
             <form action="{{ route('cart.store', $course->id) }}" method="POST" class="flex-1"> 
                 @csrf
