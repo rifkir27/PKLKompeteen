@@ -28,7 +28,8 @@ class CourseController extends Controller
     {
         $categories = Category::all();
         $benefits = Benefit::orderBy('created_at', 'ASC')->get();
-        return view('admin.course.create', compact('categories', 'benefits'));
+        $mentors = \App\Models\Mentor::orderBy('name', 'ASC')->get();
+        return view('admin.course.create', compact('categories', 'benefits', 'mentors'));
     }
 
     /**
@@ -62,8 +63,9 @@ class CourseController extends Controller
         $categories = Category::all();
         $benefits = Benefit::orderBy('created_at', 'ASC')->get();
         $benefitSelected = $course->benefits->pluck('id')->toArray();
+        $mentors = \App\Models\Mentor::orderBy('name', 'ASC')->get();
 
-        return view('admin.course.edit', compact('categories', 'course', 'benefits', 'benefitSelected'));
+        return view('admin.course.edit', compact('categories', 'course', 'benefits', 'benefitSelected', 'mentors'));
     }
 
     /**

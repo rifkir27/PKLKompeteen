@@ -22,9 +22,9 @@ class Mentor extends Model
     ];
 
 
-    public function course()
+    public function courses()
     {
-        return $this->belongsTo(Course::class);
+        return $this->hasMany(Course::class);
     }
     protected function cover(): Attribute
     {

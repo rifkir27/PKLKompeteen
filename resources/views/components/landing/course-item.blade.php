@@ -1,8 +1,6 @@
 @props(['course'])
 
-
-<div class="relative bg-white rounded-xl overflow-hidden flex flex-col h-full min-h-[550px]">
-
+<div class="relative bg-white rounded-xl shadow-md overflow-hidden flex flex-col h-full min-h-[550px]">
 
     {{-- Diskon --}}
     @if($course->price_before_discount > $course->price_after_discount)

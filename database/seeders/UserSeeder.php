@@ -23,6 +23,9 @@ class UserSeeder extends Seeder
             'username' => 'admin',
             'email' => 'administrator@eduthings.com',
             'password' => bcrypt('77422424')
+
+
+        
         ]);
 
         $admin->assignRole($roleAdmin);
@@ -35,6 +38,15 @@ class UserSeeder extends Seeder
             'github' => 'github.com/dederusliandi98',
             'instagram' => '@dederusliandi_',
             'about' => 'Fullstack Developer & Trainer'
+        ]);
+
+        $admin->assignRole($roleAdmin);
+
+        $admin = User::create([
+            'name' => 'rifki',
+            'username' => 'rifki_admin',
+            'email' => 'admin123@eduthings.com',
+            'password' => bcrypt('rifki123')
         ]);
 
         $admin->assignRole($roleAdmin);
