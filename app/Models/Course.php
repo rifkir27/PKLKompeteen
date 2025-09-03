@@ -17,12 +17,13 @@ class Course extends Model
         'id',
         'category_id',
         'user_id',
+        'mentor_id',
         'name',
         'image',
         'slug',
         'demo',
         'sort_description',
-        'description', 
+        'description',
         'price_before_discount',
         'price_after_discount',
         'meta_keywords',
@@ -77,5 +78,10 @@ class Course extends Model
     public function benefits()
     {
         return $this->belongsToMany(Benefit::class);
+    }
+
+    public function mentor()
+    {
+        return $this->belongsTo(Mentor::class);
     }
 }

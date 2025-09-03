@@ -23,9 +23,10 @@ class CourseRequest extends FormRequest
     {
         if(request()->isMethod('PUT')){
             $data = [
-                'name' => 'required','unique:courses,name'.$this->id,
+                'name' => 'required|unique:courses,name,'.$this->id,
                 'image' => 'mimes:png,jpg,jpeg|max:2048',
                 'category_id' => 'required',
+                'mentor_id' => 'nullable|exists:mentors,id',
                 'demo' => 'nullable',
                 'discount' => 'nullable',
                 'sort_description' => 'required',
@@ -44,6 +45,7 @@ class CourseRequest extends FormRequest
                 'name' => 'required|unique:courses',
                 'image' => 'required|mimes:png,jpg,jpeg|max:2048',
                 'category_id' => 'required',
+                'mentor_id' => 'nullable|exists:mentors,id',
                 'demo' => 'nullable',
                 'discount' => 'nullable',
                 'description' => 'required',
@@ -58,7 +60,7 @@ class CourseRequest extends FormRequest
                 'is_published' => 'required'
             ];
         }
-    
+
         return $data;
     }
 }
