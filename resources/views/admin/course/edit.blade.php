@@ -63,22 +63,23 @@
                                         <span class="error invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="col-form-label">Mentor</label>
-                                    <select class="form-control @error('mentor_id') is-invalid @enderror" name="mentor_id">
-                                        <option value="">Select Mentor</option>
-                                        @foreach ($mentors as $mentor)
-                                            <option value="{{ $mentor->id }}" @selected($errors->any() ? (old('mentor_id') == $mentor->id) : ($course->mentor_id == $mentor->id))>
-                                                {{ $mentor->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('mentor_id')
-                                        <span class="error invalid-feedback">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                                <label class="col-form-label">Mentor</label>
+                                <select class="form-control @error('mentor_id') is-invalid @enderror" name="mentor_id">
+                                    <option value="">[ Select Mentor ]</option>
+                                    @foreach ($mentors as $mentor)
+                                        <option value="{{ $mentor->id }}" 
+                                            @selected($errors->any() ? (old('mentor_id') == $mentor->id) : ($course->mentor_id == $mentor->id))>
+                                            {{ $mentor->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('mentor_id')
+                                    <span class="error invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
 
+                                
                                 <div class="form-group">
                                     <label class="col-form-label">demo</label>
                                     <input type="text" class="form-control @error('demo') is-invalid @enderror" placeholder="demo" name="demo" value="{{ old('demo', $course->demo) }}">
