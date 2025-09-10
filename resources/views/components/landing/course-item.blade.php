@@ -26,10 +26,14 @@
         <div class="flex flex-col gap-3 flex-1">
             {{-- Mentor --}}
             <div class="flex items-center gap-2 text-sm">
-                <img class="w-8 h-8 rounded-full" src="{{ asset('images/default.png') }}" alt="Mentor">
+                <img class="w-8 h-8 rounded-full" 
+                     src="{{ $course->mentor?->image ?? asset('images/default.png') }}" 
+                     alt="{{ $course->mentor?->name ?? 'Mentor' }}">
                 <div class="flex-1 min-w-0">
-                    <p class="font-semibold truncate">{{ $course->user->name }}</p>
-                    <p class="text-xs opacity-80">Mobile Developer</p>
+                    <p class="font-semibold truncate">
+                        {{ $course->mentor?->name ?? 'Tanpa Mentor' }}
+                    </p>
+                    <p class="text-xs opacity-80">Mentor</p>
                 </div>
             </div>
 
@@ -45,7 +49,7 @@
             </div>
             @endif
 
-            {{-- Harga & Enrolled --}}
+            {{-- Enrolled & Harga --}}
             <div class="flex justify-between items-center text-sm">
                 <div>
                     {{ $course->enrolled }} Siswa

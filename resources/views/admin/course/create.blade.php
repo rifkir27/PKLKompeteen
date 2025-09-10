@@ -62,22 +62,6 @@
                                         <span class="error invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
-
-                                <div class="form-group">
-                                    <label class="col-form-label">Mentor</label>
-                                    <select class="form-control @error('mentor_id') is-invalid @enderror" name="mentor_id">
-                                        <option value="">Select Mentor</option>
-                                        @foreach ($mentors as $mentor)
-                                            <option value="{{ $mentor->id }}" @selected($mentor->id == old('mentor_id'))>
-                                                {{ $mentor->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('mentor_id')
-                                        <span class="error invalid-feedback">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
                                 <div class="form-group">
                                     <label class="col-form-label">demo</label>
                                     <input type="text" class="form-control @error('demo') is-invalid @enderror" placeholder="demo" name="demo" value="{{ old('demo') }}">
@@ -170,6 +154,21 @@
                                         <span class="error invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
+                                <div class="form-group">
+                                <label class="col-form-label">Mentor</label>
+                                <select class="form-control @error('mentor_id') is-invalid @enderror" name="mentor_id">
+                                    <option value="">[ Select Mentor ]</option>
+                                    @foreach ($mentors as $mentor)
+                                        <option value="{{ $mentor->id }}" @selected($mentor->id == old('mentor_id'))>
+                                            {{ $mentor->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('mentor_id')
+                                    <span class="error invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+
 
                                 <div class="form-group">
                                     <label class="col-form-label">Is Published</label>

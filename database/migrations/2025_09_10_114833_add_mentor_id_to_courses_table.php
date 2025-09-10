@@ -6,19 +6,14 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('courses', function (Blueprint $table) {
-            $table->foreignId('mentor_id')->nullable()->constrained('mentors')->onDelete('set null');
+            $table->unsignedBigInteger('mentor_id')->nullable()->after('category_id');
+            $table->foreign('mentor_id')->references('id')->on('mentors')->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('courses', function (Blueprint $table) {
