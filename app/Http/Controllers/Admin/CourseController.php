@@ -44,12 +44,14 @@ class CourseController extends Controller
 
         $input = $request->all();
         $input['image'] = $image ? $image->hashName() : null;
+        $input['user_id'] = auth()->id(); // 🔑 foreign key ke users
 
-        // simpan course dengan mentor
         $course = Course::create($input);
 
-        // sync benefits
-        $course->benefits()->sync($request->benefits);
+        // sync benefits kalau ada
+        if ($request->has('benefits')) {
+            $course->benefits()->sync($request->benefits);
+        }
 
         return redirect(route('admin.courses.index'))->with('toast_success', 'Course Created');
     }
@@ -73,6 +75,7 @@ class CourseController extends Controller
     public function update(CourseRequest $request, Course $course)
     {
         $input = $request->all();
+        $input['user_id'] = auth()->id(); // 🔑 biar konsisten
 
         if ($request->file('image')) {
             Storage::disk('local')->delete('public/courses/' . basename($course->image));
@@ -84,7 +87,9 @@ class CourseController extends Controller
         $course->update($input);
 
         // update benefits
-        $course->benefits()->sync($request->benefits);
+        if ($request->has('benefits')) {
+            $course->benefits()->sync($request->benefits);
+        }
 
         return redirect(route('admin.courses.index'))->with('toast_success', 'Course Updated');
     }

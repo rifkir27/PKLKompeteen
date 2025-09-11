@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Mentor extends Model
 {
-    use HasFactory, HasScope; // Hapus HasUuids karena pakai $table->id()
+    use HasFactory, HasScope; 
 
     protected $fillable = [
         'name',
