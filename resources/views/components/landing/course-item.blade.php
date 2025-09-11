@@ -2,9 +2,16 @@
 
 <div class="relative bg-white rounded-xl overflow-hidden flex flex-col h-full min-h-[600px]">
 
-    {{-- Diskon --}}
+    {{-- Rating kiri atas --}}
+    @if($course->avg_rating > 0)
+        <div class="absolute top-0 left-0 bg-custom-orange text-white px-2 py-1 rounded-br-lg text-sm font-bold">
+            ⭐ {{ number_format($course->avg_rating, 1) }}
+        </div>
+    @endif
+
+    {{-- Diskon kanan atas --}}
     @if($course->price_before_discount > $course->price_after_discount)
-        <div class="absolute top-0 right-0 bg-orange-500 text-white px-2 py-1 rounded-bl-lg text-sm font-bold">
+        <div class="absolute top-0 right-0 bg-custom-orange text-white px-2 py-1 rounded-bl-lg text-sm font-bold">
             {{ discount($course->price_before_discount, $course->price_after_discount) }}% OFF
         </div>
     @endif
@@ -37,16 +44,15 @@
                 </div>
             </div>
 
-            {{-- Rating --}}
-            @if($course->avg_rating > 0)
-            <div class="flex items-center gap-2 text-sm">
-                <x-star-rating 
-                    :rating="$course->avg_rating" 
-                    :showNumber="true"
-                    :showCount="true"
-                    :ratingCount="$course->reviews_count"
-                    size="sm" />
-            </div>
+            @if($course->reviews_count > 0)
+                <div class="flex items-center justify-end text-sm opacity-80">
+                    <svg xmlns="http://www.w3.org/2000/svg" 
+                         class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M7 8h10M7 12h6m-6 4h10m-2 4l4-4H7a4 4 0 01-4-4V7a4 4 0 014-4h10a4 4 0 014 4v5" />
+                    </svg>
+                    <span>{{ $course->reviews_count }} Review</span>
+                </div>
             @endif
 
             {{-- Enrolled & Harga --}}

@@ -35,8 +35,6 @@
                         <div class="card-header">
                             <a href="{{ route('admin.courses.index') }}" class="btn btn-success"><i class="fa fa-chevron-left"></i> Back</a>
                         </div>
-                        <!-- /.card-header -->
-                        <!-- form start -->
                         <form class="form-horizontal" method="POST" action="{{ route('admin.courses.update', $course->id) }}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
