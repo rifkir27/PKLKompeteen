@@ -41,9 +41,12 @@
 
         @if($course->reviews_count > 0)
             <div class="flex items-center justify-end text-sm opacity-80 mb-2">
-                <svg xmlns="http://www.w3.org/2000/svg" 
+                <span>{{ $course->reviews_count }} Testimoni</span>
+            </div>
+            <div class="flex items-center justify-end text-sm opacity-80 mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
                      class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M7 8h10M7 12h6m-6 4h10m-2 4l4-4H7a4 4 0 01-4-4V7a4 4 0 014-4h10a4 4 0 014 4v5" />
                 </svg>
                 <span>{{ $course->reviews_count }} Review</span>
