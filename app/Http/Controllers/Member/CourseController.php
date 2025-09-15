@@ -53,6 +53,22 @@ class CourseController extends Controller
             return abort('404');
         }
 
+        // Check if all previous series are completed
+        $allSeries = Series::where('course_id', $course->id)->orderBy('number_of_series')->get();
+        $currentSeriesNumber = $seriesDetail->number_of_series;
+        $previousSeries = $allSeries->where('number_of_series', '<', $currentSeriesNumber);
+
+        foreach ($previousSeries as $prev) {
+            if (!in_array($prev->id, $seriesChecked)) {
+                // Redirect to the first incomplete series
+                $firstIncomplete = $allSeries->first(function ($series) use ($seriesChecked) {
+                    return !in_array($series->id, $seriesChecked);
+                });
+                return redirect()->route('member.mycourse.course.show', [$course->id, $firstIncomplete->id])
+                    ->with('error', 'Anda harus menyelesaikan tugas sebelumnya terlebih dahulu.');
+            }
+        }
+
         $prevSeries = Series::where(['course_id' => $course->id, 'number_of_series' => $seriesDetail->number_of_series - 1])->first();
         $nextSeries = Series::where(['course_id' => $course->id, 'number_of_series' => $seriesDetail->number_of_series + 1])->first();
 

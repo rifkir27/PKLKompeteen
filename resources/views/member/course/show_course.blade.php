@@ -121,17 +121,35 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         @foreach ($course->series as $index => $series)
+                            @php
+                                $isAccessible = true;
+                                foreach ($course->series as $s) {
+                                    if ($s->number_of_series < $series->number_of_series && !in_array($s->id, $seriesChecked)) {
+                                        $isAccessible = false;
+                                        break;
+                                    }
+                                }
+                            @endphp
                             <li class="nav-item nav-item-custom" id="{{ $series->id }}">
-                                <a href="{{ route('member.mycourse.course.show', [$course->id, $series->id]) }}" class="nav-link nav-link-custom {{ Request::segment(6) == $series->id ? "active" : "" }}">
-                                    @if (in_array($series->id, $seriesChecked))
-                                        <i class="fas fa-check-circle" style="color:#4dc771;"></i>
-                                    @else
-                                        <i class="fas fa-check-circle"></i>   
-                                    @endif
-                                    <p>
-                                        {{ $series->title }}
-                                    </p>
-                                </a>
+                                @if ($isAccessible)
+                                    <a href="{{ route('member.mycourse.course.show', [$course->id, $series->id]) }}" class="nav-link nav-link-custom {{ Request::segment(6) == $series->id ? 'active' : '' }}">
+                                        @if (in_array($series->id, $seriesChecked))
+                                            <i class="fas fa-check-circle" style="color:#4dc771;"></i>
+                                        @else
+                                            <i class="fas fa-check-circle"></i>   
+                                        @endif
+                                        <p>
+                                            {{ $series->title }}
+                                        </p>
+                                    </a>
+                                @else
+                                    <a href="#" class="nav-link nav-link-custom disabled" style="pointer-events: none; opacity: 0.5;">
+                                        <i class="fas fa-lock"></i>
+                                        <p>
+                                            {{ $series->title }}
+                                        </p>
+                                    </a>
+                                @endif
                             </li>
                         @endforeach
                     </ul>
