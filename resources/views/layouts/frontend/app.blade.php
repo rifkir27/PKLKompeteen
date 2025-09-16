@@ -65,7 +65,7 @@
     @include('layouts.frontend.partials.footer')
 
     <a href="https://wa.me/6281212126043?text=Hallo%2C%20Admin%20saya%20ingin%20bertanya...." class="float" target="_blank">
-        <i class="fa fa-whatsapp my-float"></i>
+        <i class="fab fa-whatsapp my-float"></i>
     </a>
 
     <!-- sweet alert -->
