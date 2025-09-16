@@ -41,9 +41,6 @@
 
         @if($course->reviews_count > 0)
             <div class="flex items-center justify-end text-sm opacity-80 mb-2">
-                <span>{{ $course->reviews_count }} Testimoni</span>
-            </div>
-            <div class="flex items-center justify-end text-sm opacity-80 mb-2">
                 <svg xmlns="http://www.w3.org/2000/svg"
                      class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
