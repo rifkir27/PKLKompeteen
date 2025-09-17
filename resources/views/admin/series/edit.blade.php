@@ -64,11 +64,32 @@
                                         <span class="error invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                
+
                                 <div class="form-group">
+                                    <label class="col-form-label">Content Type</label>
+                                    <select class="form-control @error('content_type') is-invalid @enderror" name="content_type" id="content_type">
+                                        <option value="">[Choose Content Type]</option>
+                                        <option value="video" @selected($errors->any() ? (old('content_type') == "video") : ($series->content_type == "video"))>Video</option>
+                                        <option value="text" @selected($errors->any() ? (old('content_type') == "text") : ($series->content_type == "text"))>Text</option>
+                                        <option value="quiz" @selected($errors->any() ? (old('content_type') == "quiz") : ($series->content_type == "quiz"))>Quiz</option>
+                                    </select>
+                                    @error('content_type')
+                                        <span class="error invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group" id="video_code_group" style="{{ ($errors->any() ? old('content_type', $series->content_type) : $series->content_type) != 'video' ? 'display: none;' : '' }}">
                                     <label class="col-form-label">Video Code Youtube</label>
                                     <input type="text" class="form-control @error('video_code') is-invalid @enderror" placeholder="Video Code Youtube" name="video_code" value="{{ old('video_code', $series->video_code) }}">
                                     @error('video_code')
+                                        <span class="error invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group" id="text_content_group" style="{{ ($errors->any() ? old('content_type', $series->content_type) : $series->content_type) != 'text' ? 'display: none;' : '' }}">
+                                    <label class="col-form-label">Text Content</label>
+                                    <textarea name="text_content" id="text_content" class="form-control @error('text_content') is-invalid @enderror">{{ old('text_content', $series->text_content) }}</textarea>
+                                    @error('text_content')
                                         <span class="error invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -152,6 +173,24 @@
                 { value: 'First.Name', title: 'First Name' },
                 { value: 'Email', title: 'Email' },
             ]
+        });
+
+        // Toggle content fields based on content type
+        document.getElementById('content_type').addEventListener('change', function() {
+            var contentType = this.value;
+            var videoGroup = document.getElementById('video_code_group');
+            var textGroup = document.getElementById('text_content_group');
+
+            if (contentType === 'video') {
+                videoGroup.style.display = 'block';
+                textGroup.style.display = 'none';
+            } else if (contentType === 'text') {
+                videoGroup.style.display = 'none';
+                textGroup.style.display = 'block';
+            } else {
+                videoGroup.style.display = 'none';
+                textGroup.style.display = 'none';
+            }
         });
   </script>
 @endpush

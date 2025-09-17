@@ -13,12 +13,14 @@ class Series extends Model
 
     protected $fillable = [
         'id',
-        'course_id', 
-        'title', 
-        'number_of_series', 
-        'intro', 
+        'course_id',
+        'title',
+        'number_of_series',
+        'intro',
         'video_code',
-        'description'
+        'description',
+        'content_type',
+        'text_content'
     ];
 
     public function course()
@@ -29,6 +31,11 @@ class Series extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class);
     }
 
     public function avgRating()

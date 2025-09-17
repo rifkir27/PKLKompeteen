@@ -1,20 +1,53 @@
-# TODO - Perbaikan Sistem Rating
+# TODO: Suggestions for Adding Materials to Courses
 
-## Rencana Pengerjaan
+## Current Structure Analysis
+- Courses contain Series (lessons/materials) with: title, number_of_series, intro (free/premium), video_code, description
+- Admin interface exists for managing Series (create, edit, delete)
+- Member view displays series with video and description
 
-1. [x] Membuat komponen rating yang reusable (star-rating.blade.php)
-2. [x] Memperbarui komponen course-item untuk menampilkan rating
-3. [x] Memperbarui halaman show.blade.php untuk menggunakan komponen rating yang konsisten
-4. [x] Memperbarui CSS rating untuk styling yang lebih baik
+## Proposed Enhancements
 
-## Progress
+### 1. Add Quiz/Assessment Functionality
+- **Goal**: Add interactive quizzes to series for better learning engagement
+- **Implementation**:
+  - Create Quiz model with questions, multiple choice options, correct answers
+  - Link quizzes to series
+  - Add quiz display in member course view
+- **Status**: Quiz model and migration created, Series relationship updated
 
-- [x] Membuat komponen star-rating
-- [x] Update course-item component (termasuk perbaikan variabel avg_rating)
-- [x] Update show.blade.php (3 bagian rating)
-- [x] Update rating.css dengan styling yang lebih baik
-- [ ] Testing dan verifikasi
+### 2. Add Downloadable Resources
+- **Goal**: Allow attaching files (PDFs, docs, code samples) to series
+- **Implementation**:
+  - Add file upload field to Series model
+  - Update SeriesRequest validation
+  - Modify admin series form and view
+  - Add download links in member view
 
-## Issues yang Diperbaiki
-- Fixed: Undefined variable $course di course-item.blade.php
-- Fixed: Menggunakan avg_rating bukan rating untuk konsistensi dengan controller
+### 3. Add Image Galleries
+- **Goal**: Support multiple images per series for visual content
+- **Implementation**:
+  - Create SeriesImage model or extend Photo model
+  - Add image upload in series management
+  - Display gallery in course view
+
+### 4. Add Text-Based Materials
+- **Goal**: Support articles or long-form text content
+- **Implementation**:
+  - Add content_type field to Series model and migration ✅
+  - Update SeriesRequest validation ✅
+  - Modify admin series form and view ✅
+  - Update member view to render text content ✅
+  - Use rich text editor for text input ✅
+- **Status**: Completed - Migration run, models updated, views modified
+
+### 5. Add Prerequisites and Dependencies
+- **Goal**: Allow series to have prerequisites
+- **Implementation**:
+  - Add prerequisite_series_id to Series
+  - Update logic in CourseController to enforce prerequisites
+
+## Next Steps
+- Implement quiz functionality in views and controllers
+- Add file upload for resources
+- Test new material types
+- Update UI for better content management
