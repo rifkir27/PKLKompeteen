@@ -1,25 +1,30 @@
 @props(['course'])
 
 <div class="relative bg-white rounded-xl overflow-hidden flex flex-col h-full min-h-[600px]">
+    {{-- Badge Rating --}}
     @if($course->avg_rating > 0)
         <div class="absolute top-0 left-0 bg-custom-orange text-white px-2 py-1 rounded-br-lg text-sm font-bold">
             ⭐ {{ number_format($course->avg_rating, 1) }}
         </div>
     @endif
 
+    {{-- Badge Diskon --}}
     @if($course->price_before_discount > $course->price_after_discount)
         <div class="absolute top-0 right-0 bg-custom-orange text-white px-2 py-1 rounded-bl-lg text-sm font-bold">
             {{ discount($course->price_before_discount, $course->price_after_discount) }}% OFF
         </div>
     @endif
 
-    <div class="w-full aspect-[3/4] overflow-hidden">
-        <img class="w-full h-full object-cover object-center" 
-             src="{{ $course->image ?? asset('images/default.png') }}" 
-             alt="{{ $course->name }}"
-             onerror="this.src='{{ asset('images/default.png') }}'">
-    </div>
+    {{-- Image dengan ratio fix 3:4 --}}
+<div class="w-full aspect-[4/3] overflow-hidden">
+    <img class="w-full h-full object-cover object-center"
+         src="{{ $course->image ?? asset('images/default.png') }}"
+         alt="{{ $course->name }}"
+         onerror="this.src='{{ asset('images/default.png') }}'">
+</div>
 
+
+    {{-- Content --}}
     <div class="bg-custom-purple text-white p-4 flex flex-col flex-1">
         <div class="min-h-[100px] flex flex-col justify-between mb-3">
             <h3 class="text-lg font-semibold line-clamp-2">
@@ -27,8 +32,8 @@
             </h3>
 
             <div class="flex items-center gap-2 text-sm mt-2">
-                <img class="w-8 h-8 rounded-full flex-shrink-0" 
-                     src="{{ $course->mentor?->image ?? asset('images/default.png') }}" 
+                <img class="w-8 h-8 rounded-full flex-shrink-0"
+                     src="{{ $course->mentor?->image ?? asset('images/default.png') }}"
                      alt="{{ $course->mentor?->name ?? 'Mentor' }}">
                 <div class="flex-1 min-w-0">
                     <p class="font-semibold truncate">
@@ -39,6 +44,7 @@
             </div>
         </div>
 
+        {{-- Review --}}
         @if($course->reviews_count > 0)
             <div class="flex items-center justify-end text-sm opacity-80 mb-2">
                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -50,6 +56,7 @@
             </div>
         @endif
 
+        {{-- Harga & Siswa --}}
         <div class="flex justify-between items-center text-sm mb-4">
             <div>
                 {{ $course->enrolled }} Siswa
@@ -64,20 +71,20 @@
             </div>
         </div>
 
+        {{-- Action Button --}}
         <div class="flex gap-4 mt-auto">
-            <form action="{{ route('cart.store', $course->id) }}" method="POST" class="flex-1"> 
+            <form action="{{ route('cart.store', $course->id) }}" method="POST" class="flex-1">
                 @csrf
-                <button type="submit" 
+                <button type="submit"
                     class="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-semibold">
                     Gabung Kelas
                 </button>
             </form>
 
-            <a href="{{ route('course.show', $course->slug) }}" 
+            <a href="{{ route('course.show', $course->slug) }}"
                class="flex-1 border border-white py-2 rounded-lg text-center font-semibold">
                 Detail Kelas
             </a>
         </div>
     </div>
 </div>
-    
