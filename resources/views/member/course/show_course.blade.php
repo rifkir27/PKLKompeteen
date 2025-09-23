@@ -202,7 +202,11 @@
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body line-numbers">
-                                        {!! $seriesDetail->description !!}
+                                        @if($seriesDetail->content_type == 'text')
+                                            {!! $seriesDetail->text_content !!}
+                                        @else
+                                            {!! $seriesDetail->description !!}
+                                        @endif
                                     </div>
                                     <div class="card-footer">
                                         @if($prevSeries)

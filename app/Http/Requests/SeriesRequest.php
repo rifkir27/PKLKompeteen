@@ -26,7 +26,9 @@ class SeriesRequest extends FormRequest
             'number_of_series' => 'required',
             'intro' => 'required',
             'video_code' => 'sometimes',
-            'description' => 'sometimes'
+            'description' => 'sometimes',
+            'content_type' => 'required|in:video,text,quiz',
+            'text_content' => 'required_if:content_type,text'
         ];
     }
 }
