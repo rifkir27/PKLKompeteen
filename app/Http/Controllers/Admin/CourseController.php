@@ -53,6 +53,13 @@ class CourseController extends Controller
             $course->benefits()->sync($request->benefits);
         }
 
+        // create series (materials) if provided
+        if ($request->has('series') && is_array($request->series)) {
+            foreach ($request->series as $seriesData) {
+                $course->series()->create($seriesData);
+            }
+        }
+
         return redirect(route('admin.courses.index'))->with('toast_success', 'Course Created');
     }
 
@@ -89,6 +96,34 @@ class CourseController extends Controller
         // update benefits
         if ($request->has('benefits')) {
             $course->benefits()->sync($request->benefits);
+        }
+
+        // update series (materials) if provided
+        if ($request->has('series') && is_array($request->series)) {
+            // Delete existing series that are not in the request
+            $existingSeriesIds = $course->series->pluck('id')->toArray();
+            $updatedSeriesIds = [];
+
+            foreach ($request->series as $seriesData) {
+                if (isset($seriesData['id'])) {
+                    // Update existing series
+                    $series = $course->series()->find($seriesData['id']);
+                    if ($series) {
+                        $series->update($seriesData);
+                        $updatedSeriesIds[] = $seriesData['id'];
+                    }
+                } else {
+                    // Create new series
+                    $newSeries = $course->series()->create($seriesData);
+                    $updatedSeriesIds[] = $newSeries->id;
+                }
+            }
+
+            // Delete series that are not in the updated list
+            $seriesToDelete = array_diff($existingSeriesIds, $updatedSeriesIds);
+            if (!empty($seriesToDelete)) {
+                $course->series()->whereIn('id', $seriesToDelete)->delete();
+            }
         }
 
         return redirect(route('admin.courses.index'))->with('toast_success', 'Course Updated');
