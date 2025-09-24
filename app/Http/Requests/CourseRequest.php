@@ -39,6 +39,15 @@ class CourseRequest extends FormRequest
                 'link_telegram' => 'sometimes',
                 'link_whatsapp' => 'sometimes',
                 'is_published' => 'required',
+                // Series validation rules
+                'series' => 'nullable|array',
+                'series.*.title' => 'required|string|max:255',
+                'series.*.number_of_series' => 'required|integer|min:1',
+                'series.*.intro' => 'required|in:0,1',
+                'series.*.content_type' => 'required|in:video,text,quiz',
+                'series.*.video_code' => 'required_if:series.*.content_type,video|nullable|string',
+                'series.*.text_content' => 'required_if:series.*.content_type,text|nullable|string',
+                'series.*.description' => 'nullable|string',
               ];
         } else {
             $data = [
@@ -57,7 +66,16 @@ class CourseRequest extends FormRequest
                 'meta_description' => 'required',
                 'link_telegram' => 'sometimes',
                 'link_whatsapp' => 'sometimes',
-                'is_published' => 'required'
+                'is_published' => 'required',
+                // Series validation rules
+                'series' => 'nullable|array',
+                'series.*.title' => 'required|string|max:255',
+                'series.*.number_of_series' => 'required|integer|min:1',
+                'series.*.intro' => 'required|in:0,1',
+                'series.*.content_type' => 'required|in:video,text,quiz',
+                'series.*.video_code' => 'required_if:series.*.content_type,video|nullable|string',
+                'series.*.text_content' => 'required_if:series.*.content_type,text|nullable|string',
+                'series.*.description' => 'nullable|string',
             ];
         }
 

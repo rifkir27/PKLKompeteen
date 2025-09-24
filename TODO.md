@@ -1,53 +1,26 @@
-# TODO: Suggestions for Adding Materials to Courses
+# TODO: Add Course Materials Form to Add Course Page
 
-## Current Structure Analysis
-- Courses contain Series (lessons/materials) with: title, number_of_series, intro (free/premium), video_code, description
-- Admin interface exists for managing Series (create, edit, delete)
-- Member view displays series with video and description
+## Plan Implementation Steps:
 
-## Proposed Enhancements
+### 1. Update CourseRequest Validation
+- [ ] Add validation rules for series data array
+- [ ] Handle multiple series entries validation
 
-### 1. Add Quiz/Assessment Functionality
-- **Goal**: Add interactive quizzes to series for better learning engagement
-- **Implementation**:
-  - Create Quiz model with questions, multiple choice options, correct answers
-  - Link quizzes to series
-  - Add quiz display in member course view
-- **Status**: Quiz model and migration created, Series relationship updated
+### 2. Update CourseController Store Method
+- [ ] Modify store method to handle series creation
+- [ ] Create series records after course creation
+- [ ] Handle multiple series entries
 
-### 2. Add Downloadable Resources
-- **Goal**: Allow attaching files (PDFs, docs, code samples) to series
-- **Implementation**:
-  - Add file upload field to Series model
-  - Update SeriesRequest validation
-  - Modify admin series form and view
-  - Add download links in member view
+### 3. Update Course Creation View
+- [ ] Add course materials form section
+- [ ] Add dynamic JavaScript for adding/removing series
+- [ ] Include all necessary series fields
+- [ ] Add content type toggle functionality
 
-### 3. Add Image Galleries
-- **Goal**: Support multiple images per series for visual content
-- **Implementation**:
-  - Create SeriesImage model or extend Photo model
-  - Add image upload in series management
-  - Display gallery in course view
+### 4. Testing
+- [ ] Test course creation with materials
+- [ ] Verify series are properly linked to course
+- [ ] Test different content types
+- [ ] Verify form validation
 
-### 4. Add Text-Based Materials
-- **Goal**: Support articles or long-form text content
-- **Implementation**:
-  - Add content_type field to Series model and migration ✅
-  - Update SeriesRequest validation ✅
-  - Modify admin series form and view ✅
-  - Update member view to render text content ✅
-  - Use rich text editor for text input ✅
-- **Status**: Completed - Migration run, models updated, views modified
-
-### 5. Add Prerequisites and Dependencies
-- **Goal**: Allow series to have prerequisites
-- **Implementation**:
-  - Add prerequisite_series_id to Series
-  - Update logic in CourseController to enforce prerequisites
-
-## Next Steps
-- Implement quiz functionality in views and controllers
-- Add file upload for resources
-- Test new material types
-- Update UI for better content management
+## Current Status: In Progress
