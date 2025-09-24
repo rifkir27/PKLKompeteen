@@ -140,6 +140,90 @@
                                     @enderror
                                 </div>
 
+                                <!-- Course Materials Section -->
+                                <div class="form-group">
+                                    <label class="col-form-label"><h5><i class="fas fa-book"></i> Course Materials (Materi Kursus)</h5></label>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <button type="button" class="btn btn-primary btn-sm" id="add-material">
+                                                <i class="fas fa-plus"></i> Add Material
+                                            </button>
+                                        </div>
+                                        <div class="card-body" id="materials-container">
+                                            <!-- Existing materials will be loaded here -->
+                                            @if($course->series->count() > 0)
+                                                @foreach($course->series as $index => $series)
+                                                    <div class="material-item card mb-3" data-material="{{ $index }}">
+                                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                                            <h6 class="mb-0">Material #{{ $index + 1 }}</h6>
+                                                            <button type="button" class="btn btn-danger btn-sm remove-material">
+                                                                <i class="fas fa-trash"></i> Remove
+                                                            </button>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="col-form-label">Title *</label>
+                                                                        <input type="text" class="form-control" name="series[{{ $index }}][title]" value="{{ $series->title }}" required>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                        <label class="col-form-label">Series Number *</label>
+                                                                        <input type="number" class="form-control" name="series[{{ $index }}][number_of_series]" value="{{ $series->number_of_series }}" min="1" required>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                        <label class="col-form-label">Type *</label>
+                                                                        <select class="form-control content-type-select" name="series[{{ $index }}][intro]" required>
+                                                                            <option value="">Select Type</option>
+                                                                            <option value="0" {{ $series->intro == 0 ? 'selected' : '' }}>Free</option>
+                                                                            <option value="1" {{ $series->intro == 1 ? 'selected' : '' }}>Premium</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="col-form-label">Content Type *</label>
+                                                                        <select class="form-control material-content-type" name="series[{{ $index }}][content_type]" required>
+                                                                            <option value="">Select Content Type</option>
+                                                                            <option value="video" {{ $series->content_type == 'video' ? 'selected' : '' }}>Video</option>
+                                                                            <option value="text" {{ $series->content_type == 'text' ? 'selected' : '' }}>Text</option>
+                                                                            <option value="quiz" {{ $series->content_type == 'quiz' ? 'selected' : '' }}>Quiz</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    <div class="form-group video-content-group" style="display: {{ $series->content_type == 'video' ? 'block' : 'none' }};">
+                                                                        <label class="col-form-label">Video Code (YouTube)</label>
+                                                                        <input type="text" class="form-control" name="series[{{ $index }}][video_code]" value="{{ $series->video_code }}" placeholder="YouTube video code">
+                                                                        <small class="form-text text-muted">Enter the video ID from YouTube URL</small>
+                                                                    </div>
+                                                                    <div class="form-group text-content-group" style="display: {{ $series->content_type == 'text' ? 'block' : 'none' }};">
+                                                                        <label class="col-form-label">Text Content</label>
+                                                                        <textarea class="form-control" name="series[{{ $index }}][text_content]" rows="3" placeholder="Enter text content here...">{{ $series->text_content }}</textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label class="col-form-label">Description</label>
+                                                                <textarea class="form-control" name="series[{{ $index }}][description]" rows="2" placeholder="Material description (optional)">{{ $series->description }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <small class="form-text text-muted">Add course materials/series. You can add multiple materials with different content types.</small>
+                                </div>
+
                                 <div class="form-group">
                                     <label class="col-form-label">Meta Keywords</label>
                                     <textarea rows="10" name="meta_keywords" class="form-control @error('meta_keywords') is-invalid @enderror">{{ old('meta_keywords', $course->meta_keywords) }}</textarea>
@@ -209,6 +293,115 @@
 
     <script>
         $('.select2').select2()
+    </script>
+
+    <!-- Materials Form JavaScript -->
+    <script>
+        let materialCount = {{ $course->series->count() }};
+
+        // Material form template
+        function getMaterialTemplate(index) {
+            return `
+                <div class="material-item card mb-3" data-material="${index}">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Material #${index + 1}</h6>
+                        <button type="button" class="btn btn-danger btn-sm remove-material">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Title *</label>
+                                    <input type="text" class="form-control" name="series[${index}][title]" placeholder="Material title" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="col-form-label">Series Number *</label>
+                                    <input type="number" class="form-control" name="series[${index}][number_of_series]" placeholder="1" min="1" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="col-form-label">Type *</label>
+                                    <select class="form-control content-type-select" name="series[${index}][intro]" required>
+                                        <option value="">Select Type</option>
+                                        <option value="0">Free</option>
+                                        <option value="1">Premium</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">Content Type *</label>
+                                    <select class="form-control material-content-type" name="series[${index}][content_type]" required>
+                                        <option value="">Select Content Type</option>
+                                        <option value="video">Video</option>
+                                        <option value="text">Text</option>
+                                        <option value="quiz">Quiz</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group video-content-group" style="display: none;">
+                                    <label class="col-form-label">Video Code (YouTube)</label>
+                                    <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="YouTube video code">
+                                    <small class="form-text text-muted">Enter the video ID from YouTube URL</small>
+                                </div>
+                                <div class="form-group text-content-group" style="display: none;">
+                                    <label class="col-form-label">Text Content</label>
+                                    <textarea class="form-control" name="series[${index}][text_content]" rows="3" placeholder="Enter text content here..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-form-label">Description</label>
+                            <textarea class="form-control" name="series[${index}][description]" rows="2" placeholder="Material description (optional)"></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Add new material
+        document.getElementById('add-material').addEventListener('click', function() {
+            const container = document.getElementById('materials-container');
+            container.insertAdjacentHTML('beforeend', getMaterialTemplate(materialCount));
+            materialCount++;
+        });
+
+        // Remove material
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-material') || e.target.closest('.remove-material')) {
+                e.target.closest('.material-item').remove();
+            }
+        });
+
+        // Handle content type change
+        document.addEventListener('change', function(e) {
+            if (e.target.classList.contains('material-content-type')) {
+                const cardBody = e.target.closest('.card-body');
+                const videoGroup = cardBody.querySelector('.video-content-group');
+                const textGroup = cardBody.querySelector('.text-content-group');
+
+                // Hide all content groups first
+                videoGroup.style.display = 'none';
+                textGroup.style.display = 'none';
+
+                // Show relevant group based on content type
+                if (e.target.value === 'video') {
+                    videoGroup.style.display = 'block';
+                } else if (e.target.value === 'text') {
+                    textGroup.style.display = 'block';
+                }
+            }
+        });
     </script>
 
     <script src="https://cdn.tiny.cloud/1/p3bgwt3k7550en3tmyd4pd3xrdk6sjx2j0j1ywb7zxgiejix/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
