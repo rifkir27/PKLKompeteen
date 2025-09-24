@@ -1,6 +1,6 @@
 @props(['course'])
 
-<div class="relative bg-white rounded-xl overflow-hidden flex flex-col h-full min-h-[600px]">
+<div class="relative bg-white rounded-2xl overflow-hidden flex flex-col h-full min-h-[600px] border-8 border-gray-200 shadow-sm">
     @if($course->avg_rating > 0)
         <div class="absolute top-0 left-0 bg-custom-orange text-white px-2 py-1 rounded-br-lg text-sm font-bold">
             ⭐ {{ number_format($course->avg_rating, 1) }}
@@ -13,9 +13,9 @@
         </div>
     @endif
 
-    <div class="w-full aspect-[3/4] overflow-hidden">
-        <img class="w-full h-full object-cover object-center" 
-             src="{{ $course->image ?? asset('images/default.png') }}" 
+    <div class="w-full aspect-[4/3] overflow-hidden relative">
+        <img class="w-full h-full object-cover object-center"
+             src="{{ $course->image ?? asset('images/default.png') }}"
              alt="{{ $course->name }}"
              onerror="this.src='{{ asset('images/default.png') }}'">
     </div>
@@ -25,10 +25,9 @@
             <h3 class="text-lg font-semibold line-clamp-2">
                 {{ $course->name }}
             </h3>
-
             <div class="flex items-center gap-2 text-sm mt-2">
-                <img class="w-8 h-8 rounded-full flex-shrink-0" 
-                     src="{{ $course->mentor?->image ?? asset('images/default.png') }}" 
+                <img class="w-8 h-8 rounded-full flex-shrink-0"
+                     src="{{ $course->mentor?->image ?? asset('images/default.png') }}"
                      alt="{{ $course->mentor?->name ?? 'Mentor' }}">
                 <div class="flex-1 min-w-0">
                     <p class="font-semibold truncate">
@@ -65,19 +64,18 @@
         </div>
 
         <div class="flex gap-4 mt-auto">
-            <form action="{{ route('cart.store', $course->id) }}" method="POST" class="flex-1"> 
+            <form action="{{ route('cart.store', $course->id) }}" method="POST" class="flex-1">
                 @csrf
-                <button type="submit" 
+                <button type="submit"
                     class="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-semibold">
                     Gabung Kelas
                 </button>
             </form>
 
-            <a href="{{ route('course.show', $course->slug) }}" 
+            <a href="{{ route('course.show', $course->slug) }}"
                class="flex-1 border border-white py-2 rounded-lg text-center font-semibold">
                 Detail Kelas
             </a>
         </div>
     </div>
 </div>
-    

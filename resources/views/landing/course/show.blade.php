@@ -16,9 +16,7 @@
             </a>
         </div>
     @else
-    <!-- BAGIAN ATAS -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Kiri: Judul + penjelasan -->
         <div class="lg:col-span-2">
             <h1 class="text-3xl font-bold mb-2">{{ $course->name }}</h1>
             <p class="text-gray-600">{{ $course->sort_description ?? 'Deskripsi singkat tidak tersedia' }}</p>
@@ -37,10 +35,10 @@
         </div>
 
         <div>
-            <div class="border rounded-lg overflow-hidden bg-custom-purple2 shadow">
-                <img src="{{ $course->image ?? asset('images/course.jpg') }}" 
+            <div class="border rounded-lg overflow-hidden bg-custom-purple shadow aspect-w-4 aspect-h-3">
+            <img src="{{ $course->image ?? asset('images/course.jpg') }}" 
                 alt="{{ $course->name ?? 'Gambar Kelas' }}" 
-                class="w-full h-80 object-cover" 
+                class="w-full h-full object-cover"
                 onerror="this.src='{{ asset('images/course.jpg') }}'">
 
                 <div class="p-4">
@@ -146,10 +144,10 @@
                 <h3 class="text-lg font-semibold mb-2">Mentor</h3>
                 @if($course->mentor)
                 <div class="flex items-center gap-3">
-                    <img src="{{ $course->mentor->avatar ?? 'https://via.placeholder.com/80' }}" 
-                         alt="{{ $course->mentor->name }}"
-                         class="w-14 h-14 rounded-full object-cover"
-                         onerror="this.src='https://via.placeholder.com/80'">
+                   <img src="{{ $course->mentor?->image ?? asset('images/default.png') }}" 
+                    alt="{{ $course->mentor?->name ?? 'Mentor' }}"
+                    class="w-14 h-14 rounded-full object-cover"
+                    onerror="this.src='{{ asset('images/default.png') }}'">
                     <div>
                         <p class="font-bold">{{ $course->mentor->name }}</p>
                         <x-star-rating 
