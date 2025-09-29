@@ -21,9 +21,12 @@ class CourseRequest extends FormRequest
      */
     public function rules(): array
     {
-        if(request()->isMethod('PUT')){
+        if ($this->isMethod('PUT')) {
+            // Ambil ID course dari route model binding
+            $courseId = $this->route('course');
+
             $data = [
-                'name' => 'required|unique:courses,name,'.$this->id,
+                'name' => 'required|unique:courses,name,' . $courseId,
                 'image' => 'mimes:png,jpg,jpeg|max:2048',
                 'category_id' => 'required',
                 'mentor_id' => 'nullable|exists:mentors,id',
@@ -48,7 +51,7 @@ class CourseRequest extends FormRequest
                 'series.*.video_code' => 'required_if:series.*.content_type,video|nullable|string',
                 'series.*.text_content' => 'required_if:series.*.content_type,text|nullable|string',
                 'series.*.description' => 'nullable|string',
-              ];
+            ];
         } else {
             $data = [
                 'name' => 'required|unique:courses',

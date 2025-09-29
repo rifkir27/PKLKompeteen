@@ -75,7 +75,7 @@
     }
     .or-divider::before {
       left: 0;
-    }
+    }`  
     .or-divider::after {
       right: 0;
     }
@@ -88,7 +88,7 @@
 <body class="d-flex flex-column align-items-center justify-content-center" style="background-color: #4b0082; height: 100vh;">
 
   <div class="text-center mb-3" style="color: white; font-size: 2rem; font-weight: 700;">
-    Kompe<span style="color: orange;">teen</span>
+    Kompe<span style="color: #e0641c;">teen</span>
   </div>
 
   <div class="login-box">
