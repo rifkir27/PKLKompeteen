@@ -83,9 +83,7 @@
     <div class="my-10 border-t border-gray-300"></div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Kiri -->
         <div class="lg:col-span-2 space-y-8">
-            <!-- Apa yang akan dipelajari -->
             <div>
                 <h2 class="text-xl font-semibold mb-4">Apa yang akan kamu pelajari</h2>
                 @if($course->benefits && count($course->benefits) > 0)
@@ -101,7 +99,6 @@
                 @endif
             </div>
 
-            <!-- Tentang Course -->
             <div>
                 <h2 class="text-xl font-semibold mb-4">Tentang E-Course</h2>
                 <div class="text-gray-700 leading-relaxed">
@@ -109,7 +106,6 @@
                 </div>
             </div>
 
-            <!-- Kurikulum -->
             <div>
                 <h2 class="text-xl font-semibold mb-4">Kurikulum E-Course</h2>
                 @if($series && count($series) > 0)
@@ -126,7 +122,6 @@
                 @endif
             </div>
 
-            <!-- Tools -->
             <div>
                 <h2 class="text-xl font-semibold mb-4">Kebutuhan Tools</h2>
                 <ul class="flex flex-wrap gap-4 text-gray-700">
@@ -137,9 +132,7 @@
             </div>
         </div>
 
-        <!-- Kanan -->
         <div class="space-y-6">
-            <!-- Mentor -->
             <div class="border-2 rounded-lg p-4 bg-white border-custom-purple2">
                 <h3 class="text-lg font-semibold mb-2">Mentor</h3>
                 @if($course->mentor)
