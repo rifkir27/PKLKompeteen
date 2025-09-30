@@ -1,6 +1,6 @@
 @props(['course'])
 
-<div class="relative bg-white rounded-2xl overflow-hidden flex flex-col h-full min-h-[600px] border-8 border-gray-400 shadow-sm">
+<div class="relative bg-white rounded-2xl overflow-hidden flex flex-col h-full min-h-[600px] border-8 border-gray-200 shadow-sm">
     @if($course->avg_rating > 0)
         <div class="absolute top-0 left-0 bg-custom-orange text-white px-2 py-1 rounded-br-lg text-sm font-bold">
             ⭐ {{ number_format($course->avg_rating, 1) }}
