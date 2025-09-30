@@ -20,26 +20,45 @@
         <div class="lg:col-span-2">
             <h1 class="text-3xl font-bold mb-2">{{ $course->name }}</h1>
             <p class="text-gray-600">{{ $course->sort_description ?? 'Deskripsi singkat tidak tersedia' }}</p>
-            <div class="flex flex-wrap gap-4 mt-3 text-sm text-gray-500 items-center">
-                <span class="font-semibold">{{ $course->mentor->name ?? 'Mentor' }}</span>
-                <div class="flex items-center">
-                    <x-star-rating 
-                        :rating="$avgRating ?? 0" 
-                        :showNumber="true"
-                        :showCount="true"
-                        :ratingCount="$ratingCount ?? 0"
-                        size="sm" />
+
+            <!-- Mentor + Rating + Alumni -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mt-4 gap-4">
+                <div class="flex items-center gap-3">
+                    <img src="{{ $course->mentor?->image ?? asset('images/default.png') }}" 
+                         alt="{{ $course->mentor?->name ?? 'Mentor' }}"
+                         class="w-14 h-14 rounded-full object-cover"
+                         onerror="this.src='{{ asset('images/default.png') }}'">
+                    <div>
+                        <p class="font-bold text-gray-800">{{ $course->mentor->name ?? 'Mentor' }}</p>
+                    </div>
                 </div>
-                <span>{{ $enrolled ?? 0 }} siswa</span>
+
+                <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                    <div class="flex items-center gap-1">
+                        <i class="fas fa-users"></i>
+                        <span>{{ $enrolled ?? 0 }} alumni</span>
+                    </div>
+                </div>
             </div>
+
+            <!-- Apa yang akan kamu pelajari (tanpa judul) -->
+            @if($course->benefits && count($course->benefits) > 0)
+                <div class="flex flex-wrap gap-2 mt-4">
+                    @foreach ($course->benefits as $benefit)
+                        <span class="px-3 py-1 border border-custom-orange rounded-lg text-sm text-gray-700">
+                            {{ $benefit->name }}
+                        </span>
+                    @endforeach
+                </div>
+            @endif
         </div>
 
         <div>
-            <div class="border rounded-lg overflow-hidden bg-custom-purple shadow aspect-w-4 aspect-h-3">
-            <img src="{{ $course->image ?? asset('images/course.jpg') }}" 
-                alt="{{ $course->name ?? 'Gambar Kelas' }}" 
-                class="w-full h-full object-cover"
-                onerror="this.src='{{ asset('images/course.jpg') }}'">
+            <div class="border-4 border-gray-400 rounded-lg overflow-hidden bg-custom-purple3 shadow aspect-w-4 aspect-h-3">
+                <img src="{{ $course->image ?? asset('images/course.jpg') }}" 
+                    alt="{{ $course->name ?? 'Gambar Kelas' }}" 
+                    class="w-full h-full object-cover"
+                    onerror="this.src='{{ asset('images/course.jpg') }}'">
 
                 <div class="p-4">
                     @if($course->price_before_discount != $course->price_after_discount && $course->price_before_discount > 0)
@@ -85,21 +104,6 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2 space-y-8">
             <div>
-                <h2 class="text-xl font-semibold mb-4">Apa yang akan kamu pelajari</h2>
-                @if($course->benefits && count($course->benefits) > 0)
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    @foreach ($course->benefits as $benefit)
-                        <div class="flex items-center gap-2 text-gray-700">
-                            <i class="fa fa-check text-green-500"></i> {{ $benefit->name }}
-                        </div>
-                    @endforeach
-                </div>
-                @else
-                <p class="text-gray-500">Informasi manfaat belajar sedang dalam pengembangan.</p>
-                @endif
-            </div>
-
-            <div>
                 <h2 class="text-xl font-semibold mb-4">Tentang E-Course</h2>
                 <div class="text-gray-700 leading-relaxed">
                     {!! $course->description ?? '<p class="text-gray-500">Deskripsi lengkap kelas sedang dalam pengembangan.</p>' !!}
@@ -144,7 +148,7 @@
                     <div>
                         <p class="font-bold">{{ $course->mentor->name }}</p>
                         <x-star-rating 
-                            :rating="$course->mentor->rating ?? 4.8" 
+                            :rating="$course->mentor->rating ?? 5.0" 
                             :showNumber="true"
                             size="sm" />
                     </div>
@@ -164,7 +168,6 @@
                     @foreach ($reviews->take(3) as $review)
                         <div class="border-b border-custom-orange pb-4 mb-4 last:border-b-0">
                             <div class="flex items-start gap-3">
-                                <!-- Profile Icon -->
                                 <div class="flex-shrink-0">
                                     <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold text-sm">
                                         {{ substr($review->user->name ?? 'U', 0, 1) }}
@@ -176,7 +179,8 @@
                                         <x-star-rating 
                                             :rating="$review->rating" 
                                             :showHalfStars="false"
-                                            size="sm" />                                    </div>
+                                            size="sm" />                                    
+                                    </div>
                                     <p class="text-sm text-gray-600 mt-2 leading-relaxed">{{ $review->review }}</p>
                                     @if($review->created_at)
                                         <p class="text-xs text-gray-400 mt-2">

@@ -12,6 +12,7 @@ module.exports = {
         'custom-orange': '#e0641c',
         'custom-orange2': '#CE560C',
         'custom-purple2': '#680cb4',
+        'custom-purple3': '#640FB4'
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
