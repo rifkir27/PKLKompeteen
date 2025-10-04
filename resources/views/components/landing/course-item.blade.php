@@ -1,25 +1,30 @@
 @props(['course'])
 
-<div class="relative bg-white rounded-2xl overflow-hidden flex flex-col h-full min-h-[600px] border-8 border-gray-200 shadow-sm">
-    @if($course->avg_rating > 0)
-        <div class="absolute top-0 left-0 bg-custom-orange text-white px-2 py-1 rounded-br-lg text-sm font-bold">
-            ⭐ {{ number_format($course->avg_rating, 1) }}
-        </div>
-    @endif
+<div class="relative z-0 bg-white rounded-2xl overflow-hidden flex flex-col h-full min-h-[600px] border-8 border-gray-200 shadow-sm">
 
-    @if($course->price_before_discount > $course->price_after_discount)
-        <div class="absolute top-0 right-0 bg-custom-orange text-white px-2 py-1 rounded-bl-lg text-sm font-bold">
-            {{ discount($course->price_before_discount, $course->price_after_discount) }}% OFF
-        </div>
-    @endif
-
+    {{-- Gambar 4:3 --}}
     <div class="w-full aspect-[4/3] overflow-hidden relative">
+        {{-- Badge Rating --}}
+        @if($course->avg_rating > 0)
+            <div class="absolute top-0 left-0 z-10 bg-custom-orange text-white px-2 py-1 rounded-br-lg text-sm font-bold">
+                ⭐ {{ number_format($course->avg_rating, 1) }}
+            </div>
+        @endif
+
+        {{-- Badge Discount --}}
+        @if($course->price_before_discount > $course->price_after_discount)
+            <div class="absolute top-0 right-0 z-10 bg-custom-orange text-white px-2 py-1 rounded-bl-lg text-sm font-bold">
+                {{ discount($course->price_before_discount, $course->price_after_discount) }}% OFF
+            </div>
+        @endif
+
         <img class="w-full h-full object-cover object-center"
              src="{{ $course->image ?? asset('images/default.png') }}"
              alt="{{ $course->name }}"
              onerror="this.src='{{ asset('images/default.png') }}'">
     </div>
 
+    {{-- Konten --}}
     <div class="bg-custom-purple text-white p-4 flex flex-col flex-1">
         <div class="min-h-[100px] flex flex-col justify-between mb-3">
             <h3 class="text-lg font-semibold line-clamp-2">
@@ -38,6 +43,7 @@
             </div>
         </div>
 
+        {{-- Jumlah Review --}}
         @if($course->reviews_count > 0)
             <div class="flex items-center justify-end text-sm opacity-80 mb-2">
                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -49,6 +55,7 @@
             </div>
         @endif
 
+        {{-- Enrolled & Harga --}}
         <div class="flex justify-between items-center text-sm mb-4">
             <div>
                 {{ $course->enrolled }} Siswa
@@ -63,6 +70,7 @@
             </div>
         </div>
 
+        {{-- Tombol --}}
         <div class="flex gap-4 mt-auto">
             <form action="{{ route('cart.store', $course->id) }}" method="POST" class="flex-1">
                 @csrf

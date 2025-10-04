@@ -36,12 +36,11 @@
                 <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600">
                     <div class="flex items-center gap-1">
                         <i class="fas fa-users"></i>
-                        <span>{{ $enrolled ?? 0 }} alumni</span>
+                        <span>{{ $enrolled ?? 0 }} Siswa</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Apa yang akan kamu pelajari (tanpa judul) -->
             @if($course->benefits && count($course->benefits) > 0)
                 <div class="flex flex-wrap gap-2 mt-4">
                     @foreach ($course->benefits as $benefit)
@@ -54,7 +53,7 @@
         </div>
 
         <div>
-            <div class="border-4 border-gray-400 rounded-lg overflow-hidden bg-custom-purple3 shadow aspect-w-4 aspect-h-3">
+            <div class="rounded-lg overflow-hidden bg-custom-purple shadow aspect-w-4 aspect-h-3">
                 <img src="{{ $course->image ?? asset('images/course.jpg') }}" 
                     alt="{{ $course->name ?? 'Gambar Kelas' }}" 
                     class="w-full h-full object-cover"
@@ -84,12 +83,12 @@
                             <form action="{{ route('cart.store', $course->id) }}" method="POST">
                                 @csrf
                                 <button type="submit" 
-                                    class="w-full px-4 py-2 rounded-lg bg-custom-orange hover:bg-custom-orange2 transition-colors">
+                                    class="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-semibold">
                                     Beli Sekarang
                                 </button>
                             </form>
                             <button type="submit"
-                             class="w-full px-4 py-2 rounded-lg text-white border-2 border-custom-orange transition-colors">
+                             class="flex-1 border border-white py-2 rounded-lg text-center font-semibold text-white">
                                 Simpan ke Favorit
                             </button>
                         @endif
