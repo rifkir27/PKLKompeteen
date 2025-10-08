@@ -21,12 +21,15 @@
                 <x-landing.course-item :course="$course" />
             @endforeach
         </div>
-        <div class="flex justify-start text-left mt-14">
-            <a href="{{ route('course.index') }}"
-                class="px-4 py-2 rounded-lg bg-white text-black hover:bg-custom-orange hover:text-white duration-200 flex items-center gap-2 text-lg border-2 border-custom-orange hover:border-custom-orange hover:transition-colors">
-                Lihat Semua
-            </a>
+        <div class="container mx-auto">
+            <div class="flex justify-start text-left mt-14 px-4 md:px-0">
+                <a href="{{ route('course.index') }}"
+                    class="px-4 py-2 rounded-lg bg-white text-black hover:bg-custom-orange hover:text-white duration-200 flex items-center gap-2 text-lg border-2 border-custom-orange hover:border-custom-orange hover:transition-colors">
+                    Lihat Semua
+                </a>
+            </div>
         </div>
+
 
     </section>
     
