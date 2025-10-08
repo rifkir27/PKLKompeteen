@@ -200,9 +200,9 @@
                                                                 </div>
                                                                 <div class="col-md-8">
                                                                     <div class="form-group video-content-group" style="display: {{ $series->content_type == 'video' ? 'block' : 'none' }};">
-                                                                        <label class="col-form-label">Video Code (YouTube)</label>
-                                                                        <input type="text" class="form-control" name="series[{{ $index }}][video_code]" value="{{ $series->video_code }}" placeholder="YouTube video code">
-                                                                        <small class="form-text text-muted">Enter the video ID from YouTube URL</small>
+                                                                        <label class="col-form-label">Video Link (Google Drive)</label>
+                                                                        <input type="text" class="form-control" name="series[{{ $index }}][video_code]" value="{{ $series->video_code }}" placeholder="Google Drive file ID or shareable link">
+                                                                        <small class="form-text text-muted">Enter Google Drive file ID or shareable link</small>
                                                                     </div>
                                                                     <div class="form-group text-content-group" style="display: {{ $series->content_type == 'text' ? 'block' : 'none' }};">
                                                                         <label class="col-form-label">Text Content</label>
@@ -349,9 +349,9 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="form-group video-content-group" style="display: none;">
-                                    <label class="col-form-label">Video Code (YouTube)</label>
-                                    <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="YouTube video code">
-                                    <small class="form-text text-muted">Enter the video ID from YouTube URL</small>
+                                    <label class="col-form-label">Video Link (Google Drive)</label>
+                                    <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="Google Drive file ID or shareable link">
+                                    <small class="form-text text-muted">Enter Google Drive file ID or shareable link</small>
                                 </div>
                                 <div class="form-group text-content-group" style="display: none;">
                                     <label class="col-form-label">Text Content</label>
