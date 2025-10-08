@@ -34,4 +34,11 @@ class Mentor extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getAvgRatingAttribute()
+    {
+        return $this->courses()
+            ->join('reviews', 'courses.id', '=', 'reviews.course_id')
+            ->avg('reviews.rating') ?? 0;
+    }
 }

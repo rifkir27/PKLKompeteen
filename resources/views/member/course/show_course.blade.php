@@ -170,13 +170,22 @@
                     <div class="row">
                         <div class="col-12">
                             @if ($series->video_code)
+                                @php
+                                    function extractGoogleDriveId($link) {
+                                        if (preg_match('/\/d\/([a-zA-Z0-9_-]+)/', $link, $matches)) {
+                                            return $matches[1];
+                                        }
+                                        return $link; // assume it's already ID
+                                    }
+                                    $driveId = extractGoogleDriveId($seriesDetail->video_code);
+                                @endphp
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 style="font-family:Comic Sans MS">{{ $seriesDetail->title }}</h3>
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body line-numbers">
-                                        <iframe src="https://www.youtube.com/embed/{{ $seriesDetail->video_code }}?rel=0" frameborder="0" allowfullscreen></iframe>
+                                        <iframe src="https://drive.google.com/file/d/{{ $driveId }}/preview" frameborder="0" allowfullscreen></iframe>
                                     </div>
                                     @if ($seriesDetail->description == null)
                                         <div class="card-footer">
