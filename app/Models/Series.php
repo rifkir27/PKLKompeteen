@@ -18,9 +18,10 @@ class Series extends Model
         'number_of_series',
         'intro',
         'video_code',
+        'video_path',
         'description',
         'content_type',
-        'text_content'
+        'text_content',
     ];
 
     public function course()
@@ -46,5 +47,15 @@ class Series extends Model
     public function ratingCount()
     {
         return $this->reviews()->count();
+    }
+
+    public function getVideoUrlAttribute()
+    {
+        return $this->video_path ? asset('storage/' . $this->video_path) : null;
+    }
+
+    public function isLocalVideo()
+    {
+        return !empty($this->video_path);
     }
 }
