@@ -6,23 +6,14 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CourseRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
-     */
     public function rules(): array
     {
         if ($this->isMethod('PUT')) {
-            // Ambil ID course dari route model binding
             $courseId = $this->route('course');
 
             $data = [
@@ -42,13 +33,14 @@ class CourseRequest extends FormRequest
                 'link_telegram' => 'sometimes',
                 'link_whatsapp' => 'sometimes',
                 'is_published' => 'required',
-                // Series validation rules
-                'series' => 'nullable|array',
+
+                // ✅ Validasi Series (versi update)
+                'series' => 'sometimes|array',
                 'series.*.title' => 'required|string|max:255',
                 'series.*.number_of_series' => 'required|integer|min:1',
                 'series.*.intro' => 'required|in:0,1',
                 'series.*.content_type' => 'required|in:video,text,quiz',
-                'series.*.video_code' => 'required_if:series.*.content_type,video|nullable|string',
+                'series.*.video_file' => 'required_if:series.*.content_type,video|nullable|file|mimes:mp4,mov,avi|max:51200',
                 'series.*.text_content' => 'required_if:series.*.content_type,text|nullable|string',
                 'series.*.description' => 'nullable|string',
             ];
@@ -70,13 +62,14 @@ class CourseRequest extends FormRequest
                 'link_telegram' => 'sometimes',
                 'link_whatsapp' => 'sometimes',
                 'is_published' => 'required',
-                // Series validation rules
-                'series' => 'nullable|array',
+
+                // ✅ Validasi Series (versi create)
+                'series' => 'sometimes|array',
                 'series.*.title' => 'required|string|max:255',
                 'series.*.number_of_series' => 'required|integer|min:1',
                 'series.*.intro' => 'required|in:0,1',
                 'series.*.content_type' => 'required|in:video,text,quiz',
-                'series.*.video_code' => 'required_if:series.*.content_type,video|nullable|string',
+                'series.*.video_file' => 'required_if:series.*.content_type,video|nullable|file|mimes:mp4,mov,avi|max:51200',
                 'series.*.text_content' => 'required_if:series.*.content_type,text|nullable|string',
                 'series.*.description' => 'nullable|string',
             ];

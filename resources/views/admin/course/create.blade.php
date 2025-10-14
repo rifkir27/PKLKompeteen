@@ -278,11 +278,14 @@
                                 </div>
                             </div>
                             <div class="col-md-8">
+                                <!-- ✅ DIGANTI: Upload Video Lokal -->
                                 <div class="form-group video-content-group" style="display: none;">
-                                    <label class="col-form-label">Video Link (Google Drive)</label>
-                                    <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="Google Drive file ID or shareable link">
-                                    <small class="form-text text-muted">Enter Google Drive file ID or shareable link</small>
+                                    <label class="col-form-label">Upload Video</label>
+                                    <input type="file" class="form-control" name="series[${index}][video_file]" accept="video/*">
+                                    <small class="form-text text-muted">Choose a video file from your computer</small>
                                 </div>
+                                <!-- ✅ END GANTI -->
+
                                 <div class="form-group text-content-group" style="display: none;">
                                     <label class="col-form-label">Text Content</label>
                                     <textarea class="form-control" name="series[${index}][text_content]" rows="3" placeholder="Enter text content here..."></textarea>

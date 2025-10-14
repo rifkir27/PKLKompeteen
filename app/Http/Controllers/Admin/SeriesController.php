@@ -8,6 +8,7 @@ use App\Models\Series;
 use App\Models\Course;
 use App\Http\Requests\SeriesRequest;
 use DataTables;
+use Illuminate\Support\Facades\Storage;
 
 class SeriesController extends Controller
 {
@@ -23,8 +24,20 @@ class SeriesController extends Controller
 
     public function store(Course $course, SeriesRequest $request)
     {
-        $series = $course->series()->create($request->all());
-        return redirect(route('admin.courses.series.show', [$course->id, $series->id]))->with('toast_success', 'Series Created');
+        $data = $request->all();
+
+        // ✅ handle upload video file lokal
+        if ($request->hasFile('video_file')) {
+            $file = $request->file('video_file');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('videos', $filename, 'public');
+            $data['video_path'] = 'storage/' . $path; // simpan path video
+        }
+
+        $series = $course->series()->create($data);
+
+        return redirect(route('admin.courses.series.show', [$course->id, $series->id]))
+            ->with('toast_success', 'Series Created');
     }
 
     public function show(Course $course, Series $series)
@@ -39,13 +52,34 @@ class SeriesController extends Controller
 
     public function update(SeriesRequest $request, Course $course, Series $series)
     {
-        $series->update($request->all());
-        return redirect(route('admin.courses.series.show', [$course->id, $series->id]))->with('toast_success', 'Series Updated');
+        $data = $request->all();
 
+        // ✅ handle update video baru
+        if ($request->hasFile('video_file')) {
+            // hapus video lama kalau ada
+            if ($series->video_path && Storage::disk('public')->exists(str_replace('storage/', '', $series->video_path))) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $series->video_path));
+            }
+
+            $file = $request->file('video_file');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('videos', $filename, 'public');
+            $data['video_path'] = 'storage/' . $path;
+        }
+
+        $series->update($data);
+
+        return redirect(route('admin.courses.series.show', [$course->id, $series->id]))
+            ->with('toast_success', 'Series Updated');
     }
 
     public function destroy(Course $course, Series $series)
     {
+        // ✅ hapus video dari storage juga
+        if ($series->video_path && Storage::disk('public')->exists(str_replace('storage/', '', $series->video_path))) {
+            Storage::disk('public')->delete(str_replace('storage/', '', $series->video_path));
+        }
+
         $series->delete();
         return back()->with('toast_success', 'Series Deleted');
     }
@@ -57,11 +91,13 @@ class SeriesController extends Controller
         return DataTables::of($series)
             ->addIndexColumn()
             ->editColumn('intro', function($series) {
-                return $series->intro == 1 ? '<span class="badge badge-danger">Premium</span>' : '<span class="badge badge-warning">Free</span>';
+                return $series->intro == 1
+                    ? '<span class="badge badge-danger">Premium</span>'
+                    : '<span class="badge badge-warning">Free</span>';
             })
             ->addColumn('action', function($data){
-                return '<a href="'.route('admin.courses.series.show', [$data->course_id, $data->id]).'" class="btn btn-info btn-sm"><i class="fas fa-th"></i> </a>
-                        <a href="'.route('admin.courses.series.edit', [$data->course_id, $data->id]).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> </a>
+                return '<a href="'.route('admin.courses.series.show', [$data->course_id, $data->id]).'" class="btn btn-info btn-sm"><i class="fas fa-th"></i></a>
+                        <a href="'.route('admin.courses.series.edit', [$data->course_id, $data->id]).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                         <button onclick="deleteConfirm(\''.$data->id.'\')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                         <form method="POST" action="'.route('admin.courses.series.destroy',[$data->course_id,  $data->id]).'" style="display:inline-block;" id="submit_'.$data->id.'">
                             '.method_field('delete').csrf_field().'
@@ -89,5 +125,5 @@ class SeriesController extends Controller
             @header('Content-type: text/html; charset=utf-8'); 
             echo $response;
         }
-}
+    }
 }
