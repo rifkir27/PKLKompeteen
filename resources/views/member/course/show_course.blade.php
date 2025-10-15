@@ -170,22 +170,25 @@
                     <div class="row">
                         <div class="col-12">
                             @if ($series->video_code)
-                                @php
-                                    function extractGoogleDriveId($link) {
-                                        if (preg_match('/\/d\/([a-zA-Z0-9_-]+)/', $link, $matches)) {
-                                            return $matches[1];
-                                        }
-                                        return $link; // assume it's already ID
-                                    }
-                                    $driveId = extractGoogleDriveId($seriesDetail->video_code);
-                                @endphp
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 style="font-family:Comic Sans MS">{{ $seriesDetail->title }}</h3>
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body line-numbers">
-                                        <iframe src="https://drive.google.com/file/d/{{ $driveId }}/preview" frameborder="0" allowfullscreen></iframe>
+                                        @if($seriesDetail->video_source == 'youtube' || $seriesDetail->video_source == 'drive')
+                                            <iframe src="{{ $seriesDetail->video_url }}" frameborder="0" allowfullscreen></iframe>
+                                        @elseif($seriesDetail->video_source == 'file')
+                                            <video controls style="width: 100%; height: 76vh;">
+                                                <source src="{{ $seriesDetail->video_url }}" type="video/mp4">
+                                                <source src="{{ $seriesDetail->video_url }}" type="video/avi">
+                                                <source src="{{ $seriesDetail->video_url }}" type="video/mov">
+                                                <source src="{{ $seriesDetail->video_url }}" type="video/wmv">
+                                                <source src="{{ $seriesDetail->video_url }}" type="video/flv">
+                                                <source src="{{ $seriesDetail->video_url }}" type="video/mkv">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        @endif
                                     </div>
                                     @if ($seriesDetail->description == null)
                                         <div class="card-footer">

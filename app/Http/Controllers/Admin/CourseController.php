@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class CourseController extends Controller
@@ -55,7 +56,15 @@ class CourseController extends Controller
 
         // create series (materials) if provided
         if ($request->has('series') && is_array($request->series)) {
-            foreach ($request->series as $seriesData) {
+            foreach ($request->series as $index => $seriesData) {
+                // Handle video based on source
+                if (isset($seriesData['video_source']) && $seriesData['video_source'] === 'file' && $request->hasFile("series.{$index}.video_file")) {
+                    $videoFile = $request->file("series.{$index}.video_file");
+                    $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
+                    $videoFile->storeAs('public/videos', $videoName);
+                    $seriesData['video_code'] = $videoName;
+                }
+                // For youtube/drive, video_code is already the URL
                 $course->series()->create($seriesData);
             }
         }
@@ -104,16 +113,36 @@ class CourseController extends Controller
             $existingSeriesIds = $course->series->pluck('id')->toArray();
             $updatedSeriesIds = [];
 
-            foreach ($request->series as $seriesData) {
+            foreach ($request->series as $index => $seriesData) {
                 if (isset($seriesData['id'])) {
                     // Update existing series
                     $series = $course->series()->find($seriesData['id']);
                     if ($series) {
+                        // Handle video based on source for existing series
+                        if (isset($seriesData['video_source']) && $seriesData['video_source'] === 'file' && $request->hasFile("series.{$index}.video_file")) {
+                            // Delete old video file if exists and was a file
+                            if ($series->video_source === 'file' && $series->video_code && Storage::disk('public')->exists('videos/' . $series->video_code)) {
+                                Storage::disk('public')->delete('videos/' . $series->video_code);
+                            }
+                            $videoFile = $request->file("series.{$index}.video_file");
+                            $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
+                            $videoFile->storeAs('public/videos', $videoName);
+                            $seriesData['video_code'] = $videoName;
+                        }
+                        // For youtube/drive, video_code is already the URL
                         $series->update($seriesData);
                         $updatedSeriesIds[] = $seriesData['id'];
                     }
                 } else {
                     // Create new series
+                    // Handle video based on source for new series
+                    if (isset($seriesData['video_source']) && $seriesData['video_source'] === 'file' && $request->hasFile("series.{$index}.video_file")) {
+                        $videoFile = $request->file("series.{$index}.video_file");
+                        $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
+                        $videoFile->storeAs('public/videos', $videoName);
+                        $seriesData['video_code'] = $videoName;
+                    }
+                    // For youtube/drive, video_code is already the URL
                     $newSeries = $course->series()->create($seriesData);
                     $updatedSeriesIds[] = $newSeries->id;
                 }
@@ -135,6 +164,14 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {
         Storage::disk('local')->delete('public/courses/' . basename($course->image));
+
+        // Delete video files for all series that are files
+        foreach ($course->series as $series) {
+            if ($series->video_source === 'file' && $series->video_code && Storage::disk('public')->exists('videos/' . $series->video_code)) {
+                Storage::disk('public')->delete('videos/' . $series->video_code);
+            }
+        }
+
         $course->delete();
         return back()->with('toast_success', 'Course Deleted');
     }

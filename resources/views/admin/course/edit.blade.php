@@ -161,6 +161,7 @@
                                                             </button>
                                                         </div>
                                                         <div class="card-body">
+                                                            <input type="hidden" name="series[{{ $index }}][id]" value="{{ $series->id }}">
                                                             <div class="row">
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
@@ -200,9 +201,26 @@
                                                                 </div>
                                                                 <div class="col-md-8">
                                                                     <div class="form-group video-content-group" style="display: {{ $series->content_type == 'video' ? 'block' : 'none' }};">
-                                                                        <label class="col-form-label">Video Link (Google Drive)</label>
-                                                                        <input type="text" class="form-control" name="series[{{ $index }}][video_code]" value="{{ $series->video_code }}" placeholder="Google Drive file ID or shareable link">
-                                                                        <small class="form-text text-muted">Enter Google Drive file ID or shareable link</small>
+                                                                        <label class="col-form-label">Video Source *</label>
+                                                                        <select class="form-control video-source-select" name="series[{{ $index }}][video_source]" required>
+                                                                            <option value="">Select Video Source</option>
+                                                                            <option value="file" {{ $series->video_source == 'file' ? 'selected' : '' }}>Upload File</option>
+                                                                            <option value="youtube" {{ $series->video_source == 'youtube' ? 'selected' : '' }}>YouTube</option>
+                                                                            <option value="drive" {{ $series->video_source == 'drive' ? 'selected' : '' }}>Google Drive</option>
+                                                                        </select>
+                                                                        <div class="video-file-group mt-2" style="display: {{ $series->video_source == 'file' ? 'block' : 'none' }};">
+                                                                            <label class="col-form-label">Video File</label>
+                                                                            <input type="file" class="form-control" name="series[{{ $index }}][video_file]" accept="video/*">
+                                                                            <small class="form-text text-muted">Upload video file (MP4, AVI, MOV, WMV, FLV, MKV - Max 100MB)</small>
+                                                                            @if($series->video_code && $series->video_source == 'file')
+                                                                                <small class="form-text text-info">Current file: {{ basename($series->video_code) }}</small>
+                                                                            @endif
+                                                                        </div>
+                                                                        <div class="video-url-group mt-2" style="display: {{ in_array($series->video_source, ['youtube', 'drive']) ? 'block' : 'none' }};">
+                                                                            <label class="col-form-label">Video URL/ID</label>
+                                                                            <input type="text" class="form-control" name="series[{{ $index }}][video_code]" value="{{ $series->video_code }}" placeholder="Enter video URL or Google Drive file ID">
+                                                                            <small class="form-text text-muted">For YouTube: paste full URL. For Google Drive: paste file ID or shareable link</small>
+                                                                        </div>
                                                                     </div>
                                                                     <div class="form-group text-content-group" style="display: {{ $series->content_type == 'text' ? 'block' : 'none' }};">
                                                                         <label class="col-form-label">Text Content</label>
@@ -349,9 +367,23 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="form-group video-content-group" style="display: none;">
-                                    <label class="col-form-label">Video Link (Google Drive)</label>
-                                    <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="Google Drive file ID or shareable link">
-                                    <small class="form-text text-muted">Enter Google Drive file ID or shareable link</small>
+                                    <label class="col-form-label">Video Source *</label>
+                                    <select class="form-control video-source-select" name="series[${index}][video_source]" required>
+                                        <option value="">Select Video Source</option>
+                                        <option value="file">Upload File</option>
+                                        <option value="youtube">YouTube</option>
+                                        <option value="drive">Google Drive</option>
+                                    </select>
+                                    <div class="video-file-group mt-2" style="display: none;">
+                                        <label class="col-form-label">Video File</label>
+                                        <input type="file" class="form-control" name="series[${index}][video_file]" accept="video/*">
+                                        <small class="form-text text-muted">Upload video file (MP4, AVI, MOV, WMV, FLV, MKV - Max 100MB)</small>
+                                    </div>
+                                    <div class="video-url-group mt-2" style="display: none;">
+                                        <label class="col-form-label">Video URL/ID</label>
+                                        <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="Enter video URL or Google Drive file ID">
+                                        <small class="form-text text-muted">For YouTube: paste full URL. For Google Drive: paste file ID or shareable link</small>
+                                    </div>
                                 </div>
                                 <div class="form-group text-content-group" style="display: none;">
                                     <label class="col-form-label">Text Content</label>
@@ -380,8 +412,28 @@
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('remove-material') || e.target.closest('.remove-material')) {
                 e.target.closest('.material-item').remove();
+                reIndexMaterials();
             }
         });
+
+        // Function to re-index materials after removal
+        function reIndexMaterials() {
+            const materials = document.querySelectorAll('.material-item');
+            materials.forEach((item, index) => {
+                item.setAttribute('data-material', index);
+                item.querySelector('h6').textContent = `Material #${index + 1}`;
+                // Update all input names
+                const inputs = item.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    const name = input.name;
+                    if (name && name.startsWith('series[')) {
+                        const newName = name.replace(/series\[\d+\]/, `series[${index}]`);
+                        input.name = newName;
+                    }
+                });
+            });
+            materialCount = materials.length;
+        }
 
         // Handle content type change
         document.addEventListener('change', function(e) {
@@ -399,6 +451,24 @@
                     videoGroup.style.display = 'block';
                 } else if (e.target.value === 'text') {
                     textGroup.style.display = 'block';
+                }
+            }
+
+            // Handle video source change
+            if (e.target.classList.contains('video-source-select')) {
+                const videoContentGroup = e.target.closest('.video-content-group');
+                const fileGroup = videoContentGroup.querySelector('.video-file-group');
+                const urlGroup = videoContentGroup.querySelector('.video-url-group');
+
+                // Hide all sub-groups first
+                fileGroup.style.display = 'none';
+                urlGroup.style.display = 'none';
+
+                // Show relevant sub-group based on video source
+                if (e.target.value === 'file') {
+                    fileGroup.style.display = 'block';
+                } else if (e.target.value === 'youtube' || e.target.value === 'drive') {
+                    urlGroup.style.display = 'block';
                 }
             }
         });

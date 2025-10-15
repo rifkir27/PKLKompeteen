@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Series;
 use App\Models\Course;
 use App\Http\Requests\SeriesRequest;
+use Illuminate\Support\Facades\Storage;
 use DataTables;
 
 class SeriesController extends Controller
@@ -23,7 +24,18 @@ class SeriesController extends Controller
 
     public function store(Course $course, SeriesRequest $request)
     {
-        $series = $course->series()->create($request->all());
+        $seriesData = $request->all();
+
+        // Handle video based on source
+        if ($request->input('video_source') === 'file' && $request->hasFile('video_file')) {
+            $videoFile = $request->file('video_file');
+            $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
+            $videoFile->storeAs('public/videos', $videoName);
+            $seriesData['video_code'] = $videoName;
+        }
+        // For youtube/drive, video_code is already the URL
+
+        $series = $course->series()->create($seriesData);
         return redirect(route('admin.courses.series.show', [$course->id, $series->id]))->with('toast_success', 'Series Created');
     }
 
@@ -39,13 +51,32 @@ class SeriesController extends Controller
 
     public function update(SeriesRequest $request, Course $course, Series $series)
     {
-        $series->update($request->all());
-        return redirect(route('admin.courses.series.show', [$course->id, $series->id]))->with('toast_success', 'Series Updated');
+        $seriesData = $request->all();
 
+        // Handle video based on source
+        if ($request->input('video_source') === 'file' && $request->hasFile('video_file')) {
+            // Delete old video file if exists and was a file
+            if ($series->video_source === 'file' && $series->video_code && Storage::disk('public')->exists('videos/' . $series->video_code)) {
+                Storage::disk('public')->delete('videos/' . $series->video_code);
+            }
+            $videoFile = $request->file('video_file');
+            $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
+            $videoFile->storeAs('public/videos', $videoName);
+            $seriesData['video_code'] = $videoName;
+        }
+        // For youtube/drive, video_code is already the URL
+
+        $series->update($seriesData);
+        return redirect(route('admin.courses.series.show', [$course->id, $series->id]))->with('toast_success', 'Series Updated');
     }
 
     public function destroy(Course $course, Series $series)
     {
+        // Delete video file if it exists and is a file
+        if ($series->video_source === 'file' && $series->video_code && Storage::disk('public')->exists('videos/' . $series->video_code)) {
+            Storage::disk('public')->delete('videos/' . $series->video_code);
+        }
+
         $series->delete();
         return back()->with('toast_success', 'Series Deleted');
     }
