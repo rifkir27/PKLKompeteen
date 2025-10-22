@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Series;
 use App\Models\Course;
 use App\Http\Requests\SeriesRequest;
+use Illuminate\Support\Facades\Storage;
 use DataTables;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,20 +25,19 @@ class SeriesController extends Controller
 
     public function store(Course $course, SeriesRequest $request)
     {
-        $data = $request->all();
+        $seriesData = $request->all();
 
-        // ✅ handle upload video file lokal
-        if ($request->hasFile('video_file')) {
-            $file = $request->file('video_file');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('videos', $filename, 'public');
-            $data['video_path'] = 'storage/' . $path; // simpan path video
+        // Handle video based on source
+        if ($request->input('video_source') === 'file' && $request->hasFile('video_file')) {
+            $videoFile = $request->file('video_file');
+            $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
+            $videoFile->storeAs('public/videos', $videoName);
+            $seriesData['video_code'] = $videoName;
         }
+        // For youtube/drive, video_code is already the URL
 
-        $series = $course->series()->create($data);
-
-        return redirect(route('admin.courses.series.show', [$course->id, $series->id]))
-            ->with('toast_success', 'Series Created');
+        $series = $course->series()->create($seriesData);
+        return redirect(route('admin.courses.series.show', [$course->id, $series->id]))->with('toast_success', 'Series Created');
     }
 
     public function show(Course $course, Series $series)
@@ -52,32 +52,30 @@ class SeriesController extends Controller
 
     public function update(SeriesRequest $request, Course $course, Series $series)
     {
-        $data = $request->all();
+        $seriesData = $request->all();
 
-        // ✅ handle update video baru
-        if ($request->hasFile('video_file')) {
-            // hapus video lama kalau ada
-            if ($series->video_path && Storage::disk('public')->exists(str_replace('storage/', '', $series->video_path))) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $series->video_path));
+        // Handle video based on source
+        if ($request->input('video_source') === 'file' && $request->hasFile('video_file')) {
+            // Delete old video file if exists and was a file
+            if ($series->video_source === 'file' && $series->video_code && Storage::disk('public')->exists('videos/' . $series->video_code)) {
+                Storage::disk('public')->delete('videos/' . $series->video_code);
             }
-
-            $file = $request->file('video_file');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('videos', $filename, 'public');
-            $data['video_path'] = 'storage/' . $path;
+            $videoFile = $request->file('video_file');
+            $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
+            $videoFile->storeAs('public/videos', $videoName);
+            $seriesData['video_code'] = $videoName;
         }
+        // For youtube/drive, video_code is already the URL
 
-        $series->update($data);
-
-        return redirect(route('admin.courses.series.show', [$course->id, $series->id]))
-            ->with('toast_success', 'Series Updated');
+        $series->update($seriesData);
+        return redirect(route('admin.courses.series.show', [$course->id, $series->id]))->with('toast_success', 'Series Updated');
     }
 
     public function destroy(Course $course, Series $series)
     {
-        // ✅ hapus video dari storage juga
-        if ($series->video_path && Storage::disk('public')->exists(str_replace('storage/', '', $series->video_path))) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $series->video_path));
+        // Delete video file if it exists and is a file
+        if ($series->video_source === 'file' && $series->video_code && Storage::disk('public')->exists('videos/' . $series->video_code)) {
+            Storage::disk('public')->delete('videos/' . $series->video_code);
         }
 
         $series->delete();

@@ -78,9 +78,35 @@
                                     @enderror
                                 </div>
 
+                                <div class="form-group" id="video_source_group" style="{{ ($errors->any() ? old('content_type', $series->content_type) : $series->content_type) != 'video' ? 'display: none;' : '' }}">
+                                    <label class="col-form-label">Video Source</label>
+                                    <select class="form-control @error('video_source') is-invalid @enderror" name="video_source" id="video_source">
+                                        <option value="">[Choose Video Source]</option>
+                                        <option value="youtube" @selected($errors->any() ? (old('video_source') == "youtube") : ($series->video_source == "youtube"))>YouTube</option>
+                                        <option value="drive" @selected($errors->any() ? (old('video_source') == "drive") : ($series->video_source == "drive"))>Google Drive</option>
+                                        <option value="file" @selected($errors->any() ? (old('video_source') == "file") : ($series->video_source == "file"))>Upload File</option>
+                                    </select>
+                                    @error('video_source')
+                                        <span class="error invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
                                 <div class="form-group" id="video_code_group" style="{{ ($errors->any() ? old('content_type', $series->content_type) : $series->content_type) != 'video' ? 'display: none;' : '' }}">
-                                    <label class="col-form-label">Video Code Youtube</label>
-                                    <input type="text" class="form-control @error('video_code') is-invalid @enderror" placeholder="Video Code Youtube" name="video_code" value="{{ old('video_code', $series->video_code) }}">
+                                    <label class="col-form-label">Video Code/Link</label>
+                                    <input type="text" class="form-control @error('video_code') is-invalid @enderror" name="video_code" id="video_code_input" placeholder="Enter YouTube URL, Google Drive link, or upload file below" value="{{ old('video_code', $series->video_code) }}">
+                                    <small class="form-text text-muted" id="video_help_text">Select video source first</small>
+                                    @error('video_code')
+                                        <span class="error invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group" id="video_file_group" style="display: none;">
+                                    <label class="col-form-label">Video File</label>
+                                    <input type="file" class="form-control @error('video_code') is-invalid @enderror" name="video_file" accept="video/*">
+                                    <small class="form-text text-muted">Upload video file (MP4, AVI, MOV, WMV, FLV, MKV - Max 100MB)</small>
+                                    @if($series->video_source == 'file' && $series->video_code)
+                                        <small class="form-text text-info">Current file: {{ basename($series->video_code) }}</small>
+                                    @endif
                                     @error('video_code')
                                         <span class="error invalid-feedback">{{ $message }}</span>
                                     @enderror
@@ -178,19 +204,61 @@
         // Toggle content fields based on content type
         document.getElementById('content_type').addEventListener('change', function() {
             var contentType = this.value;
-            var videoGroup = document.getElementById('video_code_group');
+            var videoSourceGroup = document.getElementById('video_source_group');
+            var videoCodeGroup = document.getElementById('video_code_group');
+            var videoFileGroup = document.getElementById('video_file_group');
             var textGroup = document.getElementById('text_content_group');
 
             if (contentType === 'video') {
-                videoGroup.style.display = 'block';
+                videoSourceGroup.style.display = 'block';
+                videoCodeGroup.style.display = 'block';
                 textGroup.style.display = 'none';
+                // Trigger video source change to show appropriate fields
+                document.getElementById('video_source').dispatchEvent(new Event('change'));
             } else if (contentType === 'text') {
-                videoGroup.style.display = 'none';
+                videoSourceGroup.style.display = 'none';
+                videoCodeGroup.style.display = 'none';
+                videoFileGroup.style.display = 'none';
                 textGroup.style.display = 'block';
             } else {
-                videoGroup.style.display = 'none';
+                videoSourceGroup.style.display = 'none';
+                videoCodeGroup.style.display = 'none';
+                videoFileGroup.style.display = 'none';
                 textGroup.style.display = 'none';
             }
+        });
+
+        // Toggle video input fields based on video source
+        document.getElementById('video_source').addEventListener('change', function() {
+            var videoSource = this.value;
+            var videoCodeInput = document.getElementById('video_code_input');
+            var videoFileGroup = document.getElementById('video_file_group');
+            var helpText = document.getElementById('video_help_text');
+
+            if (videoSource === 'file') {
+                videoCodeInput.style.display = 'none';
+                videoFileGroup.style.display = 'block';
+                helpText.textContent = 'Upload video file below';
+            } else if (videoSource === 'youtube') {
+                videoCodeInput.style.display = 'block';
+                videoCodeInput.placeholder = 'Enter YouTube URL or video ID';
+                videoFileGroup.style.display = 'none';
+                helpText.textContent = 'Enter full YouTube URL or just the video ID';
+            } else if (videoSource === 'drive') {
+                videoCodeInput.style.display = 'block';
+                videoCodeInput.placeholder = 'Enter Google Drive file ID or shareable link';
+                videoFileGroup.style.display = 'none';
+                helpText.textContent = 'Enter Google Drive file ID or full shareable link';
+            } else {
+                videoCodeInput.style.display = 'none';
+                videoFileGroup.style.display = 'none';
+                helpText.textContent = 'Select video source first';
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('video_source').dispatchEvent(new Event('change'));
         });
   </script>
 @endpush

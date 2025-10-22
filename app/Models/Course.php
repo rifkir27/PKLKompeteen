@@ -30,7 +30,8 @@ class Course extends Model
         'meta_description',
         'link_telegram',
         'link_whatsapp',
-        'is_published'
+        'is_published',
+        'certificate_drive_link'
     ];
 
     protected function image(): Attribute
