@@ -286,6 +286,15 @@
                                     @enderror
                                 </div>
 
+                                <div class="form-group">
+                                    <label class="col-form-label">Certificate Google Drive Link</label>
+                                    <input type="url" class="form-control @error('certificate_drive_link') is-invalid @enderror" placeholder="https://drive.google.com/..." name="certificate_drive_link" value="{{ old('certificate_drive_link', $course->certificate_drive_link) }}">
+                                    @error('certificate_drive_link')
+                                        <span class="error invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                    <small class="form-text text-muted">Link Google Drive untuk file sertifikat kursus (opsional)</small>
+                                </div>
+
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">

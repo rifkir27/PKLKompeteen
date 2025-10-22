@@ -42,6 +42,7 @@ class CourseRequest extends FormRequest
                 'link_telegram' => 'sometimes',
                 'link_whatsapp' => 'sometimes',
                 'is_published' => 'required',
+                'certificate_drive_link' => 'nullable|url',
                 // Series validation rules
                 'series' => 'nullable|array',
                 'series.*.title' => 'required|string|max:255',
@@ -71,6 +72,7 @@ class CourseRequest extends FormRequest
                 'link_telegram' => 'sometimes',
                 'link_whatsapp' => 'sometimes',
                 'is_published' => 'required',
+                'certificate_drive_link' => 'nullable|url',
                 // Series validation rules
                 'series' => 'nullable|array',
                 'series.*.title' => 'required|string|max:255',
