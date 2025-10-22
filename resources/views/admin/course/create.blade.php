@@ -198,6 +198,15 @@
                                     @enderror
                                 </div>
 
+                                <div class="form-group">
+                                    <label class="col-form-label">Certificate Google Drive Link</label>
+                                    <input type="url" class="form-control @error('certificate_drive_link') is-invalid @enderror" placeholder="https://drive.google.com/..." name="certificate_drive_link" value="{{ old('certificate_drive_link') }}">
+                                    @error('certificate_drive_link')
+                                        <span class="error invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                    <small class="form-text text-muted">Link Google Drive untuk file sertifikat kursus (opsional)</small>
+                                </div>
+
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
@@ -280,9 +289,23 @@
                             <div class="col-md-8">
                                 <!-- ✅ DIGANTI: Upload Video Lokal -->
                                 <div class="form-group video-content-group" style="display: none;">
-                                    <label class="col-form-label">Upload Video</label>
-                                    <input type="file" class="form-control" name="series[${index}][video_file]" accept="video/*">
-                                    <small class="form-text text-muted">Choose a video file from your computer</small>
+                                    <label class="col-form-label">Video Source *</label>
+                                    <select class="form-control video-source-select" name="series[${index}][video_source]" required>
+                                        <option value="">Select Video Source</option>
+                                        <option value="file">Upload File</option>
+                                        <option value="youtube">YouTube</option>
+                                        <option value="drive">Google Drive</option>
+                                    </select>
+                                    <div class="video-file-group mt-2" style="display: none;">
+                                        <label class="col-form-label">Video File</label>
+                                        <input type="file" class="form-control" name="series[${index}][video_file]" accept="video/*">
+                                        <small class="form-text text-muted">Upload video file (MP4, AVI, MOV, WMV, FLV, MKV - Max 100MB)</small>
+                                    </div>
+                                    <div class="video-url-group mt-2" style="display: none;">
+                                        <label class="col-form-label">Video URL/ID</label>
+                                        <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="Enter video URL or Google Drive file ID">
+                                        <small class="form-text text-muted">For YouTube: paste full URL. For Google Drive: paste file ID or shareable link</small>
+                                    </div>
                                 </div>
                                 <!-- ✅ END GANTI -->
 
@@ -313,8 +336,28 @@
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('remove-material') || e.target.closest('.remove-material')) {
                 e.target.closest('.material-item').remove();
+                reIndexMaterials();
             }
         });
+
+        // Function to re-index materials after removal
+        function reIndexMaterials() {
+            const materials = document.querySelectorAll('.material-item');
+            materials.forEach((item, index) => {
+                item.setAttribute('data-material', index);
+                item.querySelector('h6').textContent = `Material #${index + 1}`;
+                // Update all input names
+                const inputs = item.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    const name = input.name;
+                    if (name && name.startsWith('series[')) {
+                        const newName = name.replace(/series\[\d+\]/, `series[${index}]`);
+                        input.name = newName;
+                    }
+                });
+            });
+            materialCount = materials.length;
+        }
 
         // Handle content type change
         document.addEventListener('change', function(e) {
@@ -332,6 +375,26 @@
                     videoGroup.style.display = 'block';
                 } else if (e.target.value === 'text') {
                     textGroup.style.display = 'block';
+                }
+            }
+        });
+
+        // Handle video source change
+        document.addEventListener('change', function(e) {
+            if (e.target.classList.contains('video-source-select')) {
+                const videoGroup = e.target.closest('.video-content-group');
+                const fileGroup = videoGroup.querySelector('.video-file-group');
+                const urlGroup = videoGroup.querySelector('.video-url-group');
+
+                // Hide all video input groups first
+                fileGroup.style.display = 'none';
+                urlGroup.style.display = 'none';
+
+                // Show relevant group based on video source
+                if (e.target.value === 'file') {
+                    fileGroup.style.display = 'block';
+                } else if (e.target.value === 'youtube' || e.target.value === 'drive') {
+                    urlGroup.style.display = 'block';
                 }
             }
         });

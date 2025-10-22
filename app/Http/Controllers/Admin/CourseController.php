@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class CourseController extends Controller
@@ -33,8 +34,7 @@ class CourseController extends Controller
         $input = $request->all();
         $input['user_id'] = auth()->id();
 
-        // ✅ upload image
-        if ($request->hasFile('image')) {
+        if ($request->file('image')) {
             $image = $request->file('image');
             $image->storeAs('courses', $image->hashName(), 'public');
             $input['image'] = $image->hashName();
@@ -42,31 +42,21 @@ class CourseController extends Controller
 
         $course = Course::create($input);
 
-        // ✅ relasi benefit
         if ($request->has('benefits')) {
             $course->benefits()->sync($request->benefits);
         }
 
-        // ✅ relasi series + upload video
         if ($request->has('series') && is_array($request->series)) {
             foreach ($request->series as $index => $seriesData) {
-                $data = [
-                    'title'             => $seriesData['title'] ?? null,
-                    'number_of_series'  => $seriesData['number_of_series'] ?? null,
-                    'intro'             => $seriesData['intro'] ?? 0,
-                    'content_type'      => $seriesData['content_type'] ?? null,
-                    'description'       => $seriesData['description'] ?? null,
-                    'text_content'      => $seriesData['text_content'] ?? null,
-                ];
-
-                if ($request->hasFile("series.$index.video_file")) {
-                    $file = $request->file("series.$index.video_file");
-                    $filename = time() . '_' . $file->getClientOriginalName();
-                    $path = $file->storeAs('videos', $filename, 'public');
-                    $data['video_path'] = $path;
+                // Handle video based on source
+                if (isset($seriesData['video_source']) && $seriesData['video_source'] === 'file' && $request->hasFile("series.{$index}.video_file")) {
+                    $videoFile = $request->file("series.{$index}.video_file");
+                    $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
+                    $videoFile->storeAs('videos', $videoName, 'public');
+                    $seriesData['video_code'] = $videoName;
                 }
-
-                $course->series()->create($data);
+                // For youtube/drive, video_code is already the URL
+                $course->series()->create($seriesData);
             }
         }
 
@@ -88,12 +78,8 @@ class CourseController extends Controller
         $input = $request->all();
         $input['user_id'] = auth()->id();
 
-        // ✅ update image jika diganti
-        if ($request->hasFile('image')) {
-            if ($course->image && Storage::disk('public')->exists('courses/' . basename($course->image))) {
-                Storage::disk('public')->delete('courses/' . basename($course->image));
-            }
-
+        if ($request->file('image')) {
+            Storage::disk('public')->delete('courses/' . basename($course->image));
             $image = $request->file('image');
             $image->storeAs('courses', $image->hashName(), 'public');
             $input['image'] = $image->hashName();
@@ -101,59 +87,51 @@ class CourseController extends Controller
 
         $course->update($input);
 
-        // ✅ sync benefit
         if ($request->has('benefits')) {
             $course->benefits()->sync($request->benefits);
         }
 
-        // ✅ update series
         if ($request->has('series') && is_array($request->series)) {
             $existingSeriesIds = $course->series->pluck('id')->toArray();
             $updatedSeriesIds = [];
 
             foreach ($request->series as $index => $seriesData) {
-                $data = [
-                    'title'             => $seriesData['title'] ?? null,
-                    'number_of_series'  => $seriesData['number_of_series'] ?? null,
-                    'intro'             => $seriesData['intro'] ?? 0,
-                    'content_type'      => $seriesData['content_type'] ?? null,
-                    'description'       => $seriesData['description'] ?? null,
-                    'text_content'      => $seriesData['text_content'] ?? null,
-                ];
-
-                // ✅ handle upload video baru
-                if ($request->hasFile("series.$index.video_file")) {
-                    $file = $request->file("series.$index.video_file");
-                    $filename = time() . '_' . $file->getClientOriginalName();
-                    $path = $file->storeAs('videos', $filename, 'public');
-                    $data['video_path'] = $path;
-
-                    // hapus video lama
-                    if (isset($seriesData['id'])) {
-                        $oldSeries = $course->series()->find($seriesData['id']);
-                        if ($oldSeries && $oldSeries->video_path && Storage::disk('public')->exists($oldSeries->video_path)) {
-                            Storage::disk('public')->delete($oldSeries->video_path);
-                        }
-                    }
-                }
-
                 if (isset($seriesData['id'])) {
                     $series = $course->series()->find($seriesData['id']);
                     if ($series) {
-                        $series->update($data);
+                        // Handle video based on source for existing series
+                        if (isset($seriesData['video_source']) && $seriesData['video_source'] === 'file' && $request->hasFile("series.{$index}.video_file")) {
+                            // Delete old video file if exists and was a file
+                            if ($series->video_source === 'file' && $series->video_code && Storage::disk('public')->exists('videos/' . $series->video_code)) {
+                                Storage::disk('public')->delete('videos/' . $series->video_code);
+                            }
+                            $videoFile = $request->file("series.{$index}.video_file");
+                            $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
+                            $videoFile->storeAs('videos', $videoName, 'public');
+                            $seriesData['video_code'] = $videoName;
+                        }
+                        // For youtube/drive, video_code is already the URL
+                        $series->update($seriesData);
                         $updatedSeriesIds[] = $seriesData['id'];
                     }
                 } else {
-                    $newSeries = $course->series()->create($data);
+                    // Create new series
+                    // Handle video based on source for new series
+                    if (isset($seriesData['video_source']) && $seriesData['video_source'] === 'file' && $request->hasFile("series.{$index}.video_file")) {
+                        $videoFile = $request->file("series.{$index}.video_file");
+                        $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
+                        $videoFile->storeAs('videos', $videoName, 'public');
+                        $seriesData['video_code'] = $videoName;
+                    }
+                    // For youtube/drive, video_code is already the URL
+                    $newSeries = $course->series()->create($seriesData);
                     $updatedSeriesIds[] = $newSeries->id;
                 }
             }
 
-            // ✅ hapus series yang dihapus dari form
             $seriesToDelete = array_diff($existingSeriesIds, $updatedSeriesIds);
             if (!empty($seriesToDelete)) {
-                $seriesList = $course->series()->whereIn('id', $seriesToDelete)->get();
-                foreach ($seriesList as $series) {
+                foreach ($course->series()->whereIn('id', $seriesToDelete)->get() as $series) {
                     if ($series->video_path && Storage::disk('public')->exists($series->video_path)) {
                         Storage::disk('public')->delete($series->video_path);
                     }
@@ -167,34 +145,27 @@ class CourseController extends Controller
 
     public function destroy(Course $course)
     {
-        // ✅ hapus gambar utama course
-        if ($course->image && Storage::disk('public')->exists('courses/' . basename($course->image))) {
-            Storage::disk('public')->delete('courses/' . basename($course->image));
-        }
+        Storage::disk('local')->delete('public/courses/' . basename($course->image));
 
-        // ✅ hapus semua video series terkait
+        // Delete video files for all series that are files
         foreach ($course->series as $series) {
-            if ($series->video_path && Storage::disk('public')->exists($series->video_path)) {
-                Storage::disk('public')->delete($series->video_path);
+            if ($series->video_source === 'file' && $series->video_code && Storage::disk('public')->exists('videos/' . $series->video_code)) {
+                Storage::disk('public')->delete('videos/' . $series->video_code);
             }
         }
 
         $course->delete();
-
         return back()->with('toast_success', 'Course Deleted');
     }
 
     public function datatable()
     {
         $courses = Course::with(['mentor'])
-            ->withCount([
-                'series as series',
-                'details as enrolled' => function ($query) {
-                    $query->whereHas('transaction', function ($query) {
-                        $query->where('status', 'success');
-                    });
-                }
-            ])
+            ->withCount(['series as series', 'details as enrolled' => function ($query) {
+                $query->whereHas('transaction', function ($query) {
+                    $query->where('status', 'success');
+                });
+            }])
             ->orderBy('created_at', 'DESC');
 
         return DataTables::of($courses)
@@ -214,14 +185,13 @@ class CourseController extends Controller
                 return $courses->mentor ? $courses->mentor->name : '-';
             })
             ->addColumn('action', function ($data) {
-                return '
-                    <a href="' . route('admin.courses.photos.index', $data->id) . '" class="btn btn-success btn-sm"><i class="fas fa-image"></i></a>
-                    <a href="' . route('admin.courses.series.index', $data->id) . '" class="btn btn-info btn-sm"><i class="fas fa-th"></i></a>
-                    <a href="' . route('admin.courses.edit', $data->id) . '" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                    <button onclick="deleteConfirm(\'' . $data->id . '\')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                    <form method="POST" action="' . route('admin.courses.destroy', $data->id) . '" style="display:inline-block;" id="submit_' . $data->id . '">
-                        ' . method_field('delete') . csrf_field() . '
-                    </form>';
+                return '<a href="' . route('admin.courses.photos.index', $data->id) . '" class="btn btn-success btn-sm"><i class="fas fa-image"></i></a>
+                        <a href="' . route('admin.courses.series.index', $data->id) . '" class="btn btn-info btn-sm"><i class="fas fa-th"></i></a>
+                        <a href="' . route('admin.courses.edit', $data->id) . '" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                        <button onclick="deleteConfirm(\'' . $data->id . '\')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                        <form method="POST" action="' . route('admin.courses.destroy', $data->id) . '" style="display:inline-block;" id="submit_' . $data->id . '">
+                            ' . method_field('delete') . csrf_field() . '
+                        </form>';
             })
             ->rawColumns(['image', 'action', 'is_published'])
             ->make(true);
