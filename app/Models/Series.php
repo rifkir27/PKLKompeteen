@@ -21,7 +21,7 @@ class Series extends Model
         'video_source',
         'description',
         'content_type',
-        'text_content'
+        'text_content',
     ];
 
     public function course()

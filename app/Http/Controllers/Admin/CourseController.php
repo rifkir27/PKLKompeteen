@@ -15,53 +15,44 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CourseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return view('admin.course.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $categories = Category::all();
-        $benefits   = Benefit::orderBy('created_at', 'ASC')->get();
-        $mentors    = Mentor::all();
+        $benefits = Benefit::orderBy('created_at', 'ASC')->get();
+        $mentors = Mentor::all();
 
         return view('admin.course.create', compact('categories', 'benefits', 'mentors'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(CourseRequest $request)
     {
-        $image = $request->file('image');
-        $image->storeAs('public/courses', $image->hashName());
-
         $input = $request->all();
-        $input['image'] = $image ? $image->hashName() : null;
-        $input['user_id'] = auth()->id(); // 🔑 foreign key ke users
+        $input['user_id'] = auth()->id();
+
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $image->storeAs('courses', $image->hashName(), 'public');
+            $input['image'] = $image->hashName();
+        }
 
         $course = Course::create($input);
 
-        // sync benefits kalau ada
         if ($request->has('benefits')) {
             $course->benefits()->sync($request->benefits);
         }
 
-        // create series (materials) if provided
         if ($request->has('series') && is_array($request->series)) {
             foreach ($request->series as $index => $seriesData) {
                 // Handle video based on source
                 if (isset($seriesData['video_source']) && $seriesData['video_source'] === 'file' && $request->hasFile("series.{$index}.video_file")) {
                     $videoFile = $request->file("series.{$index}.video_file");
                     $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
-                    $videoFile->storeAs('public/videos', $videoName);
+                    $videoFile->storeAs('videos', $videoName, 'public');
                     $seriesData['video_code'] = $videoName;
                 }
                 // For youtube/drive, video_code is already the URL
@@ -69,53 +60,43 @@ class CourseController extends Controller
             }
         }
 
-        return redirect(route('admin.courses.index'))->with('toast_success', 'Course Created');
+        return redirect(route('admin.courses.index'))->with('toast_success', 'Course Created with Series & Video!');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Course $course)
     {
-        $categories      = Category::all();
-        $benefits        = Benefit::orderBy('created_at', 'ASC')->get();
+        $categories = Category::all();
+        $benefits = Benefit::orderBy('created_at', 'ASC')->get();
         $benefitSelected = $course->benefits->pluck('id')->toArray();
-        $mentors         = Mentor::all();
+        $mentors = Mentor::all();
 
         return view('admin.course.edit', compact('categories', 'course', 'benefits', 'benefitSelected', 'mentors'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(CourseRequest $request, Course $course)
     {
         $input = $request->all();
-        $input['user_id'] = auth()->id(); // 🔑 biar konsisten
+        $input['user_id'] = auth()->id();
 
         if ($request->file('image')) {
-            Storage::disk('local')->delete('public/courses/' . basename($course->image));
+            Storage::disk('public')->delete('courses/' . basename($course->image));
             $image = $request->file('image');
-            $image->storeAs('public/courses', $image->hashName());
+            $image->storeAs('courses', $image->hashName(), 'public');
             $input['image'] = $image->hashName();
         }
 
         $course->update($input);
 
-        // update benefits
         if ($request->has('benefits')) {
             $course->benefits()->sync($request->benefits);
         }
 
-        // update series (materials) if provided
         if ($request->has('series') && is_array($request->series)) {
-            // Delete existing series that are not in the request
             $existingSeriesIds = $course->series->pluck('id')->toArray();
             $updatedSeriesIds = [];
 
             foreach ($request->series as $index => $seriesData) {
                 if (isset($seriesData['id'])) {
-                    // Update existing series
                     $series = $course->series()->find($seriesData['id']);
                     if ($series) {
                         // Handle video based on source for existing series
@@ -126,7 +107,7 @@ class CourseController extends Controller
                             }
                             $videoFile = $request->file("series.{$index}.video_file");
                             $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
-                            $videoFile->storeAs('public/videos', $videoName);
+                            $videoFile->storeAs('videos', $videoName, 'public');
                             $seriesData['video_code'] = $videoName;
                         }
                         // For youtube/drive, video_code is already the URL
@@ -139,7 +120,7 @@ class CourseController extends Controller
                     if (isset($seriesData['video_source']) && $seriesData['video_source'] === 'file' && $request->hasFile("series.{$index}.video_file")) {
                         $videoFile = $request->file("series.{$index}.video_file");
                         $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
-                        $videoFile->storeAs('public/videos', $videoName);
+                        $videoFile->storeAs('videos', $videoName, 'public');
                         $seriesData['video_code'] = $videoName;
                     }
                     // For youtube/drive, video_code is already the URL
@@ -148,19 +129,20 @@ class CourseController extends Controller
                 }
             }
 
-            // Delete series that are not in the updated list
             $seriesToDelete = array_diff($existingSeriesIds, $updatedSeriesIds);
             if (!empty($seriesToDelete)) {
-                $course->series()->whereIn('id', $seriesToDelete)->delete();
+                foreach ($course->series()->whereIn('id', $seriesToDelete)->get() as $series) {
+                    if ($series->video_path && Storage::disk('public')->exists($series->video_path)) {
+                        Storage::disk('public')->delete($series->video_path);
+                    }
+                    $series->delete();
+                }
             }
         }
 
         return redirect(route('admin.courses.index'))->with('toast_success', 'Course Updated');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Course $course)
     {
         Storage::disk('local')->delete('public/courses/' . basename($course->image));
@@ -176,9 +158,6 @@ class CourseController extends Controller
         return back()->with('toast_success', 'Course Deleted');
     }
 
-    /**
-     * Datatable API.
-     */
     public function datatable()
     {
         $courses = Course::with(['mentor'])
@@ -192,7 +171,7 @@ class CourseController extends Controller
         return DataTables::of($courses)
             ->addIndexColumn()
             ->editColumn('image', function ($courses) {
-                return "<img src=" . $courses->image . " width='50px'>";
+                return "<img src='" . asset('storage/courses/' . $courses->image) . "' width='50px'>";
             })
             ->editColumn('is_published', function ($courses) {
                 return $courses->is_published == 0
@@ -206,9 +185,9 @@ class CourseController extends Controller
                 return $courses->mentor ? $courses->mentor->name : '-';
             })
             ->addColumn('action', function ($data) {
-                return '<a href="' . route('admin.courses.photos.index', $data->id) . '" class="btn btn-success btn-sm"><i class="fas fa-image"></i> </a>
-                        <a href="' . route('admin.courses.series.index', $data->id) . '" class="btn btn-info btn-sm"><i class="fas fa-th"></i> </a>
-                        <a href="' . route('admin.courses.edit', $data->id) . '" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> </a>
+                return '<a href="' . route('admin.courses.photos.index', $data->id) . '" class="btn btn-success btn-sm"><i class="fas fa-image"></i></a>
+                        <a href="' . route('admin.courses.series.index', $data->id) . '" class="btn btn-info btn-sm"><i class="fas fa-th"></i></a>
+                        <a href="' . route('admin.courses.edit', $data->id) . '" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                         <button onclick="deleteConfirm(\'' . $data->id . '\')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                         <form method="POST" action="' . route('admin.courses.destroy', $data->id) . '" style="display:inline-block;" id="submit_' . $data->id . '">
                             ' . method_field('delete') . csrf_field() . '

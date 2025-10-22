@@ -9,6 +9,7 @@ use App\Models\Course;
 use App\Http\Requests\SeriesRequest;
 use Illuminate\Support\Facades\Storage;
 use DataTables;
+use Illuminate\Support\Facades\Storage;
 
 class SeriesController extends Controller
 {
@@ -88,11 +89,13 @@ class SeriesController extends Controller
         return DataTables::of($series)
             ->addIndexColumn()
             ->editColumn('intro', function($series) {
-                return $series->intro == 1 ? '<span class="badge badge-danger">Premium</span>' : '<span class="badge badge-warning">Free</span>';
+                return $series->intro == 1
+                    ? '<span class="badge badge-danger">Premium</span>'
+                    : '<span class="badge badge-warning">Free</span>';
             })
             ->addColumn('action', function($data){
-                return '<a href="'.route('admin.courses.series.show', [$data->course_id, $data->id]).'" class="btn btn-info btn-sm"><i class="fas fa-th"></i> </a>
-                        <a href="'.route('admin.courses.series.edit', [$data->course_id, $data->id]).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> </a>
+                return '<a href="'.route('admin.courses.series.show', [$data->course_id, $data->id]).'" class="btn btn-info btn-sm"><i class="fas fa-th"></i></a>
+                        <a href="'.route('admin.courses.series.edit', [$data->course_id, $data->id]).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                         <button onclick="deleteConfirm(\''.$data->id.'\')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                         <form method="POST" action="'.route('admin.courses.series.destroy',[$data->course_id,  $data->id]).'" style="display:inline-block;" id="submit_'.$data->id.'">
                             '.method_field('delete').csrf_field().'
@@ -120,5 +123,5 @@ class SeriesController extends Controller
             @header('Content-type: text/html; charset=utf-8'); 
             echo $response;
         }
-}
+    }
 }

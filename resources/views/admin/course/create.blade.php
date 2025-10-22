@@ -287,6 +287,7 @@
                                 </div>
                             </div>
                             <div class="col-md-8">
+                                <!-- ✅ DIGANTI: Upload Video Lokal -->
                                 <div class="form-group video-content-group" style="display: none;">
                                     <label class="col-form-label">Video Source *</label>
                                     <select class="form-control video-source-select" name="series[${index}][video_source]" required>
@@ -306,6 +307,8 @@
                                         <small class="form-text text-muted">For YouTube: paste full URL. For Google Drive: paste file ID or shareable link</small>
                                     </div>
                                 </div>
+                                <!-- ✅ END GANTI -->
+
                                 <div class="form-group text-content-group" style="display: none;">
                                     <label class="col-form-label">Text Content</label>
                                     <textarea class="form-control" name="series[${index}][text_content]" rows="3" placeholder="Enter text content here..."></textarea>
