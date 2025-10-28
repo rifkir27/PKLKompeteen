@@ -195,7 +195,7 @@
                                             @if($prevSeries)
                                                 <a href="{{ route('member.mycourse.course.show', [$course->id, $prevSeries->id]) }}" class="btn btn-primary"><i class="fa fa-chevron-left"></i> Sebelumnya</a>
                                             @endif
-                                            
+
                                             @if($nextSeries)
                                                 <a href="{{ route('member.mycourse.course.show', [$course->id, $nextSeries->id]) }}?series_checked={{ $seriesDetail->id }}" class="btn btn-success float-right">Selesai & Lanjutkan <i class="fa fa-chevron-right"></i></a>
                                             @else
@@ -224,11 +224,25 @@
                                         @if($prevSeries)
                                             <a href="{{ route('member.mycourse.course.show', [$course->id, $prevSeries->id]) }}" class="btn btn-primary"><i class="fa fa-chevron-left"></i> Sebelumnya</a>
                                         @endif
-                                        
+
                                         @if($nextSeries)
                                             <a href="{{ route('member.mycourse.course.show', [$course->id, $nextSeries->id]) }}?series_checked={{ $seriesDetail->id }}" class="btn btn-success float-right">Selesai & Lanjutkan <i class="fa fa-chevron-right"></i></a>
                                         @else
                                             <a href="{{ route('member.mycourse.course.show', [$course->id, $seriesDetail->id]) }}?series_checked={{ $seriesDetail->id }}" class="btn btn-danger float-right"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Selesai</a>
+                                            @php
+                                                $allSeriesCompleted = true;
+                                                foreach ($course->series as $s) {
+                                                    if (!in_array($s->id, $seriesChecked)) {
+                                                        $allSeriesCompleted = false;
+                                                        break;
+                                                    }
+                                                }
+                                            @endphp
+                                            @if($allSeriesCompleted && $course->certificate_drive_link)
+                                                <div class="mt-2">
+                                                    <a href="{{ $course->certificate_drive_link }}" target="_blank" class="btn btn-info float-right ml-2"><i class="fa fa-certificate"></i> Download Certificate</a>
+                                                </div>
+                                            @endif
                                         @endif
                                     </div>
                                     <!-- /.card-body -->
