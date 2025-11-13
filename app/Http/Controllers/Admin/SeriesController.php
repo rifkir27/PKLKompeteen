@@ -9,8 +9,6 @@ use App\Models\Course;
 use App\Http\Requests\SeriesRequest;
 use Illuminate\Support\Facades\Storage;
 use DataTables;
-use Illuminate\Support\Facades\Storage;
-
 class SeriesController extends Controller
 {
     public function index(Course $course)
