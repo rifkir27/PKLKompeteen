@@ -81,6 +81,22 @@
                                                 </a>
                                             @endif
 
+                                            @php
+                                                $allSeriesCompleted = true;
+                                                $totalSeries = $data->course->series->count();
+                                                $completedSeries = count($data->series_checked ?? []);
+                                                if ($totalSeries > 0 && $completedSeries < $totalSeries) {
+                                                    $allSeriesCompleted = false;
+                                                }
+                                            @endphp
+                                            @if ($allSeriesCompleted && $data->course->certificate_drive_link)
+                                                <a href="{{ $data->course->certificate_drive_link }}" target="_blank"
+                                                    class="btn shadow btn-warning btn-md mb-2 w-100">
+                                                    <i class="fas fa-certificate mr-1"></i>
+                                                    Ambil Sertifikat
+                                                </a>
+                                            @endif
+
                                             <div class="modal fade" id="modal-default{{ $data->course->id }}">
                                                 <div class="modal-dialog">
                                                     <form action="{{ route('member.review', $data->course->id) }}" method="POST">
@@ -157,6 +173,22 @@
                                                     class="btn shadow btn-primary btn-md mb-2">
                                                     <i class="fab fa-telegram mr-1"></i>
                                                     Join Grup Telegram
+                                                </a>
+                                            @endif
+
+                                            @php
+                                                $allSeriesCompleted = true;
+                                                $totalSeries = $data->course->series->count();
+                                                $completedSeries = count($data->series_checked ?? []);
+                                                if ($totalSeries > 0 && $completedSeries < $totalSeries) {
+                                                    $allSeriesCompleted = false;
+                                                }
+                                            @endphp
+                                            @if ($allSeriesCompleted && $data->course->certificate_drive_link)
+                                                <a href="{{ $data->course->certificate_drive_link }}" target="_blank"
+                                                    class="btn shadow btn-warning btn-md mb-2">
+                                                    <i class="fas fa-certificate mr-1"></i>
+                                                    Ambil Sertifikat
                                                 </a>
                                             @endif
 
