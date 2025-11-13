@@ -1,8 +1,9 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-<div class="brand-link text-center">
-    <span class="brand-text font-weight-bold">{{ env('APP_NAME') }}</span>
-</div>
-
+    <a class="brand-link">
+        <div class="text-center">
+            <span class=" font-weight-bold">{{ env('APP_NAME') }}</span>
+        </div>
+    </a>
 
     <div class="sidebar">
         <!-- Sidebar Menu -->

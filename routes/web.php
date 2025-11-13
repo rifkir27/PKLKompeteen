@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Member\SeriesController as MemberSeriesController;
 use App\Http\Controllers\Member\CourseController as MemberCourseController;
 use App\Http\Controllers\Member\ReviewController as MemberReviewController;
+use App\Http\Controllers\Member\SeriesReviewController;
 use App\Http\Controllers\Landing\CourseController as LandingCourseController;
 use App\Http\Controllers\Landing\ReviewController as LandingReviewController;
 use App\Http\Controllers\Member\ProfileController as MemberProfileController;
@@ -187,6 +188,7 @@ Route::group(['as' => 'member.', 'prefix' => 'account', 'middleware' => ['auth',
 
     Route::get('my-course/course/{id}', [MemberCourseController::class, 'course'])->name('mycourse.course');
     Route::get('my-course/course/{id}/series/{seriesId}', [MemberCourseController::class, 'show'])->name('mycourse.course.show');
+    Route::post('my-course/course/{id}/series/{seriesId}/finish', [MemberCourseController::class, 'finish'])->name('mycourse.course.finish');
 
     Route::get('redeem-voucher', [MemberVoucherController::class, 'showRedeemForm'])->name('voucher.redeem.form');
     Route::post('redeem-voucher', [MemberVoucherController::class, 'redeem'])->name('voucher.redeem');

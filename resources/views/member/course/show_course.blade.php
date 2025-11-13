@@ -198,9 +198,12 @@
 
                                             @if($nextSeries)
                                                 <a href="{{ route('member.mycourse.course.show', [$course->id, $nextSeries->id]) }}?series_checked={{ $seriesDetail->id }}" class="btn btn-success float-right">Selesai & Lanjutkan <i class="fa fa-chevron-right"></i></a>
-                                            @else
-                                                <a href="{{ route('member.mycourse.course.show', [$course->id, $seriesDetail->id]) }}?series_checked={{ $seriesDetail->id }}" class="btn btn-danger float-right"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Selesai</a>
-                                            @endif
+                                        @else
+                                            <form action="{{ route('member.mycourse.course.finish', [$course->id, $seriesDetail->id]) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger float-right"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Selesai</button>
+                                            </form>
+                                        @endif
                                         </div>
                                     @endif
                                     <!-- /.card-body -->
@@ -228,7 +231,10 @@
                                         @if($nextSeries)
                                             <a href="{{ route('member.mycourse.course.show', [$course->id, $nextSeries->id]) }}?series_checked={{ $seriesDetail->id }}" class="btn btn-success float-right">Selesai & Lanjutkan <i class="fa fa-chevron-right"></i></a>
                                         @else
-                                            <a href="{{ route('member.mycourse.course.show', [$course->id, $seriesDetail->id]) }}?series_checked={{ $seriesDetail->id }}" class="btn btn-danger float-right"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Selesai</a>
+                                            <form action="{{ route('member.mycourse.course.finish', [$course->id, $seriesDetail->id]) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger float-right"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Selesai</button>
+                                            </form>
                                             @php
                                                 $allSeriesCompleted = true;
                                                 foreach ($course->series as $s) {
