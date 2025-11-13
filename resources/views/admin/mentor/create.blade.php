@@ -1,9 +1,7 @@
 @extends('layouts.backend.app', ['title' => 'Add Mentor'])
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -17,22 +15,17 @@
                     </ol>
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
 
-    <!-- Main content -->
-    <section class="content">
+=    <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    <!-- /.card -->
-                    <!-- Horizontal Form -->
-                    <div class="card">
+=                    <div class="card">
                         <div class="card-header">
                             <a href="{{ route('admin.mentor.index') }}" class="btn btn-success"><i class="fa fa-chevron-left"></i> Back</a>
                         </div>
-                        <!-- /.card-header -->
-                        <!-- form start -->
                         <form class="form-horizontal" method="POST" action="{{ route('admin.mentor.store') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
@@ -57,23 +50,17 @@
                                     <span class="error invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <!-- /.card-body -->
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
-                            <!-- /.card-footer -->
                         </form>
                     </div>
-                    <!-- /.card -->
 
                 </div>
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
-    <!-- /.content -->
 </div>
-<!-- /.content-wrapper -->
 @endsection
 
 @push('scripts')

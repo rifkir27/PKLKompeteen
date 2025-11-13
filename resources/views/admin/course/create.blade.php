@@ -123,9 +123,8 @@
                                     @enderror
                                 </div>
 
-                                <!-- Course Materials Section -->
                                 <div class="form-group">
-                                    <label class="col-form-label"><h5><i class="fas fa-book"></i> Course Materials (Materi Kursus)</h5></label>
+                                    <label class="col-form-label"><h5><i class="fas fa-book"></i> Course Materials</h5></label>
                                     <div class="card">
                                         <div class="card-header">
                                             <button type="button" class="btn btn-primary btn-sm" id="add-material">
@@ -133,7 +132,6 @@
                                             </button>
                                         </div>
                                         <div class="card-body" id="materials-container">
-                                            <!-- Material template will be added here by JavaScript -->
                                         </div>
                                     </div>
                                     <small class="form-text text-muted">Add course materials/series. You can add multiple materials with different content types.</small>
@@ -234,178 +232,133 @@
         $('.select2').select2()
     </script>
 
-    <!-- Materials Form JavaScript -->
-    <script>
-        let materialCount = 0;
+<script>
+    let materialCount = 0;
 
-        // Material form template
-        function getMaterialTemplate(index) {
-            return `
-                <div class="material-item card mb-3" data-material="${index}">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0">Material #${index + 1}</h6>
-                        <button type="button" class="btn btn-danger btn-sm remove-material">
-                            <i class="fas fa-trash"></i> Remove
-                        </button>
+    function getMaterialTemplate(index) {
+        return `
+            <div class="material-item card mb-3" data-material="${index}">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Material #${index + 1}</h6>
+                    <button type="button" class="btn btn-danger btn-sm remove-material">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Title *</label>
+                                <input type="text" class="form-control" name="series[${index}][title]" placeholder="Material title" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="col-form-label">Series Number *</label>
+                                <input type="number" class="form-control" name="series[${index}][number_of_series]" placeholder="1" min="1" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="col-form-label">Type *</label>
+                                <select class="form-control content-type-select" name="series[${index}][intro]" required>
+                                    <option value="">Select Type</option>
+                                    <option value="0">Free</option>
+                                    <option value="1">Premium</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="col-form-label">Title *</label>
-                                    <input type="text" class="form-control" name="series[${index}][title]" placeholder="Material title" required>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="col-form-label">Series Number *</label>
-                                    <input type="number" class="form-control" name="series[${index}][number_of_series]" placeholder="1" min="1" required>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="col-form-label">Type *</label>
-                                    <select class="form-control content-type-select" name="series[${index}][intro]" required>
-                                        <option value="">Select Type</option>
-                                        <option value="0">Free</option>
-                                        <option value="1">Premium</option>
-                                    </select>
-                                </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">Content Type *</label>
+                                <select class="form-control material-content-type" name="series[${index}][content_type]" required>
+                                    <option value="">Select Content Type</option>
+                                    <option value="video">Video</option>
+                                    <option value="text">Text</option>
+                                    <option value="quiz">Quiz</option>
+                                </select>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="col-form-label">Content Type *</label>
-                                    <select class="form-control material-content-type" name="series[${index}][content_type]" required>
-                                        <option value="">Select Content Type</option>
-                                        <option value="video">Video</option>
-                                        <option value="text">Text</option>
-                                        <option value="quiz">Quiz</option>
-                                    </select>
-                                </div>
+                        <div class="col-md-8">
+                            <!-- ✅ Simplified: Only YouTube URL input -->
+                            <div class="form-group video-content-group" style="display: none;">
+                                <label class="col-form-label">YouTube Video URL *</label>
+                                <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="https://www.youtube.com/watch?v=xxxxxx">
+                                <small class="form-text text-muted">masukkkan link yt lengap</small>
                             </div>
-                            <div class="col-md-8">
-                                <!-- ✅ DIGANTI: Upload Video Lokal -->
-                                <div class="form-group video-content-group" style="display: none;">
-                                    <label class="col-form-label">Video Source *</label>
-                                    <select class="form-control video-source-select" name="series[${index}][video_source]" required>
-                                        <option value="">Select Video Source</option>
-                                        <option value="file">Upload File</option>
-                                        <option value="youtube">YouTube</option>
-                                        <option value="drive">Google Drive</option>
-                                    </select>
-                                    <div class="video-file-group mt-2" style="display: none;">
-                                        <label class="col-form-label">Video File</label>
-                                        <input type="file" class="form-control" name="series[${index}][video_file]" accept="video/*">
-                                        <small class="form-text text-muted">Upload video file (MP4, AVI, MOV, WMV, FLV, MKV - Max 100MB)</small>
-                                    </div>
-                                    <div class="video-url-group mt-2" style="display: none;">
-                                        <label class="col-form-label">Video URL/ID</label>
-                                        <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="Enter video URL or Google Drive file ID">
-                                        <small class="form-text text-muted">For YouTube: paste full URL. For Google Drive: paste file ID or shareable link</small>
-                                    </div>
-                                </div>
-                                <!-- ✅ END GANTI -->
 
-                                <div class="form-group text-content-group" style="display: none;">
-                                    <label class="col-form-label">Text Content</label>
-                                    <textarea class="form-control" name="series[${index}][text_content]" rows="3" placeholder="Enter text content here..."></textarea>
-                                </div>
+                            <div class="form-group text-content-group" style="display: none;">
+                                <label class="col-form-label">Text Content</label>
+                                <textarea class="form-control" name="series[${index}][text_content]" rows="3" placeholder="Enter text content here..."></textarea>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <label class="col-form-label">Description</label>
-                            <textarea class="form-control" name="series[${index}][description]" rows="2" placeholder="Material description (optional)"></textarea>
-                        </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Description</label>
+                        <textarea class="form-control" name="series[${index}][description]" rows="2" placeholder="Material description (optional)"></textarea>
                     </div>
                 </div>
-            `;
+            </div>
+        `;
+    }
+
+    document.getElementById('add-material').addEventListener('click', function() {
+        const container = document.getElementById('materials-container');
+        container.insertAdjacentHTML('beforeend', getMaterialTemplate(materialCount));
+        materialCount++;
+    });
+
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-material') || e.target.closest('.remove-material')) {
+            e.target.closest('.material-item').remove();
+            reIndexMaterials();
         }
+    });
 
-        // Add new material
-        document.getElementById('add-material').addEventListener('click', function() {
-            const container = document.getElementById('materials-container');
-            container.insertAdjacentHTML('beforeend', getMaterialTemplate(materialCount));
-            materialCount++;
-        });
-
-        // Remove material
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-material') || e.target.closest('.remove-material')) {
-                e.target.closest('.material-item').remove();
-                reIndexMaterials();
-            }
-        });
-
-        // Function to re-index materials after removal
-        function reIndexMaterials() {
-            const materials = document.querySelectorAll('.material-item');
-            materials.forEach((item, index) => {
-                item.setAttribute('data-material', index);
-                item.querySelector('h6').textContent = `Material #${index + 1}`;
-                // Update all input names
-                const inputs = item.querySelectorAll('input, select, textarea');
-                inputs.forEach(input => {
-                    const name = input.name;
-                    if (name && name.startsWith('series[')) {
-                        const newName = name.replace(/series\[\d+\]/, `series[${index}]`);
-                        input.name = newName;
-                    }
-                });
+    function reIndexMaterials() {
+        const materials = document.querySelectorAll('.material-item');
+        materials.forEach((item, index) => {
+            item.setAttribute('data-material', index);
+            item.querySelector('h6').textContent = `Material #${index + 1}`;
+            const inputs = item.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                const name = input.name;
+                if (name && name.startsWith('series[')) {
+                    const newName = name.replace(/series\[\d+\]/, `series[${index}]`);
+                    input.name = newName;
+                }
             });
-            materialCount = materials.length;
+        });
+        materialCount = materials.length;
+    }
+
+    document.addEventListener('change', function(e) {
+        if (e.target.classList.contains('material-content-type')) {
+            const cardBody = e.target.closest('.card-body');
+            const videoGroup = cardBody.querySelector('.video-content-group');
+            const textGroup = cardBody.querySelector('.text-content-group');
+
+            videoGroup.style.display = 'none';
+            textGroup.style.display = 'none';
+
+            if (e.target.value === 'video') {
+                videoGroup.style.display = 'block';
+            } else if (e.target.value === 'text') {
+                textGroup.style.display = 'block';
+            }
         }
+    });
 
-        // Handle content type change
-        document.addEventListener('change', function(e) {
-            if (e.target.classList.contains('material-content-type')) {
-                const cardBody = e.target.closest('.card-body');
-                const videoGroup = cardBody.querySelector('.video-content-group');
-                const textGroup = cardBody.querySelector('.text-content-group');
-
-                // Hide all content groups first
-                videoGroup.style.display = 'none';
-                textGroup.style.display = 'none';
-
-                // Show relevant group based on content type
-                if (e.target.value === 'video') {
-                    videoGroup.style.display = 'block';
-                } else if (e.target.value === 'text') {
-                    textGroup.style.display = 'block';
-                }
-            }
-        });
-
-        // Handle video source change
-        document.addEventListener('change', function(e) {
-            if (e.target.classList.contains('video-source-select')) {
-                const videoGroup = e.target.closest('.video-content-group');
-                const fileGroup = videoGroup.querySelector('.video-file-group');
-                const urlGroup = videoGroup.querySelector('.video-url-group');
-
-                // Hide all video input groups first
-                fileGroup.style.display = 'none';
-                urlGroup.style.display = 'none';
-
-                // Show relevant group based on video source
-                if (e.target.value === 'file') {
-                    fileGroup.style.display = 'block';
-                } else if (e.target.value === 'youtube' || e.target.value === 'drive') {
-                    urlGroup.style.display = 'block';
-                }
-            }
-        });
-
-        // Initialize with one material if no materials exist
-        document.addEventListener('DOMContentLoaded', function() {
-            if (document.querySelectorAll('.material-item').length === 0) {
-                document.getElementById('add-material').click();
-            }
-        });
-    </script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.querySelectorAll('.material-item').length === 0) {
+            document.getElementById('add-material').click();
+        }
+    });
+</script>
 
     <script src="https://cdn.tiny.cloud/1/p3bgwt3k7550en3tmyd4pd3xrdk6sjx2j0j1ywb7zxgiejix/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
