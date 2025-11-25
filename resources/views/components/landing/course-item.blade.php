@@ -25,7 +25,7 @@
     </div>
 
     {{-- Konten --}}
-    <div class="bg-custom-purple2f text-white p-4 flex flex-col flex-1">
+    <div class="bg-custom-purple text-white p-4 flex flex-col flex-1">
         <div class="min-h-[100px] flex flex-col justify-between mb-3">
             <h3 class="text-lg font-semibold line-clamp-2">
                 {{ $course->name }}
