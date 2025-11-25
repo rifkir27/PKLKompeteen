@@ -40,7 +40,7 @@ class CourseController extends Controller
             return redirect()->route('home');
         }
 
-        $seriesChecked = $alreadyBought->series_checked ?? [];
+        $seriesChecked = (array) ($alreadyBought->series_checked ?? []);
 
         if ($request->series_checked && !in_array($request->series_checked, $seriesChecked)) {
             $seriesChecked[] = $request->series_checked;
@@ -101,7 +101,7 @@ class CourseController extends Controller
             return redirect()->route('home');
         }
 
-        $seriesChecked = $alreadyBought->series_checked ?? [];
+        $seriesChecked = (array) ($alreadyBought->series_checked ?? []);
 
         if (!in_array($seriesId, $seriesChecked)) {
             $seriesChecked[] = $seriesId;

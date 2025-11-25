@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Benefit;
 use App\Models\Category;
 use App\Models\Mentor;
+use App\Models\Tool;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
@@ -25,8 +26,9 @@ class CourseController extends Controller
         $categories = Category::all();
         $benefits = Benefit::orderBy('created_at', 'ASC')->get();
         $mentors = Mentor::all();
+        $tools = Tool::orderBy('name', 'ASC')->get();
 
-        return view('admin.course.create', compact('categories', 'benefits', 'mentors'));
+        return view('admin.course.create', compact('categories', 'benefits', 'mentors', 'tools'));
     }
 
     public function store(CourseRequest $request)
@@ -46,6 +48,12 @@ class CourseController extends Controller
             $course->benefits()->sync($request->benefits);
         }
 
+        if ($request->has('tools') && $request->tools) {
+            $course->tools()->sync($request->tools);
+        } else {
+            $course->tools()->detach();
+        }
+
         if ($request->has('series') && is_array($request->series)) {
             foreach ($request->series as $index => $seriesData) {
                 // Handle video based on source
@@ -53,7 +61,9 @@ class CourseController extends Controller
                     $videoFile = $request->file("series.{$index}.video_file");
                     $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
                     $videoFile->storeAs('videos', $videoName, 'public');
-                    $seriesData['video_code'] = $videoName;
+                    $seriesData['video_path'] = $videoName;
+                } elseif (isset($seriesData['video_source']) && in_array($seriesData['video_source'], ['youtube', 'drive'])) {
+                    $seriesData['video_code'] = $seriesData['video_code'] ?? '';
                 }
                 // For youtube/drive, video_code is already the URL
                 $course->series()->create($seriesData);
@@ -65,16 +75,20 @@ class CourseController extends Controller
 
     public function edit(Course $course)
     {
+        $course->load(['benefits', 'tools', 'series']);
         $categories = Category::all();
         $benefits = Benefit::orderBy('created_at', 'ASC')->get();
         $benefitSelected = $course->benefits->pluck('id')->toArray();
         $mentors = Mentor::all();
+        $tools = Tool::orderBy('name', 'ASC')->get();
+        $toolSelected = $course->tools ? $course->tools->pluck('id')->toArray() : [];
 
-        return view('admin.course.edit', compact('categories', 'course', 'benefits', 'benefitSelected', 'mentors'));
+        return view('admin.course.edit', compact('categories', 'course', 'benefits', 'benefitSelected', 'mentors', 'tools', 'toolSelected'));
     }
 
     public function update(CourseRequest $request, Course $course)
     {
+        $course->load(['benefits', 'tools', 'series']);
         $input = $request->all();
         $input['user_id'] = auth()->id();
 
@@ -91,6 +105,12 @@ class CourseController extends Controller
             $course->benefits()->sync($request->benefits);
         }
 
+        if ($request->has('tools') && $request->tools) {
+            $course->tools()->sync($request->tools);
+        } else {
+            $course->tools()->detach();
+        }
+
         if ($request->has('series') && is_array($request->series)) {
             $existingSeriesIds = $course->series->pluck('id')->toArray();
             $updatedSeriesIds = [];
@@ -102,13 +122,15 @@ class CourseController extends Controller
                         // Handle video based on source for existing series
                         if (isset($seriesData['video_source']) && $seriesData['video_source'] === 'file' && $request->hasFile("series.{$index}.video_file")) {
                             // Delete old video file if exists and was a file
-                            if ($series->video_source === 'file' && $series->video_code && Storage::disk('public')->exists('videos/' . $series->video_code)) {
-                                Storage::disk('public')->delete('videos/' . $series->video_code);
+                            if ($series->video_source === 'file' && $series->video_path && Storage::disk('public')->exists('videos/' . $series->video_path)) {
+                                Storage::disk('public')->delete('videos/' . $series->video_path);
                             }
                             $videoFile = $request->file("series.{$index}.video_file");
                             $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
                             $videoFile->storeAs('videos', $videoName, 'public');
-                            $seriesData['video_code'] = $videoName;
+                            $seriesData['video_path'] = $videoName;
+                        } elseif (isset($seriesData['video_source']) && in_array($seriesData['video_source'], ['youtube', 'drive'])) {
+                            $seriesData['video_code'] = $seriesData['video_code'] ?? '';
                         }
                         // For youtube/drive, video_code is already the URL
                         $series->update($seriesData);
@@ -121,7 +143,9 @@ class CourseController extends Controller
                         $videoFile = $request->file("series.{$index}.video_file");
                         $videoName = time() . '_' . uniqid() . '.' . $videoFile->getClientOriginalExtension();
                         $videoFile->storeAs('videos', $videoName, 'public');
-                        $seriesData['video_code'] = $videoName;
+                        $seriesData['video_path'] = $videoName;
+                    } elseif (isset($seriesData['video_source']) && in_array($seriesData['video_source'], ['youtube', 'drive'])) {
+                        $seriesData['video_code'] = $seriesData['video_code'] ?? '';
                     }
                     // For youtube/drive, video_code is already the URL
                     $newSeries = $course->series()->create($seriesData);
@@ -132,8 +156,8 @@ class CourseController extends Controller
             $seriesToDelete = array_diff($existingSeriesIds, $updatedSeriesIds);
             if (!empty($seriesToDelete)) {
                 foreach ($course->series()->whereIn('id', $seriesToDelete)->get() as $series) {
-                    if ($series->video_path && Storage::disk('public')->exists($series->video_path)) {
-                        Storage::disk('public')->delete($series->video_path);
+                    if ($series->video_source === 'file' && $series->video_path && Storage::disk('public')->exists('videos/' . $series->video_path)) {
+                        Storage::disk('public')->delete('videos/' . $series->video_path);
                     }
                     $series->delete();
                 }
@@ -149,8 +173,8 @@ class CourseController extends Controller
 
         // Delete video files for all series that are files
         foreach ($course->series as $series) {
-            if ($series->video_source === 'file' && $series->video_code && Storage::disk('public')->exists('videos/' . $series->video_code)) {
-                Storage::disk('public')->delete('videos/' . $series->video_code);
+            if ($series->video_source === 'file' && $series->video_path && Storage::disk('public')->exists('videos/' . $series->video_path)) {
+                Storage::disk('public')->delete('videos/' . $series->video_path);
             }
         }
 

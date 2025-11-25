@@ -26,12 +26,13 @@ class Course extends Model
         'description',
         'price_before_discount',
         'price_after_discount',
-        'meta_keywords',
-        'meta_description',
         'link_telegram',
         'link_whatsapp',
         'is_published',
         'certificate_drive_link'
+    ];
+
+    protected $casts = [
     ];
 
     protected function image(): Attribute
@@ -84,5 +85,10 @@ class Course extends Model
     public function mentor()
     {
         return $this->belongsTo(Mentor::class);
+    }
+
+    public function tools()
+    {
+        return $this->belongsToMany(Tool::class);
     }
 }
