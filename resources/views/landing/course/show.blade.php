@@ -152,15 +152,15 @@
                         <p class="font-bold">{{ $course->mentor->name }}</p>
 
                         <!-- ⭐ STAR RATING COMPONENT -->
-                    @php
-                        $mentorRating = $reviews->avg('rating') ?? 0;
-                    @endphp
+        @php
+            $mentorRating = $reviews->avg('rating') ?? 0;
+        @endphp
 
-                    <x-star-rating 
-                        :rating="$mentorRating"
-                        :showNumber="true"
-                        :showHalfStars="true"
-                        size="md" />
+        <x-star-rating 
+            :rating="$mentorRating"
+            :showNumber="true"
+            :showHalfStars="true"
+            size="md" />
                     </div>
                 </div>
 

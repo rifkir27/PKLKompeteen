@@ -176,7 +176,7 @@
                                     @error('tools')
                                         <span class="error invalid-feedback">{{ $message }}</span>
                                     @enderror
-                                    <small class="form-text text-muted">Pilih tools yang dibutuhkan untuk kursus ini (opsional)</small>
+                                    <small class="form-text text-muted">Pilih tools yang dibutuhkan untuk kursus ini</small>
                                 </div>
 
                                 <div class="form-group">
