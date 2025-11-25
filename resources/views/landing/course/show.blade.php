@@ -136,27 +136,39 @@
         </div>
 
         <div class="space-y-6">
+
+            <!-- MENTOR CARD + STAR RATING -->
             <div class="border-2 rounded-lg p-4 bg-white border-custom-purple2">
                 <h3 class="text-lg font-semibold mb-2">Mentor</h3>
+
                 @if($course->mentor)
                 <div class="flex items-center gap-3">
-                   <img src="{{ $course->mentor?->image ?? asset('images/default.png') }}" 
-                    alt="{{ $course->mentor?->name ?? 'Mentor' }}"
-                    class="w-14 h-14 rounded-full object-cover"
-                    onerror="this.src='{{ asset('images/default.png') }}'">
+                    <img src="{{ $course->mentor?->image ?? asset('images/default.png') }}" 
+                        alt="{{ $course->mentor?->name ?? 'Mentor' }}"
+                        class="w-14 h-14 rounded-full object-cover"
+                        onerror="this.src='{{ asset('images/default.png') }}'">
+
                     <div>
                         <p class="font-bold">{{ $course->mentor->name }}</p>
-                        <x-star-rating 
-                            :rating="$course->mentor->rating ?? 5.0" 
-                            :showNumber="true"
-                            size="sm" />
+
+                        <!-- ⭐ STAR RATING COMPONENT -->
+                    @php
+                        $mentorRating = $reviews->avg('rating') ?? 0;
+                    @endphp
+
+                    <x-star-rating 
+                        :rating="$mentorRating"
+                        :showNumber="true"
+                        :showHalfStars="true"
+                        size="md" />
                     </div>
                 </div>
+
                 <p class="mt-3 text-black text-sm">
                     {{ $course->mentor->bio ?? 'Mentor berpengalaman dengan keahlian di bidang ini.' }}
                 </p>
                 @else
-                <p class="text-black">Informasi mentor tidak tersedia.</p>
+                    <p class="text-black">Informasi mentor tidak tersedia.</p>
                 @endif
             </div>
 
@@ -199,6 +211,7 @@
                     </div>
                 @endif
             </div>
+
         </div>
     </div>
     @endif
