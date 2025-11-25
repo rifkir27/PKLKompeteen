@@ -5,9 +5,7 @@
 @endpush
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -21,7 +19,7 @@
                     </ol>
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
 
     <!-- Main content -->
@@ -235,76 +233,84 @@
 <script>
     let materialCount = 0;
 
-    function getMaterialTemplate(index) {
-        return `
-            <div class="material-item card mb-3" data-material="${index}">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0">Material #${index + 1}</h6>
-                    <button type="button" class="btn btn-danger btn-sm remove-material">
-                        <i class="fas fa-trash"></i> Remove
-                    </button>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="col-form-label">Title *</label>
-                                <input type="text" class="form-control" name="series[${index}][title]" placeholder="Material title" required>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="col-form-label">Series Number *</label>
-                                <input type="number" class="form-control" name="series[${index}][number_of_series]" placeholder="1" min="1" required>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="col-form-label">Type *</label>
-                                <select class="form-control content-type-select" name="series[${index}][intro]" required>
-                                    <option value="">Select Type</option>
-                                    <option value="0">Free</option>
-                                    <option value="1">Premium</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="col-form-label">Content Type *</label>
-                                <select class="form-control material-content-type" name="series[${index}][content_type]" required>
-                                    <option value="">Select Content Type</option>
-                                    <option value="video">Video</option>
-                                    <option value="text">Text</option>
-                                    <option value="quiz">Quiz</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <!-- ✅ Simplified: Only YouTube URL input -->
-                            <div class="form-group video-content-group" style="display: none;">
-                                <label class="col-form-label">YouTube Video URL *</label>
-                                <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="https://www.youtube.com/watch?v=xxxxxx">
-                                <small class="form-text text-muted">masukkkan link yt lengap</small>
-                            </div>
-
-                            <div class="form-group text-content-group" style="display: none;">
-                                <label class="col-form-label">Text Content</label>
-                                <textarea class="form-control" name="series[${index}][text_content]" rows="3" placeholder="Enter text content here..."></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-form-label">Description</label>
-                        <textarea class="form-control" name="series[${index}][description]" rows="2" placeholder="Material description (optional)"></textarea>
-                    </div>
-                </div>
+function getMaterialTemplate(index) {
+    return `
+        <div class="material-item card mb-3" data-material="${index}">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">Material #${index + 1}</h6>
+                <button type="button" class="btn btn-danger btn-sm remove-material">
+                    <i class="fas fa-trash"></i> Remove
+                </button>
             </div>
-        `;
-    }
+
+            <div class="card-body">
+
+                <!-- TITLE (FULL WIDTH) -->
+                <div class="form-group mb-3">
+                    <label>Title *</label>
+                    <input type="text" class="form-control" name="series[${index}][title]" required>
+                </div>
+
+                <!-- CONTENT TYPE + TYPE + SERIES NUMBER (3 COLUMNS) -->
+                <div class="row mb-3">
+
+                    <!-- Content Type -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Content Type *</label>
+                            <select class="form-control material-content-type" name="series[${index}][content_type]" required>
+                                <option value="">Select</option>
+                                <option value="video">Video</option>
+                                <option value="text">Text</option>
+                                <option value="quiz">Quiz</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Type -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Type *</label>
+                            <select class="form-control" name="series[${index}][intro]" required>
+                                <option value="">Select</option>
+                                <option value="0">Free</option>
+                                <option value="1">Premium</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Series Number -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Series Number *</label>
+                            <input type="number" class="form-control" name="series[${index}][number_of_series]" min="1" required>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- VIDEO / TEXT INPUT AREA -->
+                <div class="form-group video-content-group" style="display:none;">
+                    <label>YouTube Video URL *</label>
+                    <input type="text" class="form-control" name="series[${index}][video_code]" 
+                        placeholder="https://www.youtube.com/...">
+                </div>
+
+                <div class="form-group text-content-group" style="display:none;">
+                    <label>Text Content *</label>
+                    <textarea class="form-control" name="series[${index}][text_content]" rows="3"></textarea>
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="form-group mt-3">
+                    <label>Description</label>
+                    <textarea class="form-control" name="series[${index}][description]" rows="2"></textarea>
+                </div>
+
+            </div>
+        </div>
+    `;
+}
 
     document.getElementById('add-material').addEventListener('click', function() {
         const container = document.getElementById('materials-container');
@@ -360,7 +366,7 @@
     });
 </script>
 
-    <script src="https://cdn.tiny.cloud/1/p3bgwt3k7550en3tmyd4pd3xrdk6sjx2j0j1ywb7zxgiejix/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <!-- <script src="https://cdn.tiny.cloud/1/p3bgwt3k7550en3tmyd4pd3xrdk6sjx2j0j1ywb7zxgiejix/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         tinymce.init({
             selector: '#description',
@@ -412,6 +418,6 @@
                 { value: 'Email', title: 'Email' },
             ]
         });
-    </script>
+    </script> -->
 
 @endpush
