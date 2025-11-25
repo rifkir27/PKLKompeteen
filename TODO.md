@@ -1,3 +1,0 @@
-- [x] Add a new POST route for finishing a course series in routes/web.php
-- [x] Add a finish method in CourseController.php to handle the POST request, update series_checked, and redirect to mycourse
-- [x] Modify the "Selesai" button in show_course.blade.php to submit a form to the new route instead of linking

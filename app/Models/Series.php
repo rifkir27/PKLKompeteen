@@ -18,6 +18,7 @@ class Series extends Model
         'number_of_series',
         'intro',
         'video_code',
+        'video_path',
         'video_source',
         'description',
         'content_type',

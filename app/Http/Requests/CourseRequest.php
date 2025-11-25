@@ -27,13 +27,14 @@ class CourseRequest extends FormRequest
                 'description' => 'required',
                 'price_before_discount' => 'required',
                 'price_after_discount' => 'required',
-                'benefits' => 'required',
-                'meta_description' => 'required',
-                'meta_keywords' => 'required',
+                'benefits' => 'required|array',
+                'benefits.*' => 'required|exists:benefits,id',
                 'link_telegram' => 'sometimes',
                 'link_whatsapp' => 'sometimes',
                 'is_published' => 'required',
                 'certificate_drive_link' => 'nullable|url',
+                'tools' => 'nullable|array',
+                'tools.*' => 'nullable|exists:tools,id',
                 // Series validation rules
                 'series' => 'nullable|array',
                 'series.*.title' => 'required|string|max:255',
@@ -57,13 +58,14 @@ class CourseRequest extends FormRequest
                 'sort_description' => 'required',
                 'price_before_discount' => 'required',
                 'price_after_discount' => 'required',
-                'benefits' => 'required',
-                'meta_keywords' => 'required',
-                'meta_description' => 'required',
+                'benefits' => 'required|array',
+                'benefits.*' => 'required|exists:benefits,id',
                 'link_telegram' => 'sometimes',
                 'link_whatsapp' => 'sometimes',
                 'is_published' => 'required',
                 'certificate_drive_link' => 'nullable|url',
+                'tools' => 'nullable|array',
+                'tools.*' => 'nullable|exists:tools,id',
                 // Series validation rules
                 'series' => 'nullable|array',
                 'series.*.title' => 'required|string|max:255',
@@ -93,8 +95,8 @@ class CourseRequest extends FormRequest
                         $videoSource = $item['video_source'] ?? null;
                         if (!$videoSource) {
                             $validator->errors()->add("series.{$index}.video_source", 'Video source is required when content type is video.');
-                        } elseif ($videoSource === 'file' && (!$this->hasFile("series.{$index}.video_code") || !$this->file("series.{$index}.video_code")->isValid())) {
-                            $validator->errors()->add("series.{$index}.video_code", 'Video file is required when content type is video.');
+                        } elseif ($videoSource === 'file' && (!$this->hasFile("series.{$index}.video_file") || !$this->file("series.{$index}.video_file")->isValid())) {
+                            $validator->errors()->add("series.{$index}.video_file", 'Video file is required when content type is video.');
                         } elseif (($videoSource === 'youtube' || $videoSource === 'drive') && (!isset($item['video_code']) || empty($item['video_code']))) {
                             $validator->errors()->add("series.{$index}.video_code", 'Video URL is required when content type is video.');
                         }

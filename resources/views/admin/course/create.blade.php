@@ -136,22 +136,6 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-form-label">Meta Keywords</label>
-                                    <textarea rows="10" name="meta_keywords" class="form-control @error('meta_keywords') is-invalid @enderror">{{ old('meta_keywords') }}</textarea>
-                                    @error('meta_keywords')
-                                        <span class="error invalid-feedback">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-form-label">Meta Description</label>
-                                    <textarea rows="10" name="meta_description" class="form-control @error('meta_description') is-invalid @enderror">{{ old('meta_description') }}</textarea>
-                                    @error('meta_description')
-                                        <span class="error invalid-feedback">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
                                     <label class="col-form-label">Link Telegram</label>
                                     <input type="text" class="form-control @error('link_telegram') is-invalid @enderror" placeholder="Link Telegram" name="link_telegram" value="{{ old('link_telegram') }}">
                                     @error('link_telegram')
@@ -181,6 +165,19 @@
                                 @enderror
                             </div>
 
+                                <div class="form-group">
+                                    <label class="col-form-label">Tools</label>
+                                    <select class="select2 form-control @error('tools') is-invalid @enderror" multiple="multiple" name="tools[]" data-placeholder="Select Tools">
+                                        <option value="">[ Select ]</option>
+                                        @foreach ($tools as $tool)
+                                            <option value="{{ $tool->id }}">{{ $tool->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('tools')
+                                        <span class="error invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                    <small class="form-text text-muted">Pilih tools yang dibutuhkan untuk kursus ini (opsional)</small>
+                                </div>
 
                                 <div class="form-group">
                                     <label class="col-form-label">Is Published</label>
