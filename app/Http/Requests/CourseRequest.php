@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Series;
 
 class CourseRequest extends FormRequest
 {
@@ -95,8 +96,25 @@ class CourseRequest extends FormRequest
                         $videoSource = $item['video_source'] ?? null;
                         if (!$videoSource) {
                             $validator->errors()->add("series.{$index}.video_source", 'Video source is required when content type is video.');
-                        } elseif ($videoSource === 'file' && (!$this->hasFile("series.{$index}.video_file") || !$this->file("series.{$index}.video_file")->isValid())) {
-                            $validator->errors()->add("series.{$index}.video_file", 'Video file is required when content type is video.');
+                        } elseif ($videoSource === 'file') {
+                            $hasValidFile = $this->hasFile("series.{$index}.video_file") && $this->file("series.{$index}.video_file")->isValid();
+                            // For edit, allow omitting video_file if existing video_path exists
+                            if (!$hasValidFile) {
+                                if ($this->isMethod('PUT')) {
+                                    if (isset($item['id'])) {
+                                        $existingSeries = Series::find($item['id']);
+                                        if (!$existingSeries || !$existingSeries->video_path) {
+                                            $validator->errors()->add("series.{$index}.video_file", 'Video file is required when content type is video.');
+                                        }
+                                    } else {
+                                        // New series, require file
+                                        $validator->errors()->add("series.{$index}.video_file", 'Video file is required when content type is video.');
+                                    }
+                                } else {
+                                    // Create, require file
+                                    $validator->errors()->add("series.{$index}.video_file", 'Video file is required when content type is video.');
+                                }
+                            }
                         } elseif (($videoSource === 'youtube' || $videoSource === 'drive') && (!isset($item['video_code']) || empty($item['video_code']))) {
                             $validator->errors()->add("series.{$index}.video_code", 'Video URL is required when content type is video.');
                         }

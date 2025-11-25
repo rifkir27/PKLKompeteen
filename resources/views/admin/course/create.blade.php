@@ -248,11 +248,11 @@ function getMaterialTemplate(index) {
                     <input type="text" class="form-control" name="series[${index}][title]" required>
                 </div>
 
-                <!-- CONTENT TYPE + TYPE + SERIES NUMBER (3 COLUMNS) -->
+                <!-- CONTENT TYPE + VIDEO SOURCE + TYPE + SERIES NUMBER (4 COLUMNS) -->
                 <div class="row mb-3">
 
                     <!-- Content Type -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Content Type *</label>
                             <select class="form-control material-content-type" name="series[${index}][content_type]" required>
@@ -264,8 +264,21 @@ function getMaterialTemplate(index) {
                         </div>
                     </div>
 
+                    <!-- Video Source -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Video Source</label>
+                            <select class="form-control material-video-source" name="series[${index}][video_source]">
+                                <option value="">Select</option>
+                                <option value="file">File Upload</option>
+                                <option value="youtube">YouTube</option>
+                                <option value="drive">Google Drive</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <!-- Type -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Type *</label>
                             <select class="form-control" name="series[${index}][intro]" required>
@@ -277,7 +290,7 @@ function getMaterialTemplate(index) {
                     </div>
 
                     <!-- Series Number -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Series Number *</label>
                             <input type="number" class="form-control" name="series[${index}][number_of_series]" min="1" required>
@@ -286,13 +299,19 @@ function getMaterialTemplate(index) {
 
                 </div>
 
-                <!-- VIDEO / TEXT INPUT AREA -->
-                <div class="form-group video-content-group" style="display:none;">
-                    <label>YouTube Video URL *</label>
-                    <input type="text" class="form-control" name="series[${index}][video_code]" 
-                        placeholder="https://www.youtube.com/...">
+                <!-- VIDEO FILE INPUT (for file source) -->
+                <div class="form-group video-file-group" style="display:none;">
+                    <label>Upload Video File *</label>
+                    <input type="file" class="form-control" name="series[${index}][video_file]" accept="video/*">
                 </div>
 
+                <!-- VIDEO URL INPUT (for youtube or drive) -->
+                <div class="form-group video-url-group" style="display:none;">
+                    <label>Video URL *</label>
+                    <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="https://www.youtube.com/... or Google Drive Link">
+                </div>
+
+                <!-- TEXT CONTENT INPUT -->
                 <div class="form-group text-content-group" style="display:none;">
                     <label>Text Content *</label>
                     <textarea class="form-control" name="series[${index}][text_content]" rows="3"></textarea>
@@ -339,22 +358,33 @@ function getMaterialTemplate(index) {
         materialCount = materials.length;
     }
 
-    document.addEventListener('change', function(e) {
-        if (e.target.classList.contains('material-content-type')) {
-            const cardBody = e.target.closest('.card-body');
-            const videoGroup = cardBody.querySelector('.video-content-group');
-            const textGroup = cardBody.querySelector('.text-content-group');
+document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('material-content-type') || e.target.classList.contains('material-video-source')) {
+        const cardBody = e.target.closest('.card-body');
+        const contentType = cardBody.querySelector('.material-content-type').value;
+        const videoSource = cardBody.querySelector('.material-video-source').value;
 
-            videoGroup.style.display = 'none';
-            textGroup.style.display = 'none';
+        const videoFileGroup = cardBody.querySelector('.video-file-group');
+        const videoUrlGroup = cardBody.querySelector('.video-url-group');
+        const textContentGroup = cardBody.querySelector('.text-content-group');
 
-            if (e.target.value === 'video') {
-                videoGroup.style.display = 'block';
-            } else if (e.target.value === 'text') {
-                textGroup.style.display = 'block';
+        // Reset all groups
+        videoFileGroup.style.display = 'none';
+        videoUrlGroup.style.display = 'none';
+        textContentGroup.style.display = 'none';
+
+        if (contentType === 'video') {
+            // Show video file input or video URL input based on video source
+            if (videoSource === 'file') {
+                videoFileGroup.style.display = 'block';
+            } else if (videoSource === 'youtube' || videoSource === 'drive') {
+                videoUrlGroup.style.display = 'block';
             }
+        } else if (contentType === 'text') {
+            textContentGroup.style.display = 'block';
         }
-    });
+    }
+});
 
     document.addEventListener('DOMContentLoaded', function() {
         if (document.querySelectorAll('.material-item').length === 0) {
