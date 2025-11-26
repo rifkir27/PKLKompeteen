@@ -15,7 +15,8 @@ class CourseRequest extends FormRequest
     public function rules(): array
     {
         if ($this->isMethod('PUT')) {
-            $courseId = $this->route('course');
+            $routeCourse = $this->route('course');
+            $courseId = is_object($routeCourse) ? $routeCourse->id : $routeCourse;
 
             $data = [
                 'name' => 'required|unique:courses,name,' . $courseId,
