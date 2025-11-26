@@ -111,8 +111,9 @@
 
             <div>
                 <h2 class="text-xl font-semibold mb-4">Kurikulum E-Course</h2>
+
                 @if($series && count($series) > 0)
-                <div class="border rounded-lg divide-y">
+                <div class="rounded-lg border-2 border-custom-purple2 divide-y"> 
                     @foreach ($series as $item)
                         <div class="px-4 py-3 flex justify-between items-center hover:bg-gray-50 transition-colors">
                             <span class="font-medium">{{ $item->title }}</span>
@@ -124,20 +125,10 @@
                 <p class="text-gray-500">Kurikulum sedang dalam pengembangan.</p>
                 @endif
             </div>
-
-            <div>
-                <h2 class="text-xl font-semibold mb-4">Kebutuhan Tools</h2>
-                <ul class="flex flex-wrap gap-4 text-gray-700">
-                    <li>🌐 Web Browser</li>
-                    <li>📝 Text Editor</li>
-                    <li>📶 Koneksi Internet</li>
-                </ul>
-            </div>
         </div>
 
         <div class="space-y-6">
 
-            <!-- MENTOR CARD + STAR RATING -->
             <div class="border-2 rounded-lg p-4 bg-white border-custom-purple2">
                 <h3 class="text-lg font-semibold mb-2">Mentor</h3>
 
@@ -151,7 +142,6 @@
                     <div>
                         <p class="font-bold">{{ $course->mentor->name }}</p>
 
-                        <!-- ⭐ STAR RATING COMPONENT -->
         @php
             $mentorRating = $reviews->avg('rating') ?? 0;
         @endphp
@@ -172,7 +162,6 @@
                 @endif
             </div>
 
-            <!-- Testimoni -->
             <div class="border-2 border-custom-purple2 rounded-lg p-4 bg-white shadow">
                 <h3 class="text-lg font-semibold mb-4">Testimoni Alumni</h3>
                 @if($reviews && count($reviews) > 0)

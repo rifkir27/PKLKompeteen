@@ -55,20 +55,28 @@
             </div>
         @endif
 
-        {{-- Enrolled & Harga --}}
-        <div class="flex justify-between items-center text-sm mb-4">
-            <div>
-                {{ $course->enrolled }} Siswa
-            </div>
-            <div class="text-right">
-                @if($course->price_before_discount > $course->price_after_discount)
-                    <p class="line-through text-gray-300 text-xs">
-                        Rp {{ moneyFormat($course->price_before_discount) }}
-                    </p>
-                @endif
-                <p class="text-xl font-bold">Rp {{ moneyFormat($course->price_after_discount) }}</p>
-            </div>
-        </div>
+                <div class="flex justify-between items-center text-sm mb-4">
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                            viewBox="0 0 24 24" fill="white"
+                            class="w-4 h-4 opacity-90">
+                            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8V21.6H21.6v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                        </svg>
+
+                        {{ $course->enrolled }} Siswa
+                    </div>
+
+                    <div class="text-right">
+                        @if($course->price_before_discount > $course->price_after_discount)
+                            <p class="line-through text-gray-300 text-xs">
+                                Rp {{ moneyFormat($course->price_before_discount) }}
+                            </p>
+                        @endif
+                        <p class="text-xl font-bold">
+                            Rp {{ moneyFormat($course->price_after_discount) }}
+                        </p>
+                    </div>
+                </div>
 
         {{-- Tombol --}}
         <div class="flex gap-4 mt-auto">
