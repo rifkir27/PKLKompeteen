@@ -51,7 +51,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M7 8h10M7 12h6m-6 4h10m-2 4l4-4H7a4 4 0 01-4-4V7a4 4 0 014-4h10a4 4 0 014 4v5" />
                 </svg>
-                <span>{{ $course->reviews_count }} Review</span>
+                <span>{{ $course->reviews_count }} Testimoni</span>
             </div>
         @endif
 
