@@ -78,4 +78,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Showcase::class);
     }
+
+    public function favoriteCourses()
+    {
+        return $this->belongsToMany(Course::class, 'course_user_favorites');
+    }
 }

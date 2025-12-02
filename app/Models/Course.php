@@ -91,4 +91,9 @@ class Course extends Model
     {
         return $this->belongsToMany(Tool::class);
     }
+
+    public function favoritedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'course_user_favorites');
+    }
 }

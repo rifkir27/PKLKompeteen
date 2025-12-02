@@ -26,7 +26,7 @@ class Mentor extends Model
     protected function cover(): Attribute
     {
         return Attribute::make(
-            get: fn($cover) => $cover ? asset('storage/showcases/' . $cover) : asset('images/default.png'),
+            get: fn($cover) => $cover ? asset('storage/showcases/' . $cover) : asset('assets/dist/img/default-150x150.png'),
         );
     }
 
@@ -35,10 +35,20 @@ class Mentor extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function mentorRatings()
+    {
+        return $this->hasMany(MentorRating::class);
+    }
+
     public function getAvgRatingAttribute()
     {
         return $this->courses()
             ->join('reviews', 'courses.id', '=', 'reviews.course_id')
             ->avg('reviews.rating') ?? 0;
+    }
+
+    public function getTotalRatingAttribute()
+    {
+        return $this->mentorRatings()->sum('rating');
     }
 }

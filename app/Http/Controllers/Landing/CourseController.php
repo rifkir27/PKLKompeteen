@@ -113,4 +113,23 @@ class CourseController extends Controller
         // passing variabel $course, $series, $series, $alreadyBought, $reviews, dan $avgRating kedalam view.
         return view('landing.course.series', compact('course','series', 'series', 'alreadyBought', 'reviews', 'avgRating'));
     }
+
+    public function toggleFavorite(Course $course)
+    {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $user = Auth::user();
+
+        if ($user->favoriteCourses()->where('course_id', $course->id)->exists()) {
+            $user->favoriteCourses()->detach($course->id);
+            $isFavorited = false;
+        } else {
+            $user->favoriteCourses()->attach($course->id);
+            $isFavorited = true;
+        }
+
+        return response()->json(['is_favorited' => $isFavorited]);
+    }
 }
