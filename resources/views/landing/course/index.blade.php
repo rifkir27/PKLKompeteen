@@ -20,3 +20,39 @@
         </div>
     </div>
 @endsection
+
+@section('scripts')
+<script>
+$(document).ready(function() {
+    $('.favorite-btn').on('click', function(e) {
+        e.preventDefault();
+        const btn = $(this);
+        const courseId = btn.data('course-id');
+        const url = btn.data('url');
+        const icon = btn.find('i');
+
+        $.ajax({
+            url: url,
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.is_favorited) {
+                    icon.removeClass('text-gray-400').addClass('text-red-500');
+                } else {
+                    icon.removeClass('text-red-500').addClass('text-gray-400');
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 401) {
+                    alert('Please login to favorite courses.');
+                } else {
+                    alert('An error occurred. Please try again.');
+                }
+            }
+        });
+    });
+});
+</script>
+@endsection

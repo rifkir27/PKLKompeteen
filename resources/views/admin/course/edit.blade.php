@@ -35,7 +35,7 @@
                         <div class="card-header">
                             <a href="{{ route('admin.courses.index') }}" class="btn btn-success"><i class="fa fa-chevron-left"></i> Back</a>
                         </div>
-                        <form class="form-horizontal" method="POST" action="{{ route('admin.courses.update', $course->id) }}" enctype="multipart/form-data">
+                        <form class="form-horizontal" method="POST" action="{{ route('admin.courses.update', $course->id) }}" enctype="multipart/form-data" novalidate>
                             @csrf
                             @method('PUT')
                             <div class="card-body">
@@ -295,12 +295,12 @@
                                     <small class="form-text text-muted">Pilih tools yang dibutuhkan untuk kursus ini (opsional)</small>
                                 </div>
 
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-primary" value="Submit">
+                                </div>
+
                             </div>
                             <!-- /.card-body -->
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                            <!-- /.card-footer -->
                         </form>
                     </div>
                     <!-- /.card -->
@@ -324,6 +324,7 @@
 
     <!-- Materials Form JavaScript -->
     <script>
+        try {
         let materialCount = {{ $course->series->count() }};
 
         // Material form template
@@ -482,7 +483,9 @@
             }
         });
 
-
+        } catch (error) {
+            console.error('Error in materials JavaScript:', error);
+        }
     </script>
 
     <script src="https://cdn.tiny.cloud/1/p3bgwt3k7550en3tmyd4pd3xrdk6sjx2j0j1ywb7zxgiejix/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>

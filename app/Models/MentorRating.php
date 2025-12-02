@@ -8,4 +8,26 @@ use Illuminate\Database\Eloquent\Model;
 class MentorRating extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'mentor_id',
+        'user_id',
+        'rating',
+        'comment',
+    ];
+
+    public function mentor()
+    {
+        return $this->belongsTo(Mentor::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public static function getTotalRatingForMentor($mentorId)
+    {
+        return self::where('mentor_id', $mentorId)->sum('rating');
+    }
 }

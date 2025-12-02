@@ -199,7 +199,7 @@ public function update(CourseRequest $request, Course $course)
         return DataTables::of($courses)
             ->addIndexColumn()
             ->editColumn('image', function ($courses) {
-                return "<img src='" . asset('storage/courses/' . $courses->image) . "' width='50px'>";
+                return "<img src='" . $courses->image . "' width='50px' style='height: 50px; object-fit: cover;'>";
             })
             ->editColumn('is_published', function ($courses) {
                 return $courses->is_published == 0

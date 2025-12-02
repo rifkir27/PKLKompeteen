@@ -66,6 +66,7 @@ Route::controller(LandingCourseController::class)->as('course.')->group(function
     Route::get('/courses', 'index')->name('index');
     Route::get('/courses/{course:slug}', 'show')->name('show');
     Route::get('/courses/{course:slug}/{series:number_of_series}', 'series')->name('series');
+    Route::post('/courses/{course}/favorite', 'toggleFavorite')->name('favorite')->middleware('auth');
 });
 // category route
 Route::get('/categories/{category:slug}', LandingCategoryController::class)->name('category');
@@ -166,6 +167,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'r
 Route::group(['as' => 'member.', 'prefix' => 'account', 'middleware' => ['auth', 'role:member']], function(){
 
     Route::get('dashboard', MemberDashboardController::class)->name('dashboard');
+
+    Route::get('/favorites', [MemberDashboardController::class, 'favorites'])->name('favorites');
 
     Route::get('/my-course', MemberMyCourseController::class)->name('mycourse');
 

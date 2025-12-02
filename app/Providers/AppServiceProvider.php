@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use App\Models\Category;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\App;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,7 +24,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191); 
-        view()->share('categories', Category::get());
+        if (!App::runningInConsole()) {
+            try {
+                view()->share('categories', Category::get());
+            } catch (\Throwable $e) {
+                view()->share('categories', collect());
+            }
+        }
         Paginator::useBootstrap();
     }
 }

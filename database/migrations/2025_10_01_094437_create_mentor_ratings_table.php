@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('mentor_ratings', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('mentor_id')->constrained('mentors')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->integer('rating')->unsigned()->comment('Rating from 1 to 5');
+            $table->text('comment')->nullable();
             $table->timestamps();
+
+            $table->unique(['mentor_id', 'user_id']); // One rating per user per mentor
         });
     }
 

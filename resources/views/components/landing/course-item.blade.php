@@ -18,6 +18,15 @@
             </div>
         @endif
 
+        {{-- Favorite Button --}}
+        @auth
+            <button class="favorite-btn absolute top-2 right-2 z-20 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 transition-all duration-200"
+                    data-course-id="{{ $course->id }}"
+                    data-url="{{ route('course.favorite', $course) }}">
+                <i class="fas fa-heart {{ Auth::user()->favoriteCourses()->where('course_id', $course->id)->exists() ? 'text-red-500' : 'text-gray-400' }}"></i>
+            </button>
+        @endauth
+
         <img class="w-full h-full object-cover object-center"
              src="{{ $course->image ?? asset('images/default.png') }}"
              alt="{{ $course->name }}"

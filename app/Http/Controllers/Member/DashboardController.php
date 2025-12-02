@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Member;
 
 use App\Models\Review;
 use App\Models\Showcase;
-use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Http\Controllers\Controller;
 
@@ -33,10 +33,20 @@ class DashboardController extends Controller
 
         $showcase = Showcase::where('user_id', $user->id)->count();
 
+        $favorite = $user->favoriteCourses()->count();
+
         // Data rating untuk dashboard
         $avgRating = Review::where('user_id', $user->id)->avg('rating');
         $totalReviews = Review::where('user_id', $user->id)->count();
 
-        return view('member.dashboard', compact('course', 'review', 'transaction', 'showcase', 'avgRating', 'totalReviews'));
+        return view('member.dashboard', compact('course', 'review', 'transaction', 'showcase', 'favorite', 'avgRating', 'totalReviews'));
+    }
+
+    public function favorites()
+    {
+        $user = auth()->user();
+        $favorites = $user->favoriteCourses()->with(['category', 'mentor', 'series'])->get();
+
+        return view('member.favorites', compact('favorites'));
     }
 }
