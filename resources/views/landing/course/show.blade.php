@@ -113,16 +113,79 @@
                 </div>
             </div>
 
-            <!-- Course Series -->
-            @if($series->count() > 0)
-                <div class="mt-12">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Course Content</h2>
-                    <div class="space-y-2">
-                        @foreach($series as $item)
-                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                <div class="flex items-center">
-                                    <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-semibold mr-4">
-                                        {{ $item->number_of_series }}
+    <div class="my-10 border-t border-gray-300"></div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-8">
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Tentang E-Course</h2>
+                <div class="text-gray-700 leading-relaxed">
+                    {!! $course->description ?? '<p class="text-gray-500">Deskripsi lengkap kelas sedang dalam pengembangan.</p>' !!}
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Kurikulum E-Course</h2>
+
+                @if($series && count($series) > 0)
+                <div class="rounded-lg border-2 border-custom-purple2 divide-y"> 
+                    @foreach ($series as $item)
+                        <div class="px-4 py-3 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                            <span class="font-medium">{{ $item->title }}</span>
+                            <span class="text-sm text-gray-500">{{ $item->lessons_count ?? 0 }} video</span>
+                        </div>
+                    @endforeach
+                </div>
+                @else
+                <p class="text-gray-500">Kurikulum sedang dalam pengembangan.</p>
+                @endif
+            </div>
+        </div>
+
+        <div class="space-y-6">
+
+            <div class="border-2 rounded-lg p-4 bg-white border-custom-purple2">
+                <h3 class="text-lg font-semibold mb-2">Mentor</h3>
+
+                @if($course->mentor)
+                <div class="flex items-center gap-3">
+                    <img src="{{ $course->mentor?->image ?? asset('images/default.png') }}" 
+                        alt="{{ $course->mentor?->name ?? 'Mentor' }}"
+                        class="w-14 h-14 rounded-full object-cover"
+                        onerror="this.src='{{ asset('images/default.png') }}'">
+
+                    <div>
+                        <p class="font-bold">{{ $course->mentor->name }}</p>
+
+        @php
+            $mentorRating = $reviews->avg('rating') ?? 0;
+        @endphp
+
+        <x-star-rating 
+            :rating="$mentorRating"
+            :showNumber="true"
+            :showHalfStars="true"
+            size="md" />
+                    </div>
+                </div>
+
+                <p class="mt-3 text-black text-sm">
+                    {{ $course->mentor->bio ?? 'Mentor berpengalaman dengan keahlian di bidang ini.' }}
+                </p>
+                @else
+                    <p class="text-black">Informasi mentor tidak tersedia.</p>
+                @endif
+            </div>
+
+            <div class="border-2 border-custom-purple2 rounded-lg p-4 bg-white shadow">
+                <h3 class="text-lg font-semibold mb-4">Testimoni Alumni</h3>
+                @if($reviews && count($reviews) > 0)
+                    @foreach ($reviews->take(3) as $review)
+                        <div class="border-b border-custom-orange pb-4 mb-4 last:border-b-0">
+                            <div class="flex items-start gap-3">
+                                <div class="flex-shrink-0">
+                                    <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold text-sm">
+                                        {{ substr($review->user->name ?? 'U', 0, 1) }}
                                     </div>
                                     <div>
                                         <h3 class="font-semibold text-gray-900">{{ $item->title }}</h3>

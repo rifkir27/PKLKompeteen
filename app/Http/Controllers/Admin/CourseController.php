@@ -12,7 +12,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 
 class CourseController extends Controller
@@ -87,23 +86,20 @@ class CourseController extends Controller
         return view('admin.course.edit', compact('categories', 'course', 'benefits', 'benefitSelected', 'mentors', 'tools', 'toolSelected'));
     }
 
-public function update(CourseRequest $request, Course $course)
+    public function update(CourseRequest $request, Course $course)
     {
-        \Log::info('Update method triggered');
         $course->load(['benefits', 'tools', 'series']);
         $input = $request->all();
         $input['user_id'] = auth()->id();
 
         if ($request->file('image')) {
-            \Log::info('Image file detected in request');
             Storage::disk('public')->delete('courses/' . basename($course->image));
             $image = $request->file('image');
             $image->storeAs('courses', $image->hashName(), 'public');
             $input['image'] = $image->hashName();
         }
 
-        $updated = $course->update($input);
-        \Log::info('Course update status: ' . ($updated ? 'success' : 'failed'));
+        $course->update($input);
 
         if ($request->has('benefits')) {
             $course->benefits()->sync($request->benefits);
