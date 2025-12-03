@@ -44,8 +44,11 @@ class CourseController extends Controller
                 ->whereHas('details', function($query) use($course){
                     $query->where('course_id', $course->id);
                 })->first();
+
+            $isFavorited = Auth::user()->favoriteCourses()->where('course_id', $course->id)->exists();
         }else{
             $alreadyBought = [];
+            $isFavorited = false;
         }
 
         $reviews = Review::where('course_id', $course->id)->orderBy('created_at', 'DESC')->limit(6)->get();
@@ -58,7 +61,7 @@ class CourseController extends Controller
             ->orderBy('rating', 'DESC')
             ->get();
         
-        return view('landing.course.show', compact('course', 'series', 'enrolled', 'alreadyBought', 'reviews', 'avgRating', 'ratingCount', 'ratingStats'));
+        return view('landing.course.show', compact('course', 'series', 'enrolled', 'alreadyBought', 'reviews', 'avgRating', 'ratingCount', 'ratingStats', 'isFavorited'));
     }
 
     public function series(Course $course, $number_of_series)

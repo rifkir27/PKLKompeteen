@@ -94,7 +94,7 @@
 
                                 <div class="form-group">
                                     <label class="col-form-label">Benefit</label>
-                                    <select class="select2 form-control @error('description') is-invalid @enderror" multiple="multiple" name="benefits[]" data-placeholder="Select Benefit">
+                                    <select class="select2 form-control @error('benefits') is-invalid @enderror" multiple="multiple" name="benefits[]" data-placeholder="Select Benefit">
                                         <option value="">[ Select ]</option>
                                         @foreach ($benefits as $benefit)
                                             <option value="{{ $benefit->id }}">{{ $benefit->name }}</option>
@@ -259,23 +259,11 @@ function getMaterialTemplate(index) {
                                 <option value="">Select</option>
                                 <option value="video">Video</option>
                                 <option value="text">Text</option>
-                                <option value="quiz">Quiz</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Video Source -->
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Video Source</label>
-                            <select class="form-control material-video-source" name="series[${index}][video_source]">
-                                <option value="">Select</option>
-                                <option value="file">File Upload</option>
-                                <option value="youtube">YouTube</option>
-                                <option value="drive">Google Drive</option>
-                            </select>
-                        </div>
-                    </div>
+
 
                     <!-- Type -->
                     <div class="col-md-3">
@@ -299,17 +287,16 @@ function getMaterialTemplate(index) {
 
                 </div>
 
-                <!-- VIDEO FILE INPUT (for file source) -->
-                <div class="form-group video-file-group" style="display:none;">
-                    <label>Upload Video File *</label>
-                    <input type="file" class="form-control" name="series[${index}][video_file]" accept="video/*">
-                </div>
+
 
                 <!-- VIDEO URL INPUT (for youtube or drive) -->
                 <div class="form-group video-url-group" style="display:none;">
                     <label>Video URL *</label>
-                    <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="https://www.youtube.com/... or Google Drive Link">
+                    <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="https://www.youtube.com/... or https://drive.google.com/...">
+                    <small class="form-text text-muted">Masukkan URL YouTube atau Google Drive</small>
                 </div>
+
+
 
                 <!-- TEXT CONTENT INPUT -->
                 <div class="form-group text-content-group" style="display:none;">
@@ -359,27 +346,20 @@ function getMaterialTemplate(index) {
     }
 
 document.addEventListener('change', function(e) {
-    if (e.target.classList.contains('material-content-type') || e.target.classList.contains('material-video-source')) {
+    if (e.target.classList.contains('material-content-type')) {
         const cardBody = e.target.closest('.card-body');
         const contentType = cardBody.querySelector('.material-content-type').value;
-        const videoSource = cardBody.querySelector('.material-video-source').value;
 
-        const videoFileGroup = cardBody.querySelector('.video-file-group');
         const videoUrlGroup = cardBody.querySelector('.video-url-group');
         const textContentGroup = cardBody.querySelector('.text-content-group');
 
         // Reset all groups
-        videoFileGroup.style.display = 'none';
         videoUrlGroup.style.display = 'none';
         textContentGroup.style.display = 'none';
 
         if (contentType === 'video') {
-            // Show video file input or video URL input based on video source
-            if (videoSource === 'file') {
-                videoFileGroup.style.display = 'block';
-            } else if (videoSource === 'youtube' || videoSource === 'drive') {
-                videoUrlGroup.style.display = 'block';
-            }
+            // Show video URL input directly for YouTube and Drive links
+            videoUrlGroup.style.display = 'block';
         } else if (contentType === 'text') {
             textContentGroup.style.display = 'block';
         }

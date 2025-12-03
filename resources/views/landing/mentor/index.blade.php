@@ -22,6 +22,16 @@
                         <h1 class="text-center font-semibold h-12 min-h-full">
                             {{ $mentor->name }}
                         </h1>
+                        <div class="flex flex-col items-center gap-1">
+                            <x-star-rating
+                                :rating="$mentor->avg_rating"
+                                :showNumber="true"
+                                :showHalfStars="true"
+                                size="md" />
+                            <p class="text-xs text-gray-500">
+                                {{ $mentor->total_reviews }} ulasan • {{ $mentor->total_courses }} kursus
+                            </p>
+                        </div>
                     </div>
                     <div class="p-4 border-t border-dashed border-slate-300 text-gray-800 text-sm flex flex-col gap-2">
                         <p class="flex items-center gap-1">

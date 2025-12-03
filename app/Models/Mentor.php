@@ -51,4 +51,9 @@ class Mentor extends Model
     {
         return $this->mentorRatings()->sum('rating');
     }
+
+    public function getAvgMentorRatingAttribute()
+    {
+        return $this->mentorRatings()->avg('rating') ?? 0;
+    }
 }

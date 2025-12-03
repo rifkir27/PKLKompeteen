@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Landing;
 
 use App\Models\Cart;
 use App\Models\Course;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -20,6 +21,18 @@ class CartController extends Controller
 
     public function store(Request $request, Course $course)
     {
+        // Check if user has already purchased this course
+        $alreadyBought = Transaction::where('user_id', $request->user()->id)
+            ->where('status', 'success')
+            ->whereHas('details', function($query) use($course) {
+                $query->where('course_id', $course->id);
+            })
+            ->exists();
+
+        if ($alreadyBought) {
+            return redirect()->back()->with('toast_error', 'Anda sudah membeli kursus ini sebelumnya.');
+        }
+
         $course->carts()->updateOrCreate([
             'user_id' => $request->user()->id,
             'course_id' => $course->id,

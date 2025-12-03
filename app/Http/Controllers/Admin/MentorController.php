@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MentorRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class MentorController extends Controller
@@ -94,7 +95,8 @@ class MentorController extends Controller
 
     public function datatable()
     {
-        $mentor = Mentor::orderBy('created_at', 'DESC');
+        $mentor = Mentor::select('mentors.*')
+            ->orderBy('mentors.created_at', 'DESC');
 
         return DataTables::of($mentor)
             ->addIndexColumn()

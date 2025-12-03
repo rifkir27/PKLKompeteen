@@ -16,7 +16,11 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/prism/prism.css') }}">
     <link rel="icon" href="{{ asset('assets/dist/img/logo-icon.png') }}" type="image/png">
     <link rel="shortcut icon" href="{{ asset('assets/dist/img/logo-icon.png') }}" type="image/png">
-    
+
+    @if($seriesDetail->video_source == 'youtube')
+        <script src="https://www.youtube.com/iframe_api"></script>
+    @endif
+
     <style>
         .nav-link-custom {
             border:1px solid #eee;
@@ -38,6 +42,11 @@
             width: 100%; /* Lebar 100% dari container */
             height: 76vh; /* Tinggi 50% dari tinggi viewport */
             /* Tambahan gaya CSS lainnya */
+        }
+
+        .finish-btn {
+            pointer-events: none;
+            opacity: 0.5;
         }
 
     </style>
@@ -176,10 +185,12 @@
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body line-numbers">
-                                        @if($seriesDetail->video_source == 'youtube' || $seriesDetail->video_source == 'drive')
-                                            <iframe src="{{ $seriesDetail->video_url }}" frameborder="0" allowfullscreen></iframe>
+                                        @if($seriesDetail->video_source == 'youtube')
+                                            <div id="youtube-player"></div>
+                                        @elseif($seriesDetail->video_source == 'drive')
+                                            <iframe src="{{ $seriesDetail->video_url }}" frameborder="0" allowfullscreen onload="setTimeout(function(){ enableFinish(); }, 300000);"></iframe>
                                         @elseif($seriesDetail->video_source == 'file')
-                                            <video controls style="width: 100%; height: 76vh;">
+                                            <video controls style="width: 100%; height: 76vh;" onended="enableFinish();">
                                                 <source src="{{ $seriesDetail->video_url }}" type="video/mp4">
                                                 <source src="{{ $seriesDetail->video_url }}" type="video/avi">
                                                 <source src="{{ $seriesDetail->video_url }}" type="video/mov">
@@ -197,11 +208,11 @@
                                             @endif
 
                                             @if($nextSeries)
-                                                <a href="{{ route('member.mycourse.course.show', [$course->id, $nextSeries->id]) }}?series_checked={{ $seriesDetail->id }}" class="btn btn-success float-right">Selesai & Lanjutkan <i class="fa fa-chevron-right"></i></a>
+                                                <a href="{{ route('member.mycourse.course.show', [$course->id, $nextSeries->id]) }}?series_checked={{ $seriesDetail->id }}" class="btn btn-success float-right finish-btn">Selesai & Lanjutkan <i class="fa fa-chevron-right"></i></a>
                                         @else
                                             <form action="{{ route('member.mycourse.course.finish', [$course->id, $seriesDetail->id]) }}" method="POST" class="d-inline">
                                                 @csrf
-                                                <button type="submit" class="btn btn-danger float-right"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Selesai</button>
+                                                <button type="submit" class="btn btn-danger float-right finish-btn"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Selesai</button>
                                             </form>
                                         @endif
                                         </div>
@@ -281,6 +292,45 @@
     <script type="text/javascript">
         var id = "{{ $seriesDetail->id }}";
         document.getElementById(id).scrollIntoView();
+
+        function enableFinish() {
+            const buttons = document.querySelectorAll('.finish-btn');
+            buttons.forEach(button => {
+                button.classList.remove('finish-btn');
+                if (button.tagName === 'BUTTON') {
+                    button.removeAttribute('disabled');
+                }
+            });
+        }
+
+        @if($seriesDetail->video_source == 'youtube')
+            var player;
+            function onYouTubeIframeAPIReady() {
+                @php
+                    $videoId = '';
+                    if ($seriesDetail->video_source == 'youtube') {
+                        $url = $seriesDetail->video_url;
+                        if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/', $url, $matches)) {
+                            $videoId = $matches[1];
+                        }
+                    }
+                @endphp
+                player = new YT.Player('youtube-player', {
+                    height: '76vh',
+                    width: '100%',
+                    videoId: '{{ $videoId }}',
+                    events: {
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+            }
+
+            function onPlayerStateChange(event) {
+                if (event.data == YT.PlayerState.ENDED) {
+                    enableFinish();
+                }
+            }
+        @endif
     </script>
 </body>
 
