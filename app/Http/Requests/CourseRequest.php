@@ -28,6 +28,7 @@ class CourseRequest extends FormRequest
                 'sort_description' => 'required',
                 'description' => 'required',
                 'learning_outcomes' => 'nullable',
+                'has_certificate' => 'nullable|boolean',
                 'price_before_discount' => 'required',
                 'price_after_discount' => 'required',
                 'benefits' => 'nullable|array',

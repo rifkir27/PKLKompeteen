@@ -108,11 +108,18 @@
                     </div>
 
                     {{-- Sertifikat --}}
-                    @php $hasCertificate = $course->certificate ?? false; @endphp
-                    <div class="flex items-center gap-2">
-                        <i class="fas fa-certificate"></i>
-                        <span>{{ $hasCertificate ? 'Sertifikat Kelulusan' : 'Tanpa Sertifikat' }}</span>
-                    </div>
+                    @php $hasCertificate = !empty($course->certificate_drive_link); @endphp
+                    @if($hasCertificate)
+                        <a href="{{ $course->certificate_drive_link }}" target="_blank" class="flex items-center gap-2 text-white hover:underline">
+                            <i class="fas fa-certificate"></i>
+                            <span>Ada Sertifikat</span>
+                        </a>
+                    @else
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-certificate"></i>
+                            <span>Tanpa Sertifikat</span>
+                        </div>
+                    @endif
 
                 </div>
 

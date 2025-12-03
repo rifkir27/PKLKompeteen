@@ -192,12 +192,22 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="has_certificate" name="has_certificate" value="1" @checked(old('has_certificate', false))>
+                                        <label class="form-check-label" for="has_certificate">
+                                            Sertifikat Tersedia
+                                        </label>
+                                    </div>
+                                    <small class="form-text text-muted">Centang jika kursus ini menyediakan sertifikat kelulusan</small>
+                                </div>
+
+                                <div class="form-group" id="certificate-link-group" style="display: none;">
                                     <label class="col-form-label">Certificate Google Drive Link</label>
                                     <input type="url" class="form-control @error('certificate_drive_link') is-invalid @enderror" placeholder="https://drive.google.com/..." name="certificate_drive_link" value="{{ old('certificate_drive_link') }}">
                                     @error('certificate_drive_link')
                                         <span class="error invalid-feedback">{{ $message }}</span>
                                     @enderror
-                                    <small class="form-text text-muted">Link Google Drive untuk file sertifikat kursus (opsional)</small>
+                                    <small class="form-text text-muted">Link Google Drive untuk file sertifikat kursus</small>
                                 </div>
 
                             </div>

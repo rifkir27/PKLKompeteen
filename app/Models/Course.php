@@ -30,7 +30,8 @@ class Course extends Model
         'link_telegram',
         'link_whatsapp',
         'is_published',
-        'certificate_drive_link'
+        'certificate_drive_link',
+        'has_certificate'
     ];
 
     protected $casts = [
