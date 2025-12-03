@@ -1,117 +1,149 @@
-@extends('layouts.frontend.app', ['title' => $course->name])
+@extends('layouts.frontend.app', [
+    'title' => $course->name ?? 'Detail Kelas',
+    'meta_keywords' => $course->meta_keywords ?? 'kursus, belajar online, e-learning',
+    'meta_description' => $course->meta_description ?? 'Temukan kelas online terbaik untuk meningkatkan skill Anda',
+    'meta_image' =>  $course->image ?? asset('images/course.jpg')
+])
 
 @section('content')
-    <!-- hero section -->
-    <x-landing.hero-section title="Course Detail"
-        subtitle="{{ $course->name }}"
-        details="{{ $course->sort_description }}"
-        :data="[$course]" cardtitle="Course Detail">
-    </x-landing.hero-section>
+<div class="container mx-auto pt-20 pb-10 px-4 lg:px-0">
+    @if(!$course)
+        <div class="text-center py-20">
+            <h1 class="text-2xl font-bold text-gray-600">Kelas tidak ditemukan</h1>
+            <p class="text-gray-500 mt-2">Maaf, kelas yang Anda cari tidak tersedia.</p>
+            <a href="{{ route('landing.course.index') }}" class="mt-4 inline-block px-6 py-2 bg-custom-purple text-white rounded-lg">
+                Kembali ke Daftar Kelas
+            </a>
+        </div>
+    @else
 
-    <div class="w-full bg-white p-10 2xl:px-36">
-        <div class="container mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Course Image and Info -->
-                <div class="lg:col-span-2">
-                    <div class="relative">
-                        <img src="{{ $course->image }}" alt="{{ $course->name }}" class="w-full h-64 object-cover rounded-lg mb-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+            <h1 class="text-3xl font-bold mb-2">{{ $course->name }}</h1>
+            <p class="text-gray-600">{{ $course->sort_description ?? 'Deskripsi singkat tidak tersedia' }}</p>
 
-                        {{-- Favorite Button --}}
-                        @auth
-                            <button class="favorite-btn absolute top-4 right-4 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200"
-                                    data-course-id="{{ $course->id }}"
-                                    data-url="{{ route('course.favorite', $course) }}">
-                                <i class="fas fa-heart text-xl {{ Auth::user()->favoriteCourses()->where('course_id', $course->id)->exists() ? 'text-red-500' : 'text-gray-400' }}"></i>
-                            </button>
-                        @endauth
-                    </div>
-
-                    <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ $course->name }}</h1>
-
-                    <div class="flex items-center mb-4">
-                        <img src="{{ $course->mentor?->image ?? asset('images/default.png') }}" alt="{{ $course->mentor?->name }}" class="w-12 h-12 rounded-full mr-3">
-                        <div>
-                            <p class="font-semibold text-gray-900">{{ $course->mentor?->name ?? 'No Mentor' }}</p>
-                            <p class="text-sm text-gray-600">Mentor</p>
-                        </div>
-                    </div>
-
-                    <div class="prose max-w-none mb-6">
-                        {!! $course->description !!}
-                    </div>
-
-                    <!-- Course Stats -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        <div class="text-center p-4 bg-gray-50 rounded-lg">
-                            <div class="text-2xl font-bold text-blue-600">{{ $series->count() }}</div>
-                            <div class="text-sm text-gray-600">Series</div>
-                        </div>
-                        <div class="text-center p-4 bg-gray-50 rounded-lg">
-                            <div class="text-2xl font-bold text-green-600">{{ $enrolled }}</div>
-                            <div class="text-sm text-gray-600">Students</div>
-                        </div>
-                        <div class="text-center p-4 bg-gray-50 rounded-lg">
-                            <div class="text-2xl font-bold text-yellow-600">{{ $avgRating ? number_format($avgRating, 1) : 'N/A' }}</div>
-                            <div class="text-sm text-gray-600">Rating</div>
-                        </div>
-                        <div class="text-center p-4 bg-gray-50 rounded-lg">
-                            <div class="text-2xl font-bold text-purple-600">{{ $ratingCount }}</div>
-                            <div class="text-sm text-gray-600">Reviews</div>
-                        </div>
+            <!-- Mentor + Rating + Alumni -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mt-4 gap-4">
+                <div class="flex items-center gap-3">
+                    <img src="{{ $course->mentor?->image ?? asset('images/default.png') }}" 
+                         alt="{{ $course->mentor?->name ?? 'Mentor' }}"
+                         class="w-14 h-14 rounded-full object-cover"
+                         onerror="this.src='{{ asset('images/default.png') }}'">
+                    <div>
+                        <p class="font-bold text-gray-800">{{ $course->mentor->name ?? 'Mentor' }}</p>
                     </div>
                 </div>
 
-                <!-- Sidebar -->
-                <div class="lg:col-span-1">
-                    <div class="bg-gray-50 p-6 rounded-lg sticky top-4">
-                        <div class="text-center mb-6">
-                            @if($course->price_before_discount > $course->price_after_discount)
-                                <p class="text-lg text-gray-500 line-through">Rp {{ moneyFormat($course->price_before_discount) }}</p>
-                            @endif
-                            <p class="text-3xl font-bold text-blue-600">Rp {{ moneyFormat($course->price_after_discount) }}</p>
-                            @if($course->price_before_discount > $course->price_after_discount)
-                                <p class="text-sm text-green-600 font-semibold">
-                                    Save {{ discount($course->price_before_discount, $course->price_after_discount) }}%
-                                </p>
-                            @endif
-                        </div>
-
-                        @auth
-                            @if($alreadyBought)
-                                <a href="{{ route('course.series', [$course->slug, 1]) }}" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-semibold text-center block mb-4">
-                                    Continue Learning
-                                </a>
-                            @else
-                                <form action="{{ route('cart.store', $course->id) }}" method="POST" class="mb-4">
-                                    @csrf
-                                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold">
-                                        Add to Cart
-                                    </button>
-                                </form>
-                            @endif
-                        @else
-                            <a href="{{ route('login') }}" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold text-center block mb-4">
-                                Login to Enroll
-                            </a>
-                        @endauth
-
-                        <!-- Course Benefits -->
-                        @if($course->benefits->count() > 0)
-                            <div class="border-t pt-4">
-                                <h3 class="font-semibold text-gray-900 mb-3">What you'll learn</h3>
-                                <ul class="space-y-2">
-                                    @foreach($course->benefits as $benefit)
-                                        <li class="flex items-start">
-                                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                            <span class="text-sm text-gray-700">{{ $benefit->name }}</span>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
+                <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                    <div class="flex items-center gap-1">
+                        <i class="fas fa-users"></i>
+                        <span>{{ $enrolled ?? 0 }} Siswa</span>
                     </div>
                 </div>
             </div>
+
+            @if($course->benefits && count($course->benefits) > 0)
+                <div class="flex flex-wrap gap-2 mt-4">
+                    @foreach ($course->benefits as $benefit)
+                        <span class="px-3 py-1 border border-custom-orange rounded-lg text-sm text-gray-700">
+                            {{ $benefit->name }}
+                        </span>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
+        <!-- CARD KANAN -->
+        <div class="rounded-lg bg-custom-purple shadow p-4">
+
+            {{-- Gambar --}}
+            <div class="max-w-md mx-auto aspect-[4/3] relative rounded-xl overflow-hidden shadow-lg mt-2">
+                <img src="{{ $course->image ?? asset('images/course.jpg') }}"
+                    alt="{{ $course->name ?? 'Gambar Kelas' }}"
+                    class="absolute inset-0 w-full h-full object-cover"
+                    onerror="this.src='{{ asset('images/course.jpg') }}'">
+            </div>
+
+            {{-- Harga --}}
+            <div class="mt-4">
+                                @if($course->price_before_discount != $course->price_after_discount && $course->price_before_discount > 0)
+                    <p class="line-through text-red-500 text-sm">
+                        Rp {{ moneyFormat($course->price_before_discount) }}
+                    </p>
+                @endif
+
+                {{-- Harga final + diskon sejajar --}}
+                <div class="flex items-center gap-2">
+
+                    {{-- Harga final --}}
+                    <h3 class="text-2xl font-bold text-white">
+                        @if ($course->price_after_discount == 0)
+                            Gratis
+                        @else
+                            Rp {{ moneyFormat($course->price_after_discount) }}
+                        @endif
+                    </h3>
+
+                    {{-- Diskon persen di kanan --}}
+                    @if($course->price_before_discount > $course->price_after_discount && $course->price_before_discount > 0)
+                        @php
+                            $discount = round((($course->price_before_discount - $course->price_after_discount) 
+                                / $course->price_before_discount) * 100);
+                        @endphp
+
+                        <span class="px-2 py-1 bg-custom-orange text-black text-xs rounded font-semibold">
+                            {{ $discount }}% OFF
+                        </span>
+                    @endif
+                </div>
+
+                {{-- Materi, Sertifikat --}}
+                <div class="mt-4 space-y-2 text-white text-base">
+
+                    {{-- Materi --}}
+                    @php $totalMaterials = $course->series->count(); @endphp
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-book-open"></i>
+                        <span>{{ $totalMaterials }} Materi Pembelajaran</span>
+                    </div>
+
+                    {{-- Sertifikat --}}
+                    @php $hasCertificate = $course->certificate ?? false; @endphp
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-certificate"></i>
+                        <span>{{ $hasCertificate ? 'Sertifikat Kelulusan' : 'Tanpa Sertifikat' }}</span>
+                    </div>
+
+                </div>
+
+                {{-- Tombol --}}
+                <div class="mt-4 flex flex-col gap-2">
+                    @if ($alreadyBought)
+                        <a href="{{ route('member.mycourse.course', $course->id) }}" 
+                        class="px-4 py-2 rounded-lg bg-custom-orange text-white text-center hover:bg-custom-orange2 transition-colors">
+                            Lanjutkan Belajar
+                        </a>
+                    @else
+                        <form action="{{ route('cart.store', $course->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" 
+                                class="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-semibold">
+                                Beli Sekarang
+                            </button>
+                        </form>
+
+                        <button type="submit"
+                            class="flex-1 border border-white py-2 rounded-lg text-center font-semibold text-white">
+                            Simpan ke Favorit   
+                        </button>
+                    @endif
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
 
     <div class="my-10 border-t border-gray-300"></div>
 
@@ -157,15 +189,15 @@
                     <div>
                         <p class="font-bold">{{ $course->mentor->name }}</p>
 
-        @php
-            $mentorRating = $reviews->avg('rating') ?? 0;
-        @endphp
+                        @php
+                            $mentorRating = $reviews->avg('rating') ?? 0;
+                        @endphp
 
-        <x-star-rating 
-            :rating="$mentorRating"
-            :showNumber="true"
-            :showHalfStars="true"
-            size="md" />
+                        <x-star-rating 
+                            :rating="$mentorRating"
+                            :showNumber="true"
+                            :showHalfStars="true"
+                            size="md" />
                     </div>
                 </div>
 
@@ -187,84 +219,38 @@
                                     <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold text-sm">
                                         {{ substr($review->user->name ?? 'U', 0, 1) }}
                                     </div>
-                                    <div>
-                                        <h3 class="font-semibold text-gray-900">{{ $item->title }}</h3>
-                                        <p class="text-sm text-gray-600">{{ $item->description }}</p>
-                                    </div>
                                 </div>
-                                <div class="text-sm text-gray-500">
-                                    @if($item->video_path)
-                                        <i class="fas fa-play-circle mr-1"></i> Video
-                                    @else
-                                        <i class="fas fa-file-alt mr-1"></i> Reading
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <p class="font-bold text-gray-800">{{ $review->user->name ?? 'User' }}</p>
+                                        <x-star-rating 
+                                            :rating="$review->rating" 
+                                            :showHalfStars="false"
+                                            size="sm" />                                    
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-2 leading-relaxed">{{ $review->review }}</p>
+                                    @if($review->created_at)
+                                        <p class="text-xs text-gray-400 mt-2">
+                                            {{ $review->created_at->format('d M Y') }}
+                                        </p>
                                     @endif
                                 </div>
                             </div>
-                        @endforeach
+                        </div>
+                    @endforeach
+                @else
+                    <div class="text-center py-6">
+                        <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-3">
+                            <i class="fas fa-comment text-gray-400 text-2xl"></i>
+                        </div>
+                        <p class="text-gray-500">Belum ada testimoni untuk kelas ini.</p>
                     </div>
-                </div>
-            @endif
+                @endif
+            </div>
 
-            <!-- Reviews -->
-            @if($reviews->count() > 0)
-                <div class="mt-12">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Student Reviews</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        @foreach($reviews as $review)
-                            <div class="bg-gray-50 p-6 rounded-lg">
-                                <div class="flex items-center mb-4">
-                                    <img src="{{ $review->user->avatar }}" alt="{{ $review->user->name }}" class="w-10 h-10 rounded-full mr-3">
-                                    <div>
-                                        <p class="font-semibold text-gray-900">{{ $review->user->name }}</p>
-                                        <div class="flex items-center">
-                                            @for($i = 1; $i <= 5; $i++)
-                                                <i class="fas fa-star {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }} text-sm"></i>
-                                            @endfor
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="text-gray-700">{{ $review->comment }}</p>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
         </div>
     </div>
-@endsection
 
-@section('scripts')
-<script>
-$(document).ready(function() {
-    $('.favorite-btn').on('click', function(e) {
-        e.preventDefault();
-        const btn = $(this);
-        const courseId = btn.data('course-id');
-        const url = btn.data('url');
-        const icon = btn.find('i');
-
-        $.ajax({
-            url: url,
-            method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(response) {
-                if (response.is_favorited) {
-                    icon.removeClass('text-gray-400').addClass('text-red-500');
-                } else {
-                    icon.removeClass('text-red-500').addClass('text-gray-400');
-                }
-            },
-            error: function(xhr) {
-                if (xhr.status === 401) {
-                    alert('Please login to favorite courses.');
-                } else {
-                    alert('An error occurred. Please try again.');
-                }
-            }
-        });
-    });
-});
-</script>
+    @endif
+</div>
 @endsection

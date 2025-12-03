@@ -27,7 +27,7 @@
 
                 <!-- Course -->
                 <div class="relative w-64 h-96 mx-auto">
-                    <img src="{{ asset('assets/dist/img/photo3.jpg') }}" 
+                    <img src="{{ asset('images/learn.jpg') }}" 
                          alt="Gambar 1"
                          class="w-full h-full object-cover rounded-xl shadow-lg rotate-[-2deg]">
 
@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="relative w-64 h-96 mx-auto -mt-4">
-                    <img src="{{ asset('assets/dist/img/photo2.png') }}" 
+                    <img src="{{ asset('images/img.png') }}" 
                          alt="Gambar 2"
                          class="w-full h-full object-cover rounded-xl shadow-lg">
 
@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="relative w-64 h-96 mx-auto">
-                    <img src="{{ asset('assets/dist/img/logo-eduthings.png') }}" 
+                    <img src="{{ asset('images/mentoring.jpg') }}" 
                          alt="Gambar 3"
                          class="w-full h-full object-cover rounded-xl shadow-lg rotate-[2deg]">
 
