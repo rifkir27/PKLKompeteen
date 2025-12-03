@@ -23,8 +23,17 @@ class MentorController extends Controller
             kita pecah data review yang kita tampilkan hanya 8 per halaman
             dengan urutan terbaru.
         */
-        $mentors = Mentor::orderBy('created_at', 'DESC')->get();
-        // dd($mentors);
+        $mentors = Mentor::with(['courses.reviews', 'mentorRatings'])
+            ->withCount(['courses as total_courses', 'mentorRatings as total_ratings'])
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->map(function ($mentor) {
+                $mentor->avg_rating = $mentor->avg_rating;
+                $mentor->total_reviews = $mentor->courses->sum(function ($course) {
+                    return $course->reviews->count();
+                });
+                return $mentor;
+            });
 
         // passing variabel $mentor kedalam view.
         return view('landing.mentor.index', compact('mentors'));

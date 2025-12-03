@@ -1,0 +1,5 @@
+- [x] Remove "Upload File" option from video source select in existing materials
+- [x] Remove video-file-group div from existing materials
+- [x] Remove "Upload File" option from JavaScript template
+- [x] Remove video-file-group div from JavaScript template
+- [x] Update JavaScript logic to remove file handling

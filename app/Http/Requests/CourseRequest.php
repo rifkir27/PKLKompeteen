@@ -27,6 +27,7 @@ class CourseRequest extends FormRequest
                 'discount' => 'nullable',
                 'sort_description' => 'required',
                 'description' => 'required',
+                'learning_outcomes' => 'nullable',
                 'price_before_discount' => 'required',
                 'price_after_discount' => 'required',
                 'benefits' => 'nullable|array',
@@ -60,8 +61,8 @@ class CourseRequest extends FormRequest
                 'sort_description' => 'required',
                 'price_before_discount' => 'required',
                 'price_after_discount' => 'required',
-                'benefits' => 'required|array',
-                'benefits.*' => 'required|exists:benefits,id',
+                'benefits' => 'nullable|array',
+                'benefits.*' => 'nullable|exists:benefits,id',
                 'link_telegram' => 'sometimes',
                 'link_whatsapp' => 'sometimes',
                 'is_published' => 'required',
@@ -94,7 +95,21 @@ class CourseRequest extends FormRequest
             foreach ($series as $index => $item) {
                 if (isset($item['content_type'])) {
                     if ($item['content_type'] == 'video') {
-                        $videoSource = $item['video_source'] ?? null;
+                        // Set video_source based on video_code if not set
+                        if (!isset($item['video_source']) || empty($item['video_source'])) {
+                            if (isset($item['video_code']) && !empty($item['video_code'])) {
+                                if (str_contains($item['video_code'], 'youtube.com') || str_contains($item['video_code'], 'youtu.be')) {
+                                    $item['video_source'] = 'youtube';
+                                } elseif (str_contains($item['video_code'], 'drive.google.com')) {
+                                    $item['video_source'] = 'drive';
+                                } else {
+                                    $item['video_source'] = 'drive'; // default
+                                }
+                            } else {
+                                $item['video_source'] = null;
+                            }
+                        }
+                        $videoSource = $item['video_source'];
                         if (!$videoSource) {
                             $validator->errors()->add("series.{$index}.video_source", 'Video source is required when content type is video.');
                         } elseif ($videoSource === 'file') {

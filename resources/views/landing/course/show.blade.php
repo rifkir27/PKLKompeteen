@@ -149,6 +149,17 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2 space-y-8">
+            @if($series && count($series) > 0)
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Apa yang Akan Dipelajari</h2>
+                <ul class="text-gray-700 leading-relaxed list-disc list-inside space-y-2">
+                    @foreach($series as $item)
+                        <li>{{ $item->title }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
             <div>
                 <h2 class="text-xl font-semibold mb-4">Tentang E-Course</h2>
                 <div class="text-gray-700 leading-relaxed">

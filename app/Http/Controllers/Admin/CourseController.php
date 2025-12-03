@@ -56,6 +56,16 @@ class CourseController extends Controller
 
         if ($request->has('series') && is_array($request->series)) {
             foreach ($request->series as $index => $seriesData) {
+                // Set video_source based on video_code for video content
+                if ($seriesData['content_type'] == 'video' && isset($seriesData['video_code']) && !empty($seriesData['video_code'])) {
+                    if (str_contains($seriesData['video_code'], 'youtube.com') || str_contains($seriesData['video_code'], 'youtu.be')) {
+                        $seriesData['video_source'] = 'youtube';
+                    } elseif (str_contains($seriesData['video_code'], 'drive.google.com')) {
+                        $seriesData['video_source'] = 'drive';
+                    } else {
+                        $seriesData['video_source'] = 'drive'; // default
+                    }
+                }
                 // Handle video based on source
                 if (isset($seriesData['video_source']) && $seriesData['video_source'] === 'file' && $request->hasFile("series.{$index}.video_file")) {
                     $videoFile = $request->file("series.{$index}.video_file");
@@ -138,6 +148,16 @@ class CourseController extends Controller
                     }
                 } else {
                     // Create new series
+                    // Set video_source based on video_code for video content
+                    if ($seriesData['content_type'] == 'video' && isset($seriesData['video_code']) && !empty($seriesData['video_code'])) {
+                        if (str_contains($seriesData['video_code'], 'youtube.com') || str_contains($seriesData['video_code'], 'youtu.be')) {
+                            $seriesData['video_source'] = 'youtube';
+                        } elseif (str_contains($seriesData['video_code'], 'drive.google.com')) {
+                            $seriesData['video_source'] = 'drive';
+                        } else {
+                            $seriesData['video_source'] = 'drive'; // default
+                        }
+                    }
                     // Handle video based on source for new series
                     if (isset($seriesData['video_source']) && $seriesData['video_source'] === 'file' && $request->hasFile("series.{$index}.video_file")) {
                         $videoFile = $request->file("series.{$index}.video_file");
