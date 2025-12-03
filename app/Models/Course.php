@@ -24,6 +24,7 @@ class Course extends Model
         'demo',
         'sort_description',
         'description',
+        'learning_outcomes',
         'price_before_discount',
         'price_after_discount',
         'link_telegram',
