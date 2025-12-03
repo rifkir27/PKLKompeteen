@@ -270,8 +270,7 @@ function getMaterialTemplate(index) {
                             <label>Video Source</label>
                             <select class="form-control material-video-source" name="series[${index}][video_source]">
                                 <option value="">Select</option>
-                                <option value="file">File Upload</option>
-                                <option value="youtube">YouTube</option>
+-                                <option value="youtube">YouTube</option>
                                 <option value="drive">Google Drive</option>
                             </select>
                         </div>
