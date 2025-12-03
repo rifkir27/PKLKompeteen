@@ -56,7 +56,7 @@ class Series extends Model
             return null;
         }
 
-        $source = $this->video_source ?: 'drive'; // Default to drive for legacy data
+        $source = $this->video_source ?: 'drive';
 
         switch ($source) {
             case 'file':

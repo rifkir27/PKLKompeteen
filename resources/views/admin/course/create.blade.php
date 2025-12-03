@@ -176,7 +176,7 @@
                                     @error('tools')
                                         <span class="error invalid-feedback">{{ $message }}</span>
                                     @enderror
-                                    <small class="form-text text-muted">Pilih tools yang dibutuhkan untuk kursus ini (opsional)</small>
+                                    <small class="form-text text-muted">Pilih tools yang dibutuhkan untuk kursus ini</small>
                                 </div>
 
                                 <div class="form-group">
@@ -263,7 +263,18 @@ function getMaterialTemplate(index) {
                         </div>
                     </div>
 
-
+                    <!-- Video Source -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Video Source</label>
+                            <select class="form-control material-video-source" name="series[${index}][video_source]">
+                                <option value="">Select</option>
+                                <option value="file">File Upload</option>
+                                <option value="youtube">YouTube</option>
+                                <option value="drive">Google Drive</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <!-- Type -->
                     <div class="col-md-3">
