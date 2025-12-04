@@ -178,7 +178,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            @if ($series->video_code)
+                            @if ($series->video_code && $seriesDetail->content_type != 'text')
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 style="font-family:Comic Sans MS">{{ $seriesDetail->title }}</h3>

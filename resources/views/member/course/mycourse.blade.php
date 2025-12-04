@@ -111,6 +111,7 @@
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="form-group">
+                                                                    <label>Course Rating</label>
                                                                     <select class="form-control @error('rating') is-invalid @enderror" name="rating" title="Rating">
                                                                         <option value="5">5 </option>
                                                                         <option value="4">4</option>
@@ -119,6 +120,22 @@
                                                                         <option value="1">1</option>
                                                                     </select>
                                                                     @error('rating')
+                                                                        <div class="invalid-feedback">
+                                                                            {{ $message }}
+                                                                        </div>
+                                                                    @enderror
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Mentor Rating (Optional)</label>
+                                                                    <select class="form-control @error('mentor_rating') is-invalid @enderror" name="mentor_rating" title="Mentor Rating">
+                                                                        <option value="">Select Rating</option>
+                                                                        <option value="5">5 </option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="1">1</option>
+                                                                    </select>
+                                                                    @error('mentor_rating')
                                                                         <div class="invalid-feedback">
                                                                             {{ $message }}
                                                                         </div>
@@ -206,6 +223,7 @@
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="form-group">
+                                                                    <label>Course Rating</label>
                                                                     <select class="form-control @error('rating') is-invalid @enderror" name="rating" title="Rating">
                                                                         <option value="5">5 </option>
                                                                         <option value="4">4</option>
@@ -214,6 +232,22 @@
                                                                         <option value="1">1</option>
                                                                     </select>
                                                                     @error('rating')
+                                                                        <div class="invalid-feedback">
+                                                                            {{ $message }}
+                                                                        </div>
+                                                                    @enderror
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Mentor Rating (Optional)</label>
+                                                                    <select class="form-control @error('mentor_rating') is-invalid @enderror" name="mentor_rating" title="Mentor Rating">
+                                                                        <option value="">Select Rating</option>
+                                                                        <option value="5">5 </option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="1">1</option>
+                                                                    </select>
+                                                                    @error('mentor_rating')
                                                                         <div class="invalid-feedback">
                                                                             {{ $message }}
                                                                         </div>
@@ -255,6 +289,7 @@
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="form-group">
+                                                                    <label>Course Rating</label>
                                                                     <select class="form-control @error('rating') is-invalid @enderror" name="rating" title="Rating">
                                                                         <option value="5">5 </option>
                                                                         <option value="4">4</option>
@@ -263,6 +298,22 @@
                                                                         <option value="1">1</option>
                                                                     </select>
                                                                     @error('rating')
+                                                                        <div class="invalid-feedback">
+                                                                            {{ $message }}
+                                                                        </div>
+                                                                    @enderror
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Mentor Rating (Optional)</label>
+                                                                    <select class="form-control @error('mentor_rating') is-invalid @enderror" name="mentor_rating" title="Mentor Rating">
+                                                                        <option value="">Select Rating</option>
+                                                                        <option value="5">5 </option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="1">1</option>
+                                                                    </select>
+                                                                    @error('mentor_rating')
                                                                         <div class="invalid-feedback">
                                                                             {{ $message }}
                                                                         </div>

@@ -42,7 +42,7 @@ use App\Http\Controllers\Member\TransactionController as MemberTransactionContro
 use App\Http\Controllers\Member\VoucherController as MemberVoucherController;
 use App\Http\Controllers\Landing\ArticleController as LandingArticleController;
 use App\Http\Controllers\Landing\TestimonialController as LandingTestimonialController;
-
+use App\Http\Controllers\Admin\ToolController;
 
 use App\Http\Controllers\TestingController;
 use App\Http\Controllers\UploadController;
@@ -160,6 +160,9 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'r
 
     Route::resource('infrastructure', InfrastructureController::class);
     Route::get('infrastructure/ajax/datatable', [InfrastructureController::class, 'datatable'])->name('infrastructure.ajax.datatable');
+
+    Route::resource('tools', ToolController::class)->except(['show']);
+    Route::get('tools/ajax/datatable', [ToolController::class, 'datatable'])->name('tools.ajax.datatable');
 
 });
 

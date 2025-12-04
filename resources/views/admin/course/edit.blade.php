@@ -269,7 +269,8 @@
                                     <select class="select2 form-control @error('tools') is-invalid @enderror" multiple="multiple" name="tools[]" data-placeholder="Select Tools">
                                         <option value="">[ Select ]</option>
                                         @foreach ($tools as $tool)
-                                            <option value="{{ $tool->id }}" @if(is_array($toolSelected) && in_array($tool->id, $toolSelected)) selected @endif>{{ $tool->name }}</option>
+                                            <option value="{{ $tool->id }}" @if (in_array($tool->id, $toolSelected)){{'selected'}}
+                                                @endif>{{ $tool->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('tools')
@@ -303,6 +304,29 @@
 
     <script>
         $('.select2').select2()
+
+        // Handle certificate checkbox
+        document.getElementById('has_certificate').addEventListener('change', function() {
+            const certificateLinkGroup = document.getElementById('certificate-link-group');
+            if (this.checked) {
+                certificateLinkGroup.style.display = 'block';
+            } else {
+                certificateLinkGroup.style.display = 'none';
+            }
+        });
+
+        // Initialize certificate link group visibility on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const hasCertificateCheckbox = document.getElementById('has_certificate');
+            const certificateLinkGroup = document.getElementById('certificate-link-group');
+            if (hasCertificateCheckbox && certificateLinkGroup) {
+                if (hasCertificateCheckbox.checked) {
+                    certificateLinkGroup.style.display = 'block';
+                } else {
+                    certificateLinkGroup.style.display = 'none';
+                }
+            }
+        });
     </script>
 
     <!-- Materials Form JavaScript -->

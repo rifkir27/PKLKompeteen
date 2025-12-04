@@ -176,7 +176,7 @@
                                     @error('tools')
                                         <span class="error invalid-feedback">{{ $message }}</span>
                                     @enderror
-                                    <small class="form-text text-muted">Pilih tools yang dibutuhkan untuk kursus ini</small>
+                                    <small class="form-text text-muted">Pilih tools yang dibutuhkan untuk kursus ini (opsional)</small>
                                 </div>
 
                                 <div class="form-group">
@@ -235,6 +235,16 @@
 
     <script>
         $('.select2').select2()
+
+        // Handle certificate checkbox
+        document.getElementById('has_certificate').addEventListener('change', function() {
+            const certificateLinkGroup = document.getElementById('certificate-link-group');
+            if (this.checked) {
+                certificateLinkGroup.style.display = 'block';
+            } else {
+                certificateLinkGroup.style.display = 'none';
+            }
+        });
     </script>
 
 <script>
@@ -258,11 +268,11 @@ function getMaterialTemplate(index) {
                     <input type="text" class="form-control" name="series[${index}][title]" required>
                 </div>
 
-                <!-- CONTENT TYPE + VIDEO SOURCE + TYPE + SERIES NUMBER (4 COLUMNS) -->
+                <!-- CONTENT TYPE + TYPE + SERIES NUMBER (3 COLUMNS) -->
                 <div class="row mb-3">
 
                     <!-- Content Type -->
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Content Type *</label>
                             <select class="form-control material-content-type" name="series[${index}][content_type]" required>
@@ -273,21 +283,8 @@ function getMaterialTemplate(index) {
                         </div>
                     </div>
 
-                    <!-- Video Source -->
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Video Source</label>
-                            <select class="form-control material-video-source" name="series[${index}][video_source]">
-                                <option value="">Select</option>
-                                <option value="file">File Upload</option>
-                                <option value="youtube">YouTube</option>
-                                <option value="drive">Google Drive</option>
-                            </select>
-                        </div>
-                    </div>
-
                     <!-- Type -->
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Type *</label>
                             <select class="form-control" name="series[${index}][intro]" required>
@@ -299,7 +296,7 @@ function getMaterialTemplate(index) {
                     </div>
 
                     <!-- Series Number -->
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Series Number *</label>
                             <input type="number" class="form-control" name="series[${index}][number_of_series]" min="1" required>
@@ -373,6 +370,7 @@ document.addEventListener('change', function(e) {
 
         const videoUrlGroup = cardBody.querySelector('.video-url-group');
         const textContentGroup = cardBody.querySelector('.text-content-group');
+        const videoCodeInput = cardBody.querySelector('input[name*="[video_code]"]');
 
         // Reset all groups
         videoUrlGroup.style.display = 'none';
@@ -383,6 +381,8 @@ document.addEventListener('change', function(e) {
             videoUrlGroup.style.display = 'block';
         } else if (contentType === 'text') {
             textContentGroup.style.display = 'block';
+            // Clear video code when text is selected
+            if (videoCodeInput) videoCodeInput.value = '';
         }
     }
 });
