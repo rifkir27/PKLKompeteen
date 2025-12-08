@@ -37,6 +37,17 @@ class ReviewController extends Controller
             'review' => $request->review,
         ]);
 
+        // Create mentor rating if provided
+        if ($request->has('mentor_rating') && $request->mentor_rating) {
+            MentorRating::updateOrCreate([
+                'mentor_id' => $course->mentor_id,
+                'user_id' => $request->user()->id,
+            ], [
+                'rating' => $request->mentor_rating,
+                'comment' => $request->review, // Use the same review text as comment
+            ]);
+        }
+
         return back()->with('toast_success', 'Review Created');
     }
 

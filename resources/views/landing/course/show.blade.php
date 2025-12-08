@@ -108,11 +108,18 @@
                     </div>
 
                     {{-- Sertifikat --}}
-                    @php $hasCertificate = $course->certificate ?? false; @endphp
-                    <div class="flex items-center gap-2">
-                        <i class="fas fa-certificate"></i>
-                        <span>{{ $hasCertificate ? 'Sertifikat Kelulusan' : 'Tanpa Sertifikat' }}</span>
-                    </div>
+                    @php $hasCertificate = !empty($course->certificate_drive_link); @endphp
+                    @if($hasCertificate)
+                        <a href="{{ $course->certificate_drive_link }}" target="_blank" class="flex items-center gap-2 text-white hover:underline">
+                            <i class="fas fa-certificate"></i>
+                            <span>Ada Sertifikat</span>
+                        </a>
+                    @else
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-certificate"></i>
+                            <span>Tanpa Sertifikat</span>
+                        </div>
+                    @endif
 
                 </div>
 
@@ -132,9 +139,11 @@
                             </button>
                         </form>
 
-                        <button type="submit"
-                            class="flex-1 border border-white py-2 rounded-lg text-center font-semibold text-white">
-                            Simpan ke Favorit   
+                        <button class="favorite-btn flex-1 border border-white py-2 rounded-lg text-center font-semibold text-white"
+                                data-course-id="{{ $course->id }}"
+                                data-url="{{ route('course.favorite', $course) }}">
+                            <i class="fas fa-heart {{ $isFavorited ? 'text-red-500' : 'text-gray-400' }}"></i>
+                            @if($isFavorited) Favorited @else Add to Favorite @endif
                         </button>
                     @endif
                 </div>
@@ -151,18 +160,22 @@
         <div class="lg:col-span-2 space-y-8">
             @if($series && count($series) > 0)
             <div>
-    <h2 class="text-xl font-semibold mb-4">Apa yang Akan Dipelajari</h2>
+                <h2 class="text-xl font-semibold mb-4">Apa yang Akan Dipelajari</h2>
 
-    <ul class="text-gray-700 leading-relaxed space-y-3">
-        @foreach($series as $item)
+                <ul class="text-gray-700 leading-relaxed space-y-3">
+                    @foreach($series as $item)
                         <li class="flex items-start gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks-icon lucide-list-checks"><path d="M13 5h8"/><path d="M13 12h8"/><path d="M13 19h8"/><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/></svg>
-                        <span>{{ $item->title }}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks-icon lucide-list-checks">
+                                <path d="M13 5h8"/>
+                                <path d="M13 12h8"/>
+                                <path d="M13 19h8"/>
+                                <path d="m3 17 2 2 4-4"/>
+                                <path d="m3 7 2 2 4-4"/>
+                            </svg>
+                            <span>{{ $item->title }}</span>
                         </li>
                     @endforeach
-                </ul>
             </div>
-
             @endif
 
             <div>
@@ -269,4 +282,39 @@
 
     @endif
 </div>
+@endsection
+
+@section('scripts')
+<script>
+$(document).ready(function() {
+    $('.favorite-btn').on('click', function(e) {
+        e.preventDefault();
+        const btn = $(this);
+        const courseId = btn.data('course-id');
+        const url = btn.data('url');
+
+        $.ajax({
+            url: url,
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.is_favorited) {
+                    btn.html('<i class="fas fa-heart text-red-500"></i> Favorited');
+                } else {
+                    btn.html('<i class="fas fa-heart text-gray-400"></i> Add to Favorite');
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 401) {
+                    alert('Please login to favorite courses.');
+                } else {
+                    alert('An error occurred. Please try again.');
+                }
+            }
+        });
+    });
+});
+</script>
 @endsection

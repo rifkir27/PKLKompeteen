@@ -1,5 +1,9 @@
-- [x] Remove "Upload File" option from video source select in existing materials
-- [x] Remove video-file-group div from existing materials
-- [x] Remove "Upload File" option from JavaScript template
-- [x] Remove video-file-group div from JavaScript template
-- [x] Update JavaScript logic to remove file handling
+# TODO for Adding Tools Page in Sidebar
+
+- [x] Create ToolController.php with CRUD methods
+- [x] Add routes for tools in web.php
+- [x] Create index.blade.php view for tools
+- [x] Create create.blade.php view for tools
+- [x] Create edit.blade.php view for tools
+- [x] Add Tools menu item in sidebar.blade.php
+- [x] Fix Route [admin.tools.index] not defined error

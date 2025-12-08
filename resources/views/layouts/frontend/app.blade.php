@@ -105,6 +105,51 @@
             })
         }
     </script>
+    @yield('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('.favorite-btn').on('click', function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            const courseId = btn.data('course-id');
+            const url = btn.data('url');
+            const icon = btn.find('i');
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (btn.find('i').next().length > 0) {
+                        // Button has text, update html
+                        if (response.is_favorited) {
+                            btn.html('<i class="fas fa-heart text-red-500"></i> Favorited');
+                        } else {
+                            btn.html('<i class="fas fa-heart text-gray-400"></i> Add to Favorite');
+                        }
+                    } else {
+                        // Button has no text, update icon class
+                        if (response.is_favorited) {
+                            icon.removeClass('text-gray-400').addClass('text-red-500');
+                        } else {
+                            icon.removeClass('text-red-500').addClass('text-gray-400');
+                        }
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 401) {
+                        alert('Please login to favorite courses.');
+                    } else {
+                        alert('An error occurred. Please try again.');
+                    }
+                }
+            });
+        });
+    });
+    </script>
     @stack('js')
 </body>
 

@@ -23,7 +23,8 @@ class ReviewRequest extends FormRequest
     {
         return [
             'rating' => 'max:5|integer',
-            'review' => 'required'
+            'review' => 'required',
+            'mentor_rating' => 'nullable|max:5|integer'
         ];
     }
 }
