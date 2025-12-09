@@ -53,7 +53,6 @@
             @endif
         </div>
 
-        <!-- CARD KANAN -->
         <div class="rounded-lg bg-custom-purple shadow p-4">
 
             {{-- Gambar --}}
@@ -159,13 +158,19 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2 space-y-8">
             @if($series && count($series) > 0)
-            <div>
+            <div x-data="{ showAll: false }">
                 <h2 class="text-xl font-semibold mb-4">Apa yang Akan Dipelajari</h2>
 
-                <ul class="text-gray-700 leading-relaxed space-y-3">
-                    @foreach($series as $item)
-                        <li class="flex items-start gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks-icon lucide-list-checks">
+                <ul class="text-gray-700 leading-relaxed space-y-3">+
+                    
+                        <li 
+                            class="flex items-start gap-2"
+                            @if($index >= 4) x-show="showAll" x-cloak @endif
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                class="lucide lucide-list-checks">
                                 <path d="M13 5h8"/>
                                 <path d="M13 12h8"/>
                                 <path d="M13 19h8"/>
@@ -175,6 +180,17 @@
                             <span>{{ $item->title }}</span>
                         </li>
                     @endforeach
+                </ul>
+
+                @if(count($series) > 4)
+                    <button 
+                        @click="showAll = !showAll"
+                        class="mt-3 text-custom-orange font-semibold hover:underline"
+                    >
+                        <span x-show="!showAll">Lihat Semua</span>
+                        <span x-show="showAll">Sembunyikan</span>
+                    </button>
+                @endif
             </div>
             @endif
 
