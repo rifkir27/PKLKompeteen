@@ -327,6 +327,34 @@
                 }
             }
         });
+
+        // Fetch tools data from tools get-tools endpoint and pre-select current tools
+        $(document).ready(function() {
+            $.ajax({
+                url: '{{ route("admin.tools.get-tools") }}',
+                type: 'GET',
+                success: function(tools) {
+                    const toolsSelect = $('#tools-select');
+                    toolsSelect.empty();
+                    toolsSelect.append('<option value="">[ Select ]</option>');
+
+                    const selectedTools = @json($toolSelected ?? []);
+
+                    if (tools && tools.length > 0) {
+                        tools.forEach(function(tool) {
+                            const isSelected = selectedTools.includes(parseInt(tool.id));
+                            toolsSelect.append('<option value="' + tool.id + '" ' + (isSelected ? 'selected' : '') + '>' + tool.name + '</option>');
+                        });
+                    }
+
+                    // Reinitialize select2 after populating options
+                    toolsSelect.trigger('change.select2');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching tools:', error);
+                }
+            });
+        });
     </script>
 
     <!-- Materials Form JavaScript -->

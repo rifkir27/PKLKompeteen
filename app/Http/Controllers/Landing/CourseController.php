@@ -29,6 +29,7 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
+        $course->load('tools');
         $series = Series::whereBelongsTo($course)->get();
 
         $enrolled = Transaction::with('details.course')

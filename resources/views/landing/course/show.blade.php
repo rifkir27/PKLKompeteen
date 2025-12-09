@@ -205,7 +205,7 @@
                 <h2 class="text-xl font-semibold mb-4">Kurikulum E-Course</h2>
 
                 @if($series && count($series) > 0)
-                <div class="rounded-lg border-2 border-custom-purple2 divide-y"> 
+                <div class="rounded-lg border-2 border-custom-purple2 divide-y">
                     @foreach ($series as $item)
                         <div class="px-4 py-3 flex justify-between items-center hover:bg-gray-50 transition-colors">
                             <span class="font-medium">{{ $item->title }}</span>
@@ -217,6 +217,19 @@
                 <p class="text-gray-500">Kurikulum sedang dalam pengembangan.</p>
                 @endif
             </div>
+
+            @if($course->tools && count($course->tools) > 0)
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Tools yang Dibutuhkan</h2>
+                <div class="flex flex-wrap gap-2">
+                    @foreach ($course->tools as $tool)
+                        <span class="px-3 py-1 bg-custom-purple text-white rounded-lg text-sm">
+                            {{ $tool->name }}
+                        </span>
+                    @endforeach
+                </div>
+            </div>
+            @endif
         </div>
 
         <div class="space-y-6">
