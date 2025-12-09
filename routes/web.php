@@ -163,6 +163,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'r
 
     Route::resource('tools', ToolController::class)->except(['show']);
     Route::get('tools/ajax/datatable', [ToolController::class, 'datatable'])->name('tools.ajax.datatable');
+    Route::get('tools/get-tools', [ToolController::class, 'getTools'])->name('tools.get-tools');
 
 });
 

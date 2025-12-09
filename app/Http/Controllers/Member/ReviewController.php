@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Member;
 
 use App\Models\Course;
+use App\Models\MentorRating;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReviewRequest;

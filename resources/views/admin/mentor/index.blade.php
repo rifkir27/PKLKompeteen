@@ -39,6 +39,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Name</th>
+                                    <th>Rating</th>
                                     <th>Created_at</th>
                                     <th>Image</th>
                                     <th>Action</th>
@@ -81,6 +82,12 @@ $(document).ready(function() {
         columns       : [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
             {data: 'name', name: 'name', orderable: true, searchable: true},
+            {data: 'avg_mentor_rating', name: 'avg_mentor_rating', orderable: false, searchable: false,
+            render: function(avg_mentor_rating)
+                {
+                    return avg_mentor_rating + ' ⭐';
+                }
+            },
             {data: 'created_at', name: 'created_at', orderable: false, searchable: false,
             render: function(created_at)
                 {
