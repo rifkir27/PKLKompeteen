@@ -5,6 +5,7 @@
 ])
 
 @php
+    $rating = $rating ?? 0;
     $fullStars = floor($rating);
     $halfStar = ($rating - $fullStars) >= 0.5;
     $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
@@ -19,17 +20,17 @@
 <div class="flex items-center gap-1">
     {{-- FULL STAR --}}
     @for ($i = 0; $i < $fullStars; $i++)
-        <i class="fas fa-star text-yellow-400 {{ $sizeClass }}"></i>
+        <span class="text-yellow-400 {{ $sizeClass }}">★</span>
     @endfor
 
     {{-- HALF STAR --}}
     @if ($halfStar)
-        <i class="fas fa-star-half-alt text-yellow-400 {{ $sizeClass }}"></i>
+        <span class="text-yellow-400 {{ $sizeClass }}">★</span>
     @endif
 
     {{-- EMPTY STAR --}}
     @for ($i = 0; $i < $emptyStars; $i++)
-        <i class="far fa-star text-yellow-400 {{ $sizeClass }}"></i>
+        <span class="text-yellow-400 {{ $sizeClass }}">☆</span>
     @endfor
 
     {{-- Number beside stars --}}

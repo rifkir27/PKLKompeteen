@@ -52,7 +52,7 @@ class CourseController extends Controller
             $isFavorited = false;
         }
 
-        $reviews = Review::where('course_id', $course->id)->orderBy('created_at', 'DESC')->limit(6)->get();
+        $reviews = Review::with('series')->where('course_id', $course->id)->orderBy('created_at', 'DESC')->limit(10)->get();
         
         $avgRating = Review::where('course_id', $course->id)->avg('rating');
         $ratingCount = Review::where('course_id', $course->id)->count();

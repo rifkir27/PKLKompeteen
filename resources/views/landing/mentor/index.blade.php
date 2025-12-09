@@ -24,7 +24,7 @@
                         </h1>
                         <div class="flex flex-col items-center gap-1">
                             <x-star-rating
-                                :rating="$mentor->avg_rating"
+                                :rating="$mentor->avg_rating ?? 0"
                                 :showNumber="true"
                                 :showHalfStars="true"
                                 size="md" />

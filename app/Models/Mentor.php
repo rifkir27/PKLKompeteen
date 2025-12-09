@@ -42,6 +42,20 @@ class Mentor extends Model
 
     public function getAvgRatingAttribute()
     {
+        // Use loaded data if available, otherwise query
+        if ($this->relationLoaded('courses') && $this->courses->isNotEmpty()) {
+            $totalRating = 0;
+            $totalReviews = 0;
+            foreach ($this->courses as $course) {
+                if ($course->relationLoaded('reviews') && $course->reviews->isNotEmpty()) {
+                    $totalRating += $course->reviews->sum('rating');
+                    $totalReviews += $course->reviews->count();
+                }
+            }
+            return $totalReviews > 0 ? $totalRating / $totalReviews : 0;
+        }
+
+        // Fallback to query if data not loaded
         return $this->courses()
             ->join('reviews', 'courses.id', '=', 'reviews.course_id')
             ->avg('reviews.rating') ?? 0;
