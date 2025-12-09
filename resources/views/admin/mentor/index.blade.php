@@ -6,7 +6,6 @@
 
 @section('content')
 <div class="content-wrapper">
-<!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -20,47 +19,41 @@
                 </ol>
             </div>
         </div>
-    </div><!-- /.container-fluid -->
+    </div>
 </section>
 
-<!-- Main content -->
 <section class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <a href="{{ route('admin.mentor.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Create New</a>
+                        <a href="{{ route('admin.mentor.create') }}" class="btn btn-primary">
+                            <i class="fa fa-plus"></i> Create New
+                        </a>
                     </div>
-                    <!-- /.card-header -->
+
                     <div class="card-body">
                         <table id="datatable" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>Name</th>
+                                    <th>Rating</th> <!-- ⬅️ Tambah kolom rating -->
                                     <th>Created_at</th>
                                     <th>Image</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
-                    <!-- /.card-body -->
+
                 </div>
-                <!-- /.card -->
-                <!-- /.card -->
             </div>
-            <!-- /.col -->
         </div>
-        <!-- /.row -->
     </div>
-    <!-- /.container-fluid -->
 </section>
-<!-- /.content -->
 </div>
 @endsection
 
@@ -76,24 +69,29 @@ $(document).ready(function() {
         processing : true,
         serverSide : true,
         ajax : {
-        url : '{!! route('admin.mentor.ajax.datatable') !!}',
+            url : '{!! route('admin.mentor.ajax.datatable') !!}',
         },
-        columns       : [
+        columns : [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
-            {data: 'name', name: 'name', orderable: true, searchable: true},
-            {data: 'created_at', name: 'created_at', orderable: false, searchable: false,
-            render: function(created_at)
-                {
-                    return created_at;
+            {data: 'name', name: 'name'},
+
+            // ⬅️ Tambahin kolom rating
+            {
+                data: 'rating',
+                name: 'rating',
+                orderable: false,
+                searchable: false,
+                render: function (rating) {
+                    return rating ? rating : '-';
                 }
             },
+
+            {data: 'created_at', name: 'created_at'},
             {
                 data: 'image',
-                render: (image) => /* html */`
-                ${image}
-                `
+                render: (image) => `${image}`
             },
-            {data: 'action', name: 'action', orderable: false, searchable: false,}
+            {data: 'action', name: 'action', orderable: false, searchable: false}
         ]
     });
 });
@@ -101,20 +99,15 @@ $(document).ready(function() {
 function deleteConfirm(id) {
 Swal.fire({
     text: "Are you sure you want to delete data ?",
-    type: 'warning',
     icon: 'info',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
     cancelButtonColor: '#d33',
     confirmButtonText: 'Delete'
-    }).then((result) => {
+}).then((result) => {
     if (result.value) {
         $('#submit_'+id).submit();
-            Swal.fire(
-            'Deleted!',
-            'Mentor data deleted',
-            'success'
-        )
+        Swal.fire('Deleted!', 'Mentor data deleted', 'success');
     }
 })
 }

@@ -25,9 +25,4 @@ class MentorRating extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public static function getTotalRatingForMentor($mentorId)
-    {
-        return self::where('mentor_id', $mentorId)->sum('rating');
-    }
 }
