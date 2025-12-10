@@ -209,7 +209,15 @@
                     @foreach ($series as $item)
                         <div class="px-4 py-3 flex justify-between items-center hover:bg-gray-50 transition-colors">
                             <span class="font-medium">{{ $item->title }}</span>
-                            <span class="text-sm text-gray-500">{{ $item->lessons_count ?? 0 }} video</span>
+                            <span class="text-sm text-gray-500">
+                                @if($item->content_type === 'video')
+                                    <i class="fas fa-video"></i> Video
+                                @elseif($item->content_type === 'text')
+                                    <i class="fas fa-file-alt"></i> Teks
+                                @else
+                                    <i class="fas fa-book"></i> Materi
+                                @endif
+                            </span>
                         </div>
                     @endforeach
                 </div>
@@ -270,7 +278,7 @@
             <div class="border-2 border-custom-purple2 rounded-lg p-4 bg-white shadow">
                 <h3 class="text-lg font-semibold mb-4">Testimoni Alumni</h3>
                 @if($reviews && count($reviews) > 0)
-                    @foreach ($reviews->take(3) as $review)
+                    @foreach ($reviews as $review)
                         <div class="border-b border-custom-orange pb-4 mb-4 last:border-b-0">
                             <div class="flex items-start gap-3">
                                 <div class="flex-shrink-0">
@@ -287,6 +295,11 @@
                                             size="sm" />                                    
                                     </div>
                                     <p class="text-sm text-gray-600 mt-2 leading-relaxed">{{ $review->review }}</p>
+                                    @if($review->series)
+                                        <p class="text-xs text-gray-500 mt-1">
+                                            <i class="fas fa-book-open"></i> {{ $review->series->title }}
+                                        </p>
+                                    @endif
                                     @if($review->created_at)
                                         <p class="text-xs text-gray-400 mt-2">
                                             {{ $review->created_at->format('d M Y') }}
