@@ -161,8 +161,8 @@
             <div x-data="{ showAll: false }">
                 <h2 class="text-xl font-semibold mb-4">Apa yang Akan Dipelajari</h2>
 
-                <ul class="text-gray-700 leading-relaxed space-y-3">+
-                    
+                <ul class="text-gray-700 leading-relaxed space-y-3">
+                    @foreach($series as $index => $item)
                         <li 
                             class="flex items-start gap-2"
                             @if($index >= 4) x-show="showAll" x-cloak @endif
