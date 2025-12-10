@@ -28,7 +28,6 @@ class MentorController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get()
             ->map(function ($mentor) {
-                $mentor->avg_rating = $mentor->avg_rating;
                 $mentor->total_reviews = $mentor->courses->sum(function ($course) {
                     return $course->reviews->count();
                 });

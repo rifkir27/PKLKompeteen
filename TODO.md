@@ -1,9 +1,14 @@
-# TODO for Adding Tools Page in Sidebar
+# TODO: Fix undefined ⭐ rating mentor error
 
-- [x] Create ToolController.php with CRUD methods
-- [x] Add routes for tools in web.php
-- [x] Create index.blade.php view for tools
-- [x] Create create.blade.php view for tools
-- [x] Create edit.blade.php view for tools
-- [x] Add Tools menu item in sidebar.blade.php
-- [x] Fix Route [admin.tools.index] not defined error
+## Completed Tasks
+- [x] Updated Mentor model getAvgRatingAttribute() to use loaded data efficiently
+- [x] Removed redundant avg_rating assignment in MentorController
+
+## Summary
+The error "undefined ⭐ rating mentor" was caused by the getAvgRatingAttribute() accessor not properly handling cases where mentors have no courses or reviews. The accessor was updated to:
+1. Use pre-loaded relationship data when available
+2. Calculate average rating manually from loaded reviews
+3. Fall back to database query if data not loaded
+4. Always return a numeric value (0 if no ratings)
+
+The redundant assignment in the controller was also removed to avoid potential issues.

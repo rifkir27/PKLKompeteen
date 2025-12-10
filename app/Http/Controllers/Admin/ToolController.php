@@ -87,4 +87,10 @@ class ToolController extends Controller
             ->rawColumns(['action'])
             ->make(true);
     }
+
+    public function getTools()
+    {
+        $tools = Tool::orderBy('name', 'ASC')->get(['id', 'name']);
+        return response()->json($tools);
+    }
 }

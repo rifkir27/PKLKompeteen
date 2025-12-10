@@ -29,11 +29,14 @@ class Mentor extends Model
 
     protected function cover(): Attribute
     {
-        return Attribute::make(
-            get: fn($cover) => $cover 
-                ? asset('storage/showcases/' . $cover) 
-                : asset('assets/dist/img/default-150x150.png'),
-        );
+        return $this->courses()
+            ->join('reviews', 'courses.id', '=', 'reviews.course_id')
+            ->avg('reviews.rating') ?? 0;
+    }
+
+    public function getTotalRatingAttribute()
+    {
+        return $this->mentorRatings()->sum('rating');
     }
 
     public function getAvgMentorRatingAttribute()

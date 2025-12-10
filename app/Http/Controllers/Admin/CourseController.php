@@ -48,12 +48,6 @@ class CourseController extends Controller
             $course->benefits()->sync($request->benefits);
         }
 
-        if ($request->has('tools') && $request->tools) {
-            $course->tools()->sync($request->tools);
-        } else {
-            $course->tools()->detach();
-        }
-
         if ($request->has('series') && is_array($request->series)) {
             foreach ($request->series as $index => $seriesData) {
                 // Set video_source based on video_code for video content
@@ -115,10 +109,8 @@ class CourseController extends Controller
             $course->benefits()->sync($request->benefits);
         }
 
-        if ($request->has('tools') && $request->tools) {
+        if ($request->has('tools')) {
             $course->tools()->sync($request->tools);
-        } else {
-            $course->tools()->detach();
         }
 
         if ($request->has('series') && is_array($request->series)) {
