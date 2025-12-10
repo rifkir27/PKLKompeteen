@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Traits\HasScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Mentor extends Model
 {
@@ -27,7 +26,7 @@ class Mentor extends Model
         return $this->hasMany(MentorRating::class);
     }
 
-    protected function cover(): Attribute
+    public function getCoverAttribute()
     {
         return $this->courses()
             ->join('reviews', 'courses.id', '=', 'reviews.course_id')

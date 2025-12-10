@@ -312,7 +312,7 @@ function getMaterialTemplate(index) {
                 <!-- VIDEO URL INPUT (for youtube or drive) -->
                 <div class="form-group video-url-group" style="display:none;">
                     <label>Video URL *</label>
-                    <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="https://www.youtube.com/... or https://drive.google.com/...">
+                    <input type="text" class="form-control" name="series[${index}][video_code]" placeholder="Youtube or Drive Link">
                     <small class="form-text text-muted">Masukkan URL YouTube atau Google Drive</small>
                 </div>
 
